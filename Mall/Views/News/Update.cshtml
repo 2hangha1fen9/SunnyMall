@@ -1,0 +1,123 @@
+﻿@model News
+@{
+    ViewBag.Title = "发布资讯";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>发布资讯</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="news" onsubmit="return sub()" method="post">
+            <input type="hidden" name="NewsID" value="@if (Model != null) {@Model.NewsID} else { @Html.Raw("-1")} " />
+            <div class="col-md-6">
+                <label class="form-label">标题<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Title" value="@if (Model != null) {@Model.Title}">
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">分类<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="NType" value="@if (Model != null) {@Model.NType}">
+                @Html.ValidationMessageFor(model => model.NType, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-6">
+                <label class="form-label">上传图片<span class="text-danger">*</span></label>
+                <input type="hidden" name="PhotoUrl" value="@if (Model != null) {@Model.PhotoUrl}" id="photoUrl" />
+                <input class="form-control" type="file" id="file" onchange="viewImage()">
+                @Html.ValidationMessageFor(model => model.PhotoUrl, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-3">
+                <label class="form-label">发布时间</label>
+                <input type="hidden" name="PushTime" id="pushTime" value="@if (Model != null) {@Model.PushTime} else { @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} " />
+                <input type="date" class="form-control" id="date" value='@if (Model != null) {@Model.PushTime.ToString("yyyy-MM-dd")}'>
+            </div>
+            <div class="col-3">
+                <label class="form-label">&nbsp;</label>
+                <input type="time" class="form-control" id="time" value='@if (Model != null) {@Model.PushTime.ToString("HH:mm:ss")}'>
+            </div>
+            <div class="col-6">
+                <label class="form-label">图片预览</label>
+                <img src="@if (Model != null) {@Model.PhotoUrl}" class="img-fluid rounded" id="photo">
+            </div>
+            <div class="col-12">
+                <label class="form-label">内容<span class="text-danger">*</span></label>
+                <div id="editor">
+                </div>
+                <input type="hidden" name="Content" id="content" value="@if (Model != null) {@Model.Content}" />
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">是否置顶</label>
+                <input class="form-check-input" type="checkbox" value='@if (Model != null) {@Model.States}' @if (Model != null) { @(Model.States == 1 ? "checked" : "" ) } onclick="state()" name="States" id="states" role="switch" id="flexSwitchCheckDefault">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">发布</button>
+                <a href="/News" class="btn btn-primary">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var ed;
+    window.onload = () => {
+        editor = ClassicEditor.create(document.querySelector('#editor'), {
+            extraPlugins: [MyUploadAdapterPlugin]
+        }).then(editor => {
+            ed = editor;
+            editor.setData('@if (Model != null) {@Html.Raw(Model.Content)}else{@Html.Raw("&nbsp;")}')
+        });
+
+        $("#news").validate({
+            rules: {
+                Title: { required: true },
+                NType: { required: true },
+                PhotoUrl: { required: true },
+                Content: {required: true}
+            },
+            messages: {
+                Title: { required: "请输入标题"},
+                NType: { required: "请输入分类" },
+                PhotoUrl: { required: "请上传图片" },
+                Content: { required: "请键入内容"}
+            }
+        })
+    }
+    function sub() {
+        if (confirm("是否发布资讯?")) {
+            $("#content").val(ed.getData())
+            @if(Model != null) {@Html.Raw("$('#pushTime').val($('#date').val() + ' ' + $('#time').val())\n")}     
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    function viewImage() {
+        let fileName = $("#file").val()
+        let ext = fileName.substring(fileName.lastIndexOf(".")).toLowerCase()
+        if (!ext.match(/.png|.jpg|.jpeg/)) {
+            $("#file").val("")
+            alert("文件格式必须为：png/jpg/jpeg")
+        }
+        else {
+            let xhr = new XMLHttpRequest()
+            let data = new FormData()
+            data.append("upload", document.getElementById("file").files[0])
+            data.append("main",true)
+            xhr.open("POST", "/Upload/UploadFile", true)
+            xhr.send(data)
+            xhr.onload = () => {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log("success")
+                    $("#photoUrl").val($("#file").val())
+                    $("#photo").attr("src", URL.createObjectURL(document.getElementById("file").files[0]))
+                }
+            }
+        }
+    }
+
+    function state() {
+        $("#states").val($("#states").val() == 0 ? 1 : 0)
+    }
+</script>

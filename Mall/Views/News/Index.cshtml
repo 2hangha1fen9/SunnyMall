@@ -1,0 +1,88 @@
+﻿@model PagedList<News>
+@{
+    ViewBag.Title = "资讯管理";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>资讯列表</h2>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
+        <button type="button" onclick="location.href='/News/Update'" class="btn btn-success">添加</button>
+    </div>
+</div>
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            <td>图片</td>
+            <td>标题</td>
+            <td>分类</td>
+            <td>发布时间</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" class="ck ckn" value="@item.NewsID" id="flexCheckDefault">
+                </td>
+                <td><img src="@item.PhotoUrl" class="rounded" alt="" width="50px"></td>
+                <td>@item.Title</td>
+                <td>@item.NType</td>
+                <td>@item.PushTime</td>
+                <td style="color: @(item.States == 1 ? "green" : "");">@(item.States == 1 ? "置顶" : "")</td>
+                <td>
+                    <a href="/News/Update/@item.NewsID" class="btn-sm btn-primary">编辑</a>
+                    <a href="/News/Details/@item.NewsID" class="btn-sm btn-success">详情</a>
+                    <a href="/News/Delete/@item.NewsID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
+                    <a href="/News/States/@item.NewsID" class="btn-sm btn-warning">@(item.States == 1 ? "取消置顶" : "置顶")</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Html.Pager(Model, new PagerOptions
+        {
+        PageIndexParameterName = "id",
+        HorizontalAlign = "center",
+        CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+        DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+        PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+        FirstPageText = "<<",
+        LastPageText = ">>"
+    })
+</div>
+
+
+<script>
+    function selectAll(o) {
+        $(".ck").prop("checked", o.checked)
+    }
+    function deleteList() {
+        if (confirm('是否确认删除')) {
+            let boxies = $(":checked").not(".ckm")
+            let ids = ""
+            if (boxies.length != 0) {
+                boxies.each((i, e) => {
+                    ids += $(e).val() + (i == (boxies.length - 1) ? "" : ",")
+                })
+                if (ids.length != 0) {
+                    $.post("/News/Delete", { "ids": ids }, () => {
+                        location.href = "/News"
+                    })
+                } else {
+                    $(".toast-body").text("你还未选中任何一条记录")
+                    new bootstrap.Toast(document.getElementById('liveToast')).show()
+                }
+            } else {
+                $(".toast-body").text("你还未选中任何一条记录")
+                new bootstrap.Toast(document.getElementById('liveToast')).show()
+            }
+        }
+    }
+</script>

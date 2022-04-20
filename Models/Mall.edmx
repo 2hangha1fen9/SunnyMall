@@ -1,0 +1,859 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="MallModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AdminUsers">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pwd" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Role" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Appraises">
+          <Key>
+            <PropertyRef Name="AppraiseID" />
+          </Key>
+          <Property Name="AppraiseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Grade" Type="int" Nullable="false" />
+          <Property Name="RateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CateID" />
+          </Key>
+          <Property Name="CateID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CateName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+        </EntityType>
+        <EntityType Name="Deliveries">
+          <Key>
+            <PropertyRef Name="DeliveryID" />
+          </Key>
+          <Property Name="DeliveryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Consignee" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Complete" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="12" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Favorites">
+          <Key>
+            <PropertyRef Name="FavoriteID" />
+          </Key>
+          <Property Name="FavoriteID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="NewsID" />
+          </Key>
+          <Property Name="NewsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="NType" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="PhotoUrl" Type="nvarchar" MaxLength="200" />
+          <Property Name="PushTime" Type="datetime" Nullable="false" />
+          <Property Name="States" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrdersID" />
+          </Key>
+          <Property Name="OrdersID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Orderdate" Type="date" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Total" Type="money" />
+          <Property Name="DeliveryID" Type="int" />
+          <Property Name="DeliveryDate" Type="date" />
+          <Property Name="States" Type="int" Nullable="false" />
+          <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="OrdersDetails">
+          <Key>
+            <PropertyRef Name="DetailID" />
+          </Key>
+          <Property Name="DetailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrdersID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="States" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="PhotoUrl" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CateID" Type="int" Nullable="false" />
+          <Property Name="MarketPrice" Type="money" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="PostTime" Type="datetime" Nullable="false" />
+          <Property Name="Stock" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Pwd" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nick" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeliveryID" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Appraises_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Appraises">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Appraises_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Appraises">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories1" Type="Self.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CateID" />
+            </Principal>
+            <Dependent Role="Categories1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deliveries_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favorites_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favorites_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Deliveries">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="DeliveryID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdersDetails_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrdersID" />
+            </Principal>
+            <Dependent Role="OrdersDetails">
+              <PropertyRef Name="OrdersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdersDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrdersDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Photos_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Photos">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CateID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Deliveries1">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="DeliveryID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MallModelStoreContainer">
+          <EntitySet Name="AdminUsers" EntityType="Self.AdminUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Appraises" EntityType="Self.Appraises" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Deliveries" EntityType="Self.Deliveries" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrdersDetails" EntityType="Self.OrdersDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Appraises_Products" Association="Self.FK_Appraises_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Appraises" EntitySet="Appraises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Appraises_Users" Association="Self.FK_Appraises_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Appraises" EntitySet="Appraises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deliveries_Users" Association="Self.FK_Deliveries_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favorites_Products" Association="Self.FK_Favorites_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favorites_Users" Association="Self.FK_Favorites_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Deliveries" Association="Self.FK_Orders_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdersDetails_Orders" Association="Self.FK_OrdersDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrdersDetails" EntitySet="OrdersDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdersDetails_Products" Association="Self.FK_OrdersDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrdersDetails" EntitySet="OrdersDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Photos_Products" Association="Self.FK_Photos_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Photos" EntitySet="Photos" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Deliveries1" Association="Self.FK_Users_Deliveries1">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="MallModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="AdminUsers">
+          <Key>
+            <PropertyRef Name="AdminID" />
+          </Key>
+          <Property Name="AdminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Appraises">
+          <Key>
+            <PropertyRef Name="AppraiseID" />
+          </Key>
+          <Property Name="AppraiseID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Grade" Type="Int32" Nullable="false" />
+          <Property Name="RateTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Appraises_Products" FromRole="Appraises" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Appraises_Users" FromRole="Appraises" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Categories">
+          <Key>
+            <PropertyRef Name="CateID" />
+          </Key>
+          <Property Name="CateID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ParentID" Type="Int32" />
+          <NavigationProperty Name="Categories1" Relationship="Self.FK_Categories_Categories" FromRole="Categories" ToRole="Categories1" />
+          <NavigationProperty Name="Categories2" Relationship="Self.FK_Categories_Categories" FromRole="Categories1" ToRole="Categories" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Products_Categories" FromRole="Categories" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Deliveries">
+          <Key>
+            <PropertyRef Name="DeliveryID" />
+          </Key>
+          <Property Name="DeliveryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Consignee" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Complete" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Phone" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Deliveries_Users" FromRole="Deliveries" ToRole="Users" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Deliveries" FromRole="Deliveries" ToRole="Orders" />
+          <NavigationProperty Name="Users1" Relationship="Self.FK_Users_Deliveries1" FromRole="Deliveries" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Favorites">
+          <Key>
+            <PropertyRef Name="FavoriteID" />
+          </Key>
+          <Property Name="FavoriteID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Favorites_Products" FromRole="Favorites" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Favorites_Users" FromRole="Favorites" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="NewsID" />
+          </Key>
+          <Property Name="NewsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PushTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="States" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrdersID" />
+          </Key>
+          <Property Name="OrdersID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Orderdate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="DeliveryID" Type="Int32" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="States" Type="Int32" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK_Orders_Deliveries" FromRole="Orders" ToRole="Deliveries" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
+          <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Orders" FromRole="Orders" ToRole="OrdersDetails" />
+        </EntityType>
+        <EntityType Name="OrdersDetails">
+          <Key>
+            <PropertyRef Name="DetailID" />
+          </Key>
+          <Property Name="DetailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrdersID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="States" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_OrdersDetails_Orders" FromRole="OrdersDetails" ToRole="Orders" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_OrdersDetails_Products" FromRole="OrdersDetails" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Photos">
+          <Key>
+            <PropertyRef Name="PhotoID" />
+          </Key>
+          <Property Name="PhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Photos_Products" FromRole="Photos" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Products">
+          <Key>
+            <PropertyRef Name="ProductID" />
+          </Key>
+          <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CateID" Type="Int32" Nullable="false" />
+          <Property Name="MarketPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PostTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Stock" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Appraises" Relationship="Self.FK_Appraises_Products" FromRole="Products" ToRole="Appraises" />
+          <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Products" FromRole="Products" ToRole="Favorites" />
+          <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Products" FromRole="Products" ToRole="OrdersDetails" />
+          <NavigationProperty Name="Photos" Relationship="Self.FK_Photos_Products" FromRole="Products" ToRole="Photos" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeliveryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Appraises" Relationship="Self.FK_Appraises_Users" FromRole="Users" ToRole="Appraises" />
+          <NavigationProperty Name="Deliveries" Relationship="Self.FK_Deliveries_Users" FromRole="Users" ToRole="Deliveries" />
+          <NavigationProperty Name="Deliveries1" Relationship="Self.FK_Users_Deliveries1" FromRole="Users" ToRole="Deliveries" />
+          <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Users" FromRole="Users" ToRole="Favorites" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
+        </EntityType>
+        <Association Name="FK_Appraises_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Appraises">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Appraises_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Appraises">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Categories_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="0..1" />
+          <End Role="Categories1" Type="Self.Categories" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CateID" />
+            </Principal>
+            <Dependent Role="Categories1">
+              <PropertyRef Name="ParentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Products_Categories">
+          <End Role="Categories" Type="Self.Categories" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Categories">
+              <PropertyRef Name="CateID" />
+            </Principal>
+            <Dependent Role="Products">
+              <PropertyRef Name="CateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Deliveries_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Deliveries">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Deliveries">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="0..1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="DeliveryID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Users_Deliveries1">
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Deliveries">
+              <PropertyRef Name="DeliveryID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="DeliveryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favorites_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Favorites_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Favorites">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Orders_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdersDetails_Orders">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrdersID" />
+            </Principal>
+            <Dependent Role="OrdersDetails">
+              <PropertyRef Name="OrdersID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrdersDetails_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="OrdersDetails">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Photos_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Photos">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="AdminUsers" EntityType="Self.AdminUsers" />
+          <EntitySet Name="Appraises" EntityType="Self.Appraises" />
+          <EntitySet Name="Categories" EntityType="Self.Categories" />
+          <EntitySet Name="Deliveries" EntityType="Self.Deliveries" />
+          <EntitySet Name="Favorites" EntityType="Self.Favorites" />
+          <EntitySet Name="News" EntityType="Self.News" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" />
+          <EntitySet Name="OrdersDetails" EntityType="Self.OrdersDetails" />
+          <EntitySet Name="Photos" EntityType="Self.Photos" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Appraises_Products" Association="Self.FK_Appraises_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Appraises" EntitySet="Appraises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Appraises_Users" Association="Self.FK_Appraises_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Appraises" EntitySet="Appraises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Categories1" EntitySet="Categories" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Products_Categories" Association="Self.FK_Products_Categories">
+            <End Role="Categories" EntitySet="Categories" />
+            <End Role="Products" EntitySet="Products" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Deliveries_Users" Association="Self.FK_Deliveries_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Deliveries" EntitySet="Deliveries" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Deliveries" Association="Self.FK_Orders_Deliveries">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Users_Deliveries1" Association="Self.FK_Users_Deliveries1">
+            <End Role="Deliveries" EntitySet="Deliveries" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favorites_Products" Association="Self.FK_Favorites_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Favorites_Users" Association="Self.FK_Favorites_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Favorites" EntitySet="Favorites" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Orders_Users" Association="Self.FK_Orders_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdersDetails_Orders" Association="Self.FK_OrdersDetails_Orders">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrdersDetails" EntitySet="OrdersDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrdersDetails_Products" Association="Self.FK_OrdersDetails_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrdersDetails" EntitySet="OrdersDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Photos_Products" Association="Self.FK_Photos_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Photos" EntitySet="Photos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="MallModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="AdminUsers">
+            <EntityTypeMapping TypeName="MallModel.AdminUsers">
+              <MappingFragment StoreEntitySet="AdminUsers">
+                <ScalarProperty Name="AdminID" ColumnName="AdminID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Appraises">
+            <EntityTypeMapping TypeName="MallModel.Appraises">
+              <MappingFragment StoreEntitySet="Appraises">
+                <ScalarProperty Name="AppraiseID" ColumnName="AppraiseID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="RateTime" ColumnName="RateTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="MallModel.Categories">
+              <MappingFragment StoreEntitySet="Categories">
+                <ScalarProperty Name="CateID" ColumnName="CateID" />
+                <ScalarProperty Name="CateName" ColumnName="CateName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Deliveries">
+            <EntityTypeMapping TypeName="MallModel.Deliveries">
+              <MappingFragment StoreEntitySet="Deliveries">
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Consignee" ColumnName="Consignee" />
+                <ScalarProperty Name="Complete" ColumnName="Complete" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Favorites">
+            <EntityTypeMapping TypeName="MallModel.Favorites">
+              <MappingFragment StoreEntitySet="Favorites">
+                <ScalarProperty Name="FavoriteID" ColumnName="FavoriteID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="MallModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="NewsID" ColumnName="NewsID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="NType" ColumnName="NType" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
+                <ScalarProperty Name="PushTime" ColumnName="PushTime" />
+                <ScalarProperty Name="States" ColumnName="States" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="MallModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrdersID" ColumnName="OrdersID" />
+                <ScalarProperty Name="Orderdate" ColumnName="Orderdate" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+                <ScalarProperty Name="DeliveryDate" ColumnName="DeliveryDate" />
+                <ScalarProperty Name="States" ColumnName="States" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrdersDetails">
+            <EntityTypeMapping TypeName="MallModel.OrdersDetails">
+              <MappingFragment StoreEntitySet="OrdersDetails">
+                <ScalarProperty Name="DetailID" ColumnName="DetailID" />
+                <ScalarProperty Name="OrdersID" ColumnName="OrdersID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="States" ColumnName="States" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Photos">
+            <EntityTypeMapping TypeName="MallModel.Photos">
+              <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="MallModel.Products">
+              <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="CateID" ColumnName="CateID" />
+                <ScalarProperty Name="MarketPrice" ColumnName="MarketPrice" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="PostTime" ColumnName="PostTime" />
+                <ScalarProperty Name="Stock" ColumnName="Stock" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="MallModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Pwd" ColumnName="Pwd" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Nick" ColumnName="Nick" />
+                <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="无" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
