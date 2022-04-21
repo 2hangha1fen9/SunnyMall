@@ -48,6 +48,7 @@
     <Compile Include="BaseBLL.cs" />
     <Compile Include="CategoriesBLL.cs" />
     <Compile Include="NewsBLL.cs" />
+    <Compile Include="OrdersBLL.cs" />
     <Compile Include="PhotosBLL.cs" />
     <Compile Include="ProductsBLL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

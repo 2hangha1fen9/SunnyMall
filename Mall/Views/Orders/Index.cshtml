@@ -1,0 +1,87 @@
+﻿@model PagedList<Orders>
+@{
+    ViewBag.Title = "订单管理";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+    <div>
+        @{ 
+            var states = Request.QueryString["states"] == null ?  5 : int.Parse(Request.QueryString["states"]);
+        } 
+        <select class="form-select" aria-label="Default select example" onchange="filter()" id="filter">
+            <option value="5" @(states == 5 ? "selected":"")>全部</option>
+            <option value="0" @(states == 0 ? "selected":"")>未付款</option>
+            <option value="1" @(states == 1 ? "selected":"")>已付款</option>
+            <option value="2" @(states == 2 ? "selected":"")>已发货</option>
+            <option value="3" @(states == 3 ? "selected":"")>已收货</option>
+            <option value="-1" @(states == -1 ? "selected":"")>已关闭</option>
+        </select>
+    </div>
+</div>
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            <td>下单日期</td>
+            <td>订单金额</td>
+            <td>收货日期</td>
+            <td>订单状态</td>
+            <td>收件人姓名</td>
+            <td>用户名</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.Orderdate</td>
+            <td>@item.Total.Value.ToString("0.00")</td>
+            <td>@item.DeliveryDate</td>
+            <td>
+                @(item.States == 0 ? "未付款" : item.States == 1 ? "已付款" : item.States == 2 ? "已发货" : item.States == 3 ? "已收货" : item.States == 4 ? "已评价" : "已关闭")
+            </td>
+            <td>@item.Deliveries.Consignee</td>
+            <td>@item.Users.UserName</td>
+            <td>
+                <a href="/Orders/Details/@item.OrdersID" class="btn-sm btn-primary">详情</a>
+                @if (item.States == 0)
+                {
+                    <a href="/Orders/Close/@item.OrdersID" class="btn-sm btn-danger" onclick="return confirm('是否关闭该订单')">关闭订单</a>
+                }
+                else if (item.States == 1)
+                {
+                    <a href="/Orders/Send/@item.OrdersID" class="btn-sm btn-success" onclick="return confirm('是否发货')">发货</a>
+                }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Html.Pager(Model, new PagerOptions
+        {
+        PageIndexParameterName = "id",
+        HorizontalAlign = "center",
+        CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+        DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+        PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+        FirstPageText = "<<",
+        LastPageText = ">>"
+    })
+</div>
+<script>
+    $(() => {
+        location.pathname
+    })
+    function filter() {
+        if ($("#filter option:selected").val() == 5) {
+            location.href = "/Orders"
+        }
+        else {
+            console.log($("#filter option:selected").val())
+            location.href = "/Orders?states=" + $("#filter option:selected").val()
+        }
+    }
+</script>

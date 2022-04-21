@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MallModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MallModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AdminUsers">
           <Key>
             <PropertyRef Name="AdminID" />
@@ -118,7 +118,7 @@
           <Property Name="Pwd" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Nick" Type="nvarchar" MaxLength="50" />
-          <Property Name="DeliveryID" Type="int" Nullable="false" />
+          <Property Name="DeliveryID" Type="int" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -265,7 +265,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Deliveries1">
-          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="0..1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Deliveries">
@@ -341,7 +341,8 @@
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MallModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -448,8 +449,8 @@
           <Property Name="PhotoID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Products" Relationship="Self.FK_Photos_Products" FromRole="Photos" ToRole="Products" />
           <Property Name="States" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="Self.FK_Photos_Products" FromRole="Photos" ToRole="Products" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -463,12 +464,12 @@
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PostTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Stock" Type="Int32" Nullable="false" />
+          <Property Name="States" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Appraises" Relationship="Self.FK_Appraises_Products" FromRole="Products" ToRole="Appraises" />
           <NavigationProperty Name="Categories" Relationship="Self.FK_Products_Categories" FromRole="Products" ToRole="Categories" />
           <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Products" FromRole="Products" ToRole="Favorites" />
           <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Products" FromRole="Products" ToRole="OrdersDetails" />
           <NavigationProperty Name="Photos" Relationship="Self.FK_Photos_Products" FromRole="Products" ToRole="Photos" />
-          <Property Name="States" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -479,7 +480,7 @@
           <Property Name="Pwd" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DeliveryID" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryID" Type="Int32" />
           <NavigationProperty Name="Appraises" Relationship="Self.FK_Appraises_Users" FromRole="Users" ToRole="Appraises" />
           <NavigationProperty Name="Deliveries" Relationship="Self.FK_Deliveries_Users" FromRole="Users" ToRole="Deliveries" />
           <NavigationProperty Name="Deliveries1" Relationship="Self.FK_Users_Deliveries1" FromRole="Users" ToRole="Deliveries" />
@@ -559,7 +560,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Users_Deliveries1">
-          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="1" />
+          <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="0..1" />
           <End Role="Users" Type="Self.Users" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Deliveries">
@@ -706,8 +707,7 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Photos" EntitySet="Photos" />
           </AssociationSet>
-          </EntityContainer>
-        <ComplexType Name="CategoriesGroups" />
+        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -737,11 +737,11 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="IsTypeOf(MallModel.Categories)">
+            <EntityTypeMapping TypeName="MallModel.Categories">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
-                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="CateName" ColumnName="CateName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -806,17 +806,16 @@
           <EntitySetMapping Name="Photos">
             <EntityTypeMapping TypeName="MallModel.Photos">
               <MappingFragment StoreEntitySet="Photos">
-                <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
+                <ScalarProperty Name="States" ColumnName="States" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="MallModel.Products">
               <MappingFragment StoreEntitySet="Products">
-                <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
@@ -825,6 +824,7 @@
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="PostTime" ColumnName="PostTime" />
                 <ScalarProperty Name="Stock" ColumnName="Stock" />
+                <ScalarProperty Name="States" ColumnName="States" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -840,7 +840,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          </EntityContainerMapping>
+        </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

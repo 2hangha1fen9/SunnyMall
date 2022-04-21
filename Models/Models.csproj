@@ -59,9 +59,6 @@
     <Compile Include="Categories.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>
-    <Compile Include="CategoriesGroups.cs">
-      <DependentUpon>Mall.tt</DependentUpon>
-    </Compile>
     <Compile Include="Deliveries.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>
@@ -115,6 +112,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Mall.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Mall.edmx</DependentUpon>
@@ -125,9 +125,6 @@
       <DependentUpon>Mall.edmx</DependentUpon>
       <LastGenOutput>Mall.cs</LastGenOutput>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

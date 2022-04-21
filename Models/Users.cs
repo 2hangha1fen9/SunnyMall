@@ -28,7 +28,7 @@ namespace Models
         public string Pwd { get; set; }
         public string Email { get; set; }
         public string Nick { get; set; }
-        public int DeliveryID { get; set; }
+        public Nullable<int> DeliveryID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Appraises> Appraises { get; set; }

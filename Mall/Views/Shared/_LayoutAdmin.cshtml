@@ -6,7 +6,6 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="/Content/bootstrap.css">
     <link rel="stylesheet" href="/Content/dashboard.css">
-    <link rel="stylesheet" href="/Content/bootstrap-icon.css">
     <script src="/Scripts/bootstrap.min.js"></script>
     <script src="/Scripts/jquery-3.2.1.min.js"></script>
     <script src="/Scripts/jquery.validate.min.js"></script>
@@ -70,7 +69,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link @(Request.RawUrl.Contains("/Orders") ? "active" : "")" href="/Orders">
                                 <span data-feather="bar-chart-2"></span>
                                 订单管理
                             </a>

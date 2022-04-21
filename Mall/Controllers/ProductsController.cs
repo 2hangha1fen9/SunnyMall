@@ -27,7 +27,7 @@ namespace Mall.Controllers
         {
             if (key.Length == 0)
             {
-                return Index();
+                return RedirectToAction("Index");
             }
             var news = bll.FindEntity(key);
             TempData["Message"] = $"检索到{news.Count()}条数据";
