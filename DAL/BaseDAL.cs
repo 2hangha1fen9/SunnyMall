@@ -40,6 +40,17 @@ namespace DAL
         }
 
         /// <summary>
+        /// 删除实体
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public bool Delete(IEnumerable<T> ts)
+        {
+            context.Set<T>().RemoveRange(ts);
+            return context.SaveChanges() > 0;
+        }
+
+        /// <summary>
         /// 根据Id删除实体
         /// </summary>
         /// <param name="id"></param>

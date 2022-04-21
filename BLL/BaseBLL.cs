@@ -36,6 +36,16 @@ namespace BLL
         }
 
         /// <summary>
+        /// 删除实体
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public bool DeleteEntity(IEnumerable<T> t)
+        {
+            return dal.Delete(t);
+        }
+
+        /// <summary>
         /// 根据Id删除实体
         /// </summary>
         /// <param name="id"></param>

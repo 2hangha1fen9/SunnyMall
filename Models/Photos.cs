@@ -17,7 +17,7 @@ namespace Models
         public int PhotoID { get; set; }
         public int ProductID { get; set; }
         public string PhotoUrl { get; set; }
-    
+        public int States { get; set; }  
         public virtual Products Products { get; set; }
     }
 }

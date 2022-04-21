@@ -1,11 +1,11 @@
 ﻿@model PagedList<News>
 @{
-    ViewBag.Title = "资讯管理";
+    ViewBag.Title = "资讯列表";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
 <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
-    <h2>资讯列表</h2>
+    <h2>@ViewBag.Title</h2>
     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
         <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
         <button type="button" onclick="location.href='/News/Update'" class="btn btn-success">添加</button>

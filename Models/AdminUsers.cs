@@ -11,14 +11,11 @@ namespace Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class AdminUsers
     {
         public int AdminID { get; set; }
-        [Required(ErrorMessage = "账户名不可以为空")]
         public string UserName { get; set; }
-        [Required(ErrorMessage = "密码不可以为空")]
         public string Pwd { get; set; }
         public int Role { get; set; }
     }

@@ -1,0 +1,121 @@
+﻿@model Products
+@{
+    ViewBag.Title = "发布商品";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="products" onsubmit="return sub()" method="post">
+            <input type="hidden" name="ProductID" value="@if (Model != null) {@Model.ProductID} else { @Html.Raw("-1")}" />
+            <div class="col-md-6">
+                <label class="form-label">商品名称<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Title" value="@if (Model != null) {@Model.Title}">
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">商品类型<span class="text-danger">*</span></label>
+                <input type="hidden" name="CateID" id="cateID" value="@if (Model != null) {@Model.CateID}" />
+                <select class="form-select" id="parentID" aria-label="Default select example" onchange="change()">
+                    @if (ViewBag.Categories != null)
+                    {
+                        foreach (var item in ViewBag.Categories)
+                        {
+                            <option @if (Model != null) { if (item.CateID == Model.CateID) { @Html.Raw("selected") } } value="@item.CateID">@item.CateName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-6">
+                <label class="form-label">市场价格<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="MarketPrice" value="@if (Model != null) {@Model.MarketPrice}">
+                @Html.ValidationMessageFor(model => model.MarketPrice, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-6">
+                <label class="form-label">本站价格<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="Price" value="@if (Model != null) {@Model.Price}">
+                @Html.ValidationMessageFor(model => model.MarketPrice, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-6">
+                <label class="form-label">商品库存<span class="text-danger">*</span></label>
+                <input type="number" class="form-control" name="Stock" value="@if (Model != null) {@Model.Stock}" />
+                @Html.ValidationMessageFor(model => model.MarketPrice, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-3">
+                <label class="form-label">发布时间</label>
+                <input type="hidden" name="PostTime" id="postTime" value="@if (Model != null) {@Model.PostTime} else { @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")} " />
+                <input type="date" class="form-control" id="date" value='@if (Model != null) {@Model.PostTime.ToString("yyyy-MM-dd")}'>
+            </div>
+            <div class="col-3">
+                <label class="form-label">&nbsp;</label>
+                <input type="time" class="form-control" id="time" value='@if (Model != null) {@Model.PostTime.ToString("HH:mm:ss")}'>
+            </div>
+            <div class="col-12">
+                <label class="form-label">内容<span class="text-danger">*</span></label>
+                <div id="editor">
+                </div>
+                <input type="hidden" name="Content" id="content" value="@if (Model != null) {@Model.Content}" />
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">是否上架</label>
+                <input class="form-check-input" type="checkbox"value='@if (Model != null) {@Model.States}' @if (Model != null) { @(Model.States == 1 ? "" : "checked" ) } onclick="state()" name="States" id="states" role="switch" id="flexSwitchCheckDefault">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">发布</button>
+                <a href="/Products" class="btn btn-primary">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var ed;
+    window.onload = () => {
+        editor = ClassicEditor.create(document.querySelector('#editor'), {
+            extraPlugins: [MyUploadAdapterPlugin]
+        }).then(editor => {
+            ed = editor;
+            editor.setData('@if (Model != null) {@Html.Raw(Model.Content)}else{@Html.Raw("&nbsp;")}')
+        });
+
+        $("#products").validate({
+            rules: {
+                Title: { required: true },
+                ProductID: { required: true },
+                MarketPrice: { required: true },
+                Price: { required: true },
+                Stock: { required: true },
+                Content: { required: true }
+            },
+            messages: {
+                Title: { required: "请输入商品名" },
+                ProductID: { required: "请选择商品类型" },
+                MarketPrice: { required: "请输入市场价格" },
+                Price: { required: "请输入价格" },
+                Stock: { required: "请输入库存" },
+                Content: { required: "请输入内容" }
+            }
+        })
+    }
+    function sub() {
+        if (confirm("是否发布商品?")) {
+            $("#content").val(ed.getData())
+            change()
+            @if(Model != null) {@Html.Raw("$('#postTime').val($('#date').val() + ' ' + $('#time').val())\n")}
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    function change() {
+        $("#cateID").val($("#parentID option:selected").val())
+    }
+
+    function state() {
+        $("#states").val($("#states").val() == 0 ? 1 : 0)
+    }
+</script>

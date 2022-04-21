@@ -11,22 +11,13 @@ namespace Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class News
     {
         public int NewsID { get; set; }
-
-        [Required(ErrorMessage = "标题不可以为空")]
         public string Title { get; set; }
-
-        [Required(ErrorMessage = "分类不可以为空")]
         public string NType { get; set; }
-
-        [Required(ErrorMessage = "内容不可以为空")]
         public string Content { get; set; }
-
-        [Required(ErrorMessage = "请上传图片")]
         public string PhotoUrl { get; set; }
         public System.DateTime PushTime { get; set; }
         public int States { get; set; }

@@ -59,6 +59,9 @@
     <Compile Include="Categories.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>
+    <Compile Include="CategoriesGroups.cs">
+      <DependentUpon>Mall.tt</DependentUpon>
+    </Compile>
     <Compile Include="Deliveries.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>
@@ -122,12 +125,6 @@
       <DependentUpon>Mall.edmx</DependentUpon>
       <LastGenOutput>Mall.cs</LastGenOutput>
     </Content>
-    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.4.4.js" />
-    <Content Include="Scripts\jquery-1.4.4.min.js" />
-    <Content Include="Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Scripts\jquery.validate.js" />
-    <Content Include="Scripts\jquery.validate.min.js" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

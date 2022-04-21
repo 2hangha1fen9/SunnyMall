@@ -10,7 +10,7 @@
 <div class="card">
     <div class="card-body">
         <form class="row g-3" id="news" onsubmit="return sub()" method="post">
-            <input type="hidden" name="NewsID" value="@if (Model != null) {@Model.NewsID} else { @Html.Raw("-1")} " />
+            <input type="hidden" name="NewsID" value="@if (Model != null) {@Model.NewsID} else { @Html.Raw("-1")}" />
             <div class="col-md-6">
                 <label class="form-label">标题<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="Title" value="@if (Model != null) {@Model.Title}">
@@ -49,7 +49,7 @@
             </div>
             <div class="form-check form-switch col-12" style="margin-left:10px">
                 <label class="form-check-label" for="flexSwitchCheckDefault">是否置顶</label>
-                <input class="form-check-input" type="checkbox" value='@if (Model != null) {@Model.States}' @if (Model != null) { @(Model.States == 1 ? "checked" : "" ) } onclick="state()" name="States" id="states" role="switch" id="flexSwitchCheckDefault">
+                <input class="form-check-input" type="checkbox" value='@if (Model != null) {@Model.States}' @if (Model != null) { @(Model.States == 0 ? "checked" : "" ) } onclick="state()" name="States" id="states" role="switch" id="flexSwitchCheckDefault">
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-success">发布</button>
@@ -118,6 +118,6 @@
     }
 
     function state() {
-        $("#states").val($("#states").val() == 0 ? 1 : 0)
+        $("#states").val($("#states").val() == 0 ? 0:1)
     }
 </script>

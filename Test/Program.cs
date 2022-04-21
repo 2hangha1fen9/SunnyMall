@@ -12,14 +12,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            using (Entities db = new Entities())
-            {
-                var news = db.News.ToList();
-                foreach(var item in news)
-                {
-                    Console.WriteLine(item.PushTime.ToString().Contains("5.20"));
-                }
-            }
+            
         }
     }
 }

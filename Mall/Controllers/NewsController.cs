@@ -18,7 +18,7 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index(int? id=1)
         {
-            return View(bll.ListEntity().ToList().AsQueryable().OrderByDescending(n => n.PushTime).OrderByDescending(n => n.States).ToPagedList(id ?? 1,10));
+            return View(bll.ListEntityByPage(id));
         }
 
         [AdminAuthentication]
@@ -29,9 +29,9 @@ namespace Mall.Controllers
             {
                 return Index();
             }
-            var news = bll.ListEntity().Where(n => n.Title.Contains(key) || n.NType.Contains(key) || n.Content.Contains(key) || n.States == (key == "置顶" ? 1 : -1) || n.States == (key == "未置顶" ? 0 : -1));
+            var news = bll.FindEntity(key);
             TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news.ToList().OrderByDescending(n => n.PushTime).OrderByDescending(n => n.States).ToPagedList(1,news.Count()));
+            return View(news);
         }
 
         [AllowAnonymous]
@@ -46,7 +46,7 @@ namespace Mall.Controllers
         {
             if (id.HasValue)
             {
-                return View(bll.FindEntityById((int)id));
+                return View(bll.FindEntityById(id.Value));
             }
             return View();
         }
@@ -88,11 +88,11 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
+            if (!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (bll.DeleteEntityById((int)id))
+            if (bll.DeleteEntityById(id.Value))
             {
                 TempData["Message"] = "删除成功";
                 
@@ -127,11 +127,11 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult States(int? id)
         {
-            if(id == null)
+            if(!id.HasValue)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            News news = bll.FindEntityById((int)id);
+            News news = bll.FindEntityById(id.Value);
             if(news == null)
             {
                 TempData["Message"] = "无效的ID";

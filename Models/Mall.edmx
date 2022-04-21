@@ -59,7 +59,7 @@
           <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="NType" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="PhotoUrl" Type="nvarchar" MaxLength="200" />
+          <Property Name="PhotoUrl" Type="nvarchar" MaxLength="200" Nullable="false" />
           <Property Name="PushTime" Type="datetime" Nullable="false" />
           <Property Name="States" Type="int" Nullable="false" />
         </EntityType>
@@ -93,6 +93,7 @@
           <Property Name="PhotoID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductID" Type="int" Nullable="false" />
           <Property Name="PhotoUrl" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="States" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -103,9 +104,10 @@
           <Property Name="CateID" Type="int" Nullable="false" />
           <Property Name="MarketPrice" Type="money" Nullable="false" />
           <Property Name="Price" Type="money" Nullable="false" />
-          <Property Name="Content" Type="nvarchar(max)" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
           <Property Name="PostTime" Type="datetime" Nullable="false" />
           <Property Name="Stock" Type="int" Nullable="false" />
+          <Property Name="States" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -407,7 +409,7 @@
           <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="NType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PushTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="States" Type="Int32" Nullable="false" />
         </EntityType>
@@ -447,6 +449,7 @@
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="PhotoUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Products" Relationship="Self.FK_Photos_Products" FromRole="Photos" ToRole="Products" />
+          <Property Name="States" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Products">
           <Key>
@@ -457,7 +460,7 @@
           <Property Name="CateID" Type="Int32" Nullable="false" />
           <Property Name="MarketPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PostTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Stock" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Appraises" Relationship="Self.FK_Appraises_Products" FromRole="Products" ToRole="Appraises" />
@@ -465,6 +468,7 @@
           <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Products" FromRole="Products" ToRole="Favorites" />
           <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Products" FromRole="Products" ToRole="OrdersDetails" />
           <NavigationProperty Name="Photos" Relationship="Self.FK_Photos_Products" FromRole="Products" ToRole="Photos" />
+          <Property Name="States" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -702,7 +706,8 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Photos" EntitySet="Photos" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
+        <ComplexType Name="CategoriesGroups" />
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -732,11 +737,11 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Categories">
-            <EntityTypeMapping TypeName="MallModel.Categories">
+            <EntityTypeMapping TypeName="IsTypeOf(MallModel.Categories)">
               <MappingFragment StoreEntitySet="Categories">
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
-                <ScalarProperty Name="CateName" ColumnName="CateName" />
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="CateName" ColumnName="CateName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -801,6 +806,7 @@
           <EntitySetMapping Name="Photos">
             <EntityTypeMapping TypeName="MallModel.Photos">
               <MappingFragment StoreEntitySet="Photos">
+                <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="PhotoID" ColumnName="PhotoID" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="PhotoUrl" ColumnName="PhotoUrl" />
@@ -810,6 +816,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="MallModel.Products">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="CateID" ColumnName="CateID" />
@@ -833,7 +840,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

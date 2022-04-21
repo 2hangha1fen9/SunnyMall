@@ -1,0 +1,55 @@
+﻿@model Categories
+@{
+    ViewBag.Title = "创建商品分类";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card col-md-6">
+    <div class="card-body">
+        <form class="row g-3" id="cates" method="post" onsubmit="sub()">
+            <input type="hidden" name="CateID" value="@if (Model != null) {@Model.CateID} else {@Html.Raw("-1")}" />
+            <div class="col-md-6">
+                <label class="form-label">分类名<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="CateName" value="@if (Model != null && Model.CateID != Model.ParentID) {@Model.CateName}">
+                @Html.ValidationMessageFor(model => model.CateName, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">上级分类</label>
+                <input type="hidden" name="ParentID" id="ParentID" value="@if (Model != null) {@Model.ParentID}" />
+                <select class="form-select" id="parentID" aria-label="Default select example" onchange="sub()">
+                    <option selected value="">无</option>
+                    @if (ViewBag.CateGroups != null)
+                    {
+                        foreach (var item in ViewBag.CateGroups)
+                        {
+                            <option @if (Model != null) { if (item.CateID == Model.ParentID) { @Html.Raw("selected") } } value="@item.CateID">@item.CateName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">提交</button>
+                <a href="/Categories" class="btn btn-primary">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function sub() {
+        $("#ParentID").val($("#parentID option:selected").val())
+    }
+    window.onload = () => {
+        $("#cates").validate({
+            rules: {
+                CateName: { required: true }
+            },
+            messages: {
+                CateName: { required: "请输入分类名称" }
+            }
+        })
+    }
+</script>
+
