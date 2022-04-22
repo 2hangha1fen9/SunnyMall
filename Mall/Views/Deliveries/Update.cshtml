@@ -1,0 +1,78 @@
+﻿@model Deliveries
+@{
+    ViewBag.Title = "用户地址修改";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="deliveries" onsubmit="return sub()" method="post">
+            <input type="hidden" name="DeliveryID" value="@if (Model != null) {@Model.DeliveryID} else { @Html.Raw("-1")}" />
+            <div class="col-md-6">
+                <label class="form-label">收货人<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Consignee" value="@if (Model != null) {@Model.Consignee}">
+                @Html.ValidationMessageFor(model => model.Consignee, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">详细地址<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Complete" value="@if (Model != null) {@Model.Complete}">
+                @Html.ValidationMessageFor(model => model.Complete, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">手机号<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Phone" value="@if (Model != null) {@Model.Phone}">
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">用户<span class="text-danger">*</span></label>
+                <input type="hidden" name="UserID" id="userID" value="@if (Model != null) {@Model.Users.UserID}" />
+                <select class="form-select" id="parentID" aria-label="Default select example" onchange="change()">
+                    @if (ViewBag.Users != null)
+                    {
+                        foreach (var item in ViewBag.Users)
+                        {
+                            <option @if (Model != null) { if (item.UserID == Model.UserID) { @Html.Raw("selected") } } value="@item.UserID">@item.UserName</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">提交</button>
+                <a href="/Deliveries" class="btn btn-primary">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    window.onload = () => {
+        $("#deliveries").validate({
+            rules: {
+                Consignee: { required: true },
+                Complete: { required: true },
+                Phone: { required: true },
+            },
+            messages: {
+                Consignee: { required: "请输入收货人" },
+                Complete: { required: "请选择商品类型" },
+                Phone: { required: "请输入市场价格" },
+            }
+        })
+    }
+    function sub() {
+        if (confirm("是否提交?")) {
+            change()
+            return true
+        }
+        else {
+            return false
+        }
+    }
+    function change() {
+        $("#userID").val($("#parentID option:selected").val())
+    }
+</script>
+
+

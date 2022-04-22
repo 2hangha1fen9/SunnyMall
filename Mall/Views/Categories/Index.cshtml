@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "商品类型列表";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string auth = MyAuthentication.GetAuth();
 }
 
 <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
@@ -14,6 +15,7 @@
     <thead class="table-dark">
         <tr>
             <td>类型名称</td>
+            <td>状态</td>
             <td>操作</td>
         </tr>
     </thead>
@@ -22,20 +24,24 @@
         {
             <tr>
                 <td>@cates.CateName</td>
+                <td style="color: @(cates.States == 0 ? "red" : "green");">@(cates.States == 0 ? "禁用" : "正常")</td>
                 <td>
-                    @if(cates.Categories1.Count() > 0) 
+                    @if (cates.Categories1.Count() > 0)
                     {
                         <a class="btn-sm btn-info" data-bs-toggle="collapse" href="#@cates.CateName" role="button" aria-expanded="false" aria-controls="@cates.CateName">查看子级</a>
                     }
                     <a href="/Categories/Update?createsub=@cates.CateID" class="btn-sm btn-primary">新建子级</a>
                     <a href="/Categories/Update/@cates.CateID" class="btn-sm btn-success">编辑</a>
-                    <a href="/Categories/Delete/@cates.CateID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
+                    <a href="/Categories/States/@cates.CateID" class="btn-sm btn-warning">@(cates.States == 0 ? "启用" : "禁用")</a>
+                    @if (auth == "1")
+                    { <a href="/Categories/Delete/@cates.CateID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除,此操作会删除所有相关分类')">删除</a>}
                     <div class="collapse" id="@cates.CateName">
                         <div class="card card-body">
                             <table class="table" style="text-align: center;line-height: 20px;" id="data">
                                 <thead class="table-secondary">
                                     <tr>
                                         <td>子级名称</td>
+                                        <td>状态</td>
                                         <td>操作</td>
                                     </tr>
                                 </thead>
@@ -44,9 +50,12 @@
                                     {
                                         <tr>
                                             <td>@sub.CateName</td>
+                                            <td style="color: @(sub.States == 0 ? "red" : "green");">@(sub.States == 0 ? "禁用" : "正常")</td>
                                             <td>
                                                 <a href="/Categories/Update/@sub.CateID" class="btn-sm btn-success">编辑</a>
-                                                <a href="/Categories/Delete/@sub.CateID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
+                                                <a href="/Categories/States/@sub.CateID" class="btn-sm btn-warning">@(sub.States == 0 ? "启用" : "禁用")</a>
+                                                @if (auth == "1")
+                                                { <a href="/Categories/Delete/@sub.CateID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>}
                                             </td>
                                         </tr>
                                     }

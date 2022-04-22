@@ -4,13 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1">
+      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1" ZoomLevel="118">
         <EntityTypeShape EntityType="MallModel.AdminUsers" Width="1.5" PointX="8.75" PointY="2.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Appraises" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Categories" Width="1.5" PointX="1.5" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Deliveries" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Favorites" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.News" Width="1.5" PointX="9.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="MallModel.News" Width="1.5" PointX="8.75" PointY="4.5" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Orders" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.OrdersDetails" Width="1.5" PointX="7.5" PointY="8" IsExpanded="true" />
         <EntityTypeShape EntityType="MallModel.Photos" Width="1.5" PointX="6" PointY="1.5" IsExpanded="true" />

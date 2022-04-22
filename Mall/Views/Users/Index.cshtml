@@ -1,31 +1,29 @@
-﻿@model PagedList<News>
+﻿@model PagedList<Users>
 @{
-    ViewBag.Title = "资讯列表";
+    ViewBag.Title = "用户管理";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     string auth = MyAuthentication.GetAuth();
 }
-
+@if(auth != "1")
+{
+    return;
+}
 <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
     <h2>@ViewBag.Title</h2>
     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-        @if (auth == "1") 
-        { 
-            <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
-        }
-        <button type="button" onclick="location.href='/News/Update'" class="btn btn-success">添加</button>
+        <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
+        <button type="button" onclick="location.href='/Users/Update'" class="btn btn-success">添加</button>
     </div>
 </div>
 <table class="table" style="text-align: center" id="data">
     <thead class="table-dark">
         <tr>
-            @if (auth == "1")
-            {
-                <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
-            }
-            <td>图片</td>
-            <td>标题</td>
-            <td>分类</td>
-            <td>发布时间</td>
+            <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            <td>用户名</td>
+            <td>昵称</td>
+            <td>邮箱</td>
+            <td>密码</td>
+            <td>默认地址</td>
             <td>状态</td>
             <td>操作</td>
         </tr>
@@ -34,22 +32,22 @@
         @foreach (var item in Model)
         {
             <tr>
-                @if (auth == "1")
-                {
-                    <td>
-                        <input type="checkbox" class="ck ckn" value="@item.NewsID" id="flexCheckDefault">
-                    </td>
-                }
-                <td><img src="@item.PhotoUrl" class="rounded" alt="" width="50px"></td>
-                <td>@item.Title</td>
-                <td>@item.NType</td>
-                <td>@item.PushTime</td>
-                <td style="color: @(item.States == 1 ? "green" : "");">@(item.States == 1 ? "置顶" : "")</td>
                 <td>
-                    <a href="/News/Update/@item.NewsID" class="btn-sm btn-primary">编辑</a>
-                    <a href="/News/Details/@item.NewsID" class="btn-sm btn-success">详情</a>
-                    <a href="/News/Delete/@item.NewsID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
-                    <a href="/News/States/@item.NewsID" class="btn-sm btn-warning">@(item.States == 1 ? "取消置顶" : "置顶")</a>
+                    <input type="checkbox" class="ck ckn" value="@item.UserID" id="flexCheckDefault">
+                </td>
+                <td>@item.UserName</td>
+                <td>@item.Nick</td>
+                <td>@item.Email</td>
+                <td>  
+                    <a class="mask" onclick="show(this,'@item.Pwd')" href="#">********</a>   
+                </td>
+                <td>@if(@item.Deliveries1 != null) { @item.Deliveries1.Consignee}</td>
+                <td style="color: @(item.States == 0 ? "red" : "green");">@(item.States == 0 ? "禁用" : "正常")</td>
+                <td>
+                    <a href="/Users/Update/@item.UserID" class="btn-sm btn-primary">编辑</a>
+                    <a href="/Users/Details/@item.UserID" class="btn-sm btn-success">详情</a>
+                    <a href="/Users/States/@item.UserID" class="btn-sm btn-warning">@(item.States == 0 ? "启用" : "禁用")</a>
+                    <a href="/Users/Delete/@item.UserID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
                 </td>
             </tr>
         }
@@ -74,7 +72,7 @@
         $(".ck").prop("checked", o.checked)
     }
     function deleteList() {
-        if (confirm('是否确认删除')) {
+        if (confirm('是否确认删除,会清空该用户的所有信息!')) {
             let boxies = $(":checked").not(".ckm")
             let ids = ""
             if (boxies.length != 0) {
@@ -82,8 +80,8 @@
                     ids += $(e).val() + (i == (boxies.length - 1) ? "" : ",")
                 })
                 if (ids.length != 0) {
-                    $.post("/News/Delete", { "ids": ids }, () => {
-                        location.href = "/News"
+                    $.post("/Users/Delete", { "ids": ids }, () => {
+                        location.href = "/Users"
                     })
                 } else {
                     $(".toast-body").text("你还未选中任何一条记录")
@@ -95,4 +93,13 @@
             }
         }
     }
+    function show(e, p) {
+        if (e.innerHTML == p) {
+            e.innerHTML = "********"
+        }
+        else {
+            e.innerHTML = p
+        }
+    }
+
 </script>

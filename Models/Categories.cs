@@ -24,6 +24,7 @@ namespace Models
         public int CateID { get; set; }
         public string CateName { get; set; }
         public Nullable<int> ParentID { get; set; }
+        public int States { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Categories> Categories1 { get; set; }

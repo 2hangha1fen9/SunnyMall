@@ -12,6 +12,7 @@ namespace Mall.Controllers
     public class OrdersController : Controller
     {
         private OrdersBLL bll = new OrdersBLL();
+
         // GET: Orders
         [AdminAuthentication]
         public ActionResult Index(int? id, int? states)
@@ -28,17 +29,40 @@ namespace Mall.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var news = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
+            var orders = bll.FindEntity(key);
+            TempData["Message"] = $"检索到{orders.Count()}条数据";
+            return View(orders);
         }
 
-        [AllowAnonymous]
+
+        [AdminAuthentication]
+        public ActionResult Delete(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (bll.DeleteEntityById(id.Value))
+            {
+                TempData["Message"] = "删除成功";
+
+            }
+            else
+            {
+                TempData["Message"] = "无效的ID";
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [UserAuthentication]
+        [AdminAuthentication]
         public ActionResult Details(int? id)
         {
             return View();
         }
 
+        [UserAuthentication]
         [AdminAuthentication]
         public ActionResult Close(int? id)
         {
@@ -59,6 +83,7 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
+        [UserAuthentication]
         [AdminAuthentication]
         public ActionResult Send(int? id)
         {

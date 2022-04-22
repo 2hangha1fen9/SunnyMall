@@ -30,6 +30,11 @@
                     }
                 </select>
             </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">是否启用</label>
+                <input class="form-check-input" type="checkbox" value='@if (Model != null  && Model.CateID == Model.ParentID) {@Model.States}else { @Html.Raw("1") }' @if (Model != null && Model.CateID == Model.ParentID) { @(Model.States == 1 ? "checked" : "" )  } else { @Html.Raw("checked") } onclick="state()" name="States" id="states" role="switch" id="flexSwitchCheckDefault">
+            </div>
+
             <div class="col-12">
                 <button type="submit" class="btn btn-success">提交</button>
                 <a href="/Categories" class="btn btn-primary">返回</a>
@@ -40,6 +45,9 @@
 <script>
     function sub() {
         $("#ParentID").val($("#parentID option:selected").val())
+    }
+    function state() {
+        $("#states").val($("#states").val() == 0 ? 1 : 0)
     }
     window.onload = () => {
         $("#cates").validate({

@@ -3,6 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 
@@ -20,7 +21,7 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
-        [AdminAuthentication]       
+        [AdminAuthentication]
         public ActionResult Index(string key)
         {
             if (key.Length == 0)
@@ -39,7 +40,7 @@ namespace Mall.Controllers
             {
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
             }
-            if (bll.FindEntityById(id.Value).Categories1.Count() > 0)
+            if (bll.FindEntityById(id.Value).Products.Count() > 0)
             {
                 TempData["Message"] = "删除失败,该分类下还有商品,请删除对应商品在进行操作";              
             }
@@ -101,6 +102,26 @@ namespace Mall.Controllers
                     TempData["Message"] = "添加失败";
                     return View();
                 }
+            }
+            return RedirectToAction("Index");
+        }
+
+        [AdminAuthentication]
+        public ActionResult States(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Categories cates = bll.FindEntityById(id.Value);
+            if (cates == null)
+            {
+                TempData["Message"] = "无效的ID";
+            }
+            cates.States = cates.States == 0 ? 1 : 0;
+            if (bll.UpdateEntity(cates))
+            {
+                TempData["Message"] = "操作成功";
             }
             return RedirectToAction("Index");
         }

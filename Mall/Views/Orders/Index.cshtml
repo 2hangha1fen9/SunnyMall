@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "订单管理";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    string auth = MyAuthentication.GetAuth();
 }
 
 <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
@@ -53,6 +54,10 @@
                 else if (item.States == 1)
                 {
                     <a href="/Orders/Send/@item.OrdersID" class="btn-sm btn-success" onclick="return confirm('是否发货')">发货</a>
+                }
+                @if (auth == "1")
+                {
+                    <a href="/Orders/Delete/@item.OrdersID" class="btn-sm btn-primary">删除订单</a>
                 }
             </td>
         </tr>

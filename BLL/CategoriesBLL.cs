@@ -12,7 +12,7 @@ namespace BLL
     {
         public PagedList<Categories> FindEntity(string key)
         {
-            IQueryable<Categories> news = ListEntity().Where(n => n.CateName.Contains(key));
+            IQueryable<Categories> news = ListEntity().Where(n => n.CateName.Contains(key) || n.States == (key == "正常" ? 0 : key == "禁用" ? 1 : 1));
             return news.ToList().ToPagedList(1, news.Count());
         }
 
@@ -29,6 +29,11 @@ namespace BLL
 
         public override bool DeleteEntityById(int id)
         {
+            Categories c = dal.Entity(id);
+            if (c.Categories1.Count() > 0)
+            {
+                dal.Delete(c.Categories1);
+            }
             return dal.Delete("CateID", id);
         }
 

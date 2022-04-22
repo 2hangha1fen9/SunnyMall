@@ -10,7 +10,7 @@ namespace Mall
 {
     public class MyAuthentication
     {
-
+        public static bool isRedirect = false;
         /// <summary>
         /// 获取登录凭据
         /// </summary>
@@ -26,7 +26,7 @@ namespace Mall
         /// <param name="userName"></param>
         /// <param name="userID"></param>
         /// <param name="auth"></param>
-        public static void SetAuthCookie(string userName,string userID,string auth)
+        public static void SetAuthCookie(string userName,string userID,string auth = "-1")
         {
             //拼接用户数据
             string userData = $"{userID}#{auth}";
@@ -119,12 +119,13 @@ namespace Mall
             }
         }
     }
+   
 
     public class AdminAuthentication : AuthorizeAttribute
-    {
+    { 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (!MyAuthentication.IsLogin() || MyAuthentication.GetAuth() != "admin")
+            if (!MyAuthentication.IsLogin() || (MyAuthentication.GetAuth() != "1" && MyAuthentication.GetAuth() != "0"))
             {
                 HttpContext.Current.Response.Redirect("~/Admin/Login", true);
             }
@@ -135,7 +136,7 @@ namespace Mall
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (!MyAuthentication.IsLogin() || MyAuthentication.GetAuth() != "user")
+            if (!MyAuthentication.IsLogin() || (MyAuthentication.GetAuth() != "-1" && MyAuthentication.GetAuth() != "1" && MyAuthentication.GetAuth() != "0"))
             {
                 HttpContext.Current.Response.Redirect("~/Home/Login", true);
             }

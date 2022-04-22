@@ -12,13 +12,14 @@ namespace BLL
     {
         public PagedList<Products> FindEntity(string key)
         {
-            IQueryable<Products> news = ListEntity().Where(n => n.Title.Contains(key) ||
+            IQueryable<Products> products = ListEntity().Where(n => n.Title.Contains(key) ||
                                                                    n.Title.Contains(key) ||
                                                                    n.MarketPrice.ToString().Contains(key) ||
                                                                    n.Price.ToString().Contains(key) ||
                                                                    n.Stock.ToString().Contains(key) || 
-                                                                   n.Categories.CateName.Contains(key));
-            return news.ToList().OrderByDescending(n => n.PostTime).ToPagedList(1, news.Count());
+                                                                   n.Categories.CateName.Contains(key) || 
+                                                                   n.States == (key == "下架" ? 0 : key == "上架" ? 1 : -1));
+            return products.ToList().OrderByDescending(n => n.PostTime).ToPagedList(1, products.Count());
         }
 
         public PagedList<Products> ListEntityByPage(int? id = 1)

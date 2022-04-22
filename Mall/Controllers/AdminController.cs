@@ -14,6 +14,7 @@ namespace Mall.Controllers
     public class AdminController : Controller
     {
         private AdminUsersBLL bll = new AdminUsersBLL();
+
         // GET: Admin
         [AdminAuthentication]
         public ActionResult Index()
@@ -22,6 +23,7 @@ namespace Mall.Controllers
         }
 
         // GET: Admin/Login
+        [AllowAnonymous]
         public ActionResult Login()
         {
             return View();
@@ -37,7 +39,7 @@ namespace Mall.Controllers
                 if (user != null)
                 {
                     // 设置权限
-                    MyAuthentication.SetAuthCookie(user.UserName, user.AdminID.ToString(), "admin");
+                    MyAuthentication.SetAuthCookie(user.UserName, user.AdminID.ToString(), user.Role.ToString());
                     return RedirectToAction("Index");
                 }
                 ModelState.AddModelError("","账号名或密码错误");

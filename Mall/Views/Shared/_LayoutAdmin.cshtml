@@ -30,6 +30,7 @@
         </form>
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
+                @{string auth = MyAuthentication.GetAuth();}
                 <a class="nav-link px-3 username" href="#">@(MyAuthentication.GetUserName())</a>
             </div>
         </div>
@@ -74,18 +75,27 @@
                                 订单管理
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span>
-                                用户管理
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                <span data-feather="layers"></span>
-                                网站首页
-                            </a>
-                        </li>
+                        @if (auth == "1")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(Request.RawUrl.Contains("/Users") ? "active" : "")" href="/Users">
+                                    <span data-feather="layers"></span>
+                                    用户管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(Request.RawUrl.Contains("/Deliveries") ? "active" : "")" href="/Deliveries">
+                                    <span data-feather="layers"></span>
+                                    用户地址管理
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <span data-feather="layers"></span>
+                                    网站首页
+                                </a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </nav>

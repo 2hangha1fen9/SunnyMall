@@ -9,11 +9,9 @@ using System.Web.Mvc;
 
 namespace Mall.Controllers
 {
-    public class ProductsController : Controller
+    public class UsersController : Controller
     {
-        private ProductsBLL bll = new ProductsBLL();
-        private CategoriesBLL cll = new CategoriesBLL();
-        private PhotosBLL pll = new PhotosBLL();
+        private UsersBLL bll = new UsersBLL();
 
         [AdminAuthentication]
         public ActionResult Index(int? id = 1)
@@ -29,23 +27,16 @@ namespace Mall.Controllers
             {
                 return RedirectToAction("Index");
             }
-            var news = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
-        }
-
-        [UserAuthentication]
-        [AdminAuthentication]
-        public ActionResult Details(int? id)
-        {
-            return View();
+            var users = bll.FindEntity(key);
+            TempData["Message"] = $"检索到{users.Count()}条数据";
+            return View(users);
         }
 
         [ValidateInput(false)]
+        [UserAuthentication]
         [AdminAuthentication]
         public ActionResult Update(int? id)
         {
-            ViewBag.Categories = cll.ListEntity();
             if (id.HasValue)
             {
                 return View(bll.FindEntityById(id.Value));
@@ -54,9 +45,10 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
+        [UserAuthentication]
         [AdminAuthentication]
         [ValidateInput(false)]
-        public ActionResult Update(Products n, int? id)
+        public ActionResult Update(Users n, int? id)
         {
             if (id.HasValue)
             {
@@ -74,17 +66,16 @@ namespace Mall.Controllers
             {
                 if (ModelState.IsValid && bll.AddEntity(n) != null)
                 {
-                    TempData["Message"] = "发布成功";
+                    TempData["Message"] = "添加成功";
                 }
                 else
                 {
-                    TempData["Message"] = "发布失败";
+                    TempData["Message"] = "添加失败";
                     return View();
                 }
             }
             return RedirectToAction("Index");
         }
-
 
         [AdminAuthentication]
         public ActionResult Delete(int? id)
@@ -132,66 +123,17 @@ namespace Mall.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products news = bll.FindEntityById(id.Value);
-            if (news == null)
+            Users users = bll.FindEntityById(id.Value);
+            if (users == null)
             {
                 TempData["Message"] = "无效的ID";
             }
-            news.States = news.States == 0 ? 1 : 0;
-            if (bll.UpdateEntity(news))
+            users.States = users.States == 0 ? 1 : 0;
+            if (bll.UpdateEntity(users))
             {
                 TempData["Message"] = "操作成功";
             }
             return RedirectToAction("Index");
-        }
-
-        [AdminAuthentication]
-        public ActionResult Photos(int? id)
-        {
-            if (id.HasValue)
-            {
-                return View(bll.FindEntityById(id.Value));
-            }
-            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        }
-
-        [AdminAuthentication]
-        public ActionResult DeletePhotos(int? id)
-        {
-            if (!id.HasValue && Request.QueryString["id"] == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (pll.DeleteEntityById(int.Parse(Request.QueryString["id"])))
-            {
-                TempData["Message"] = "删除成功";
-            }
-            else
-            {
-                TempData["Message"] = "无效的ID";
-            }
-            return RedirectToAction("Photos", new { id = id.Value });
-        }
-
-        [AdminAuthentication]
-        public ActionResult TopPhotos(int? id)
-        {
-            if (!id.HasValue && Request.QueryString["id"] == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Photos p = pll.FindEntityById(int.Parse(Request.QueryString["id"]));
-            if (p == null)
-            {
-                TempData["Message"] = "无效的ID";
-            }
-            p.States = p.States == 0 ? 1 : 0;
-            if (pll.UpdateEntity(p))
-            {
-                TempData["Message"] = "操作成功";
-            }
- 
-            return RedirectToAction("Photos", new { id = id.Value });
         }
     }
 }

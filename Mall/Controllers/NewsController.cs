@@ -21,8 +21,8 @@ namespace Mall.Controllers
             return View(bll.ListEntityByPage(id));
         }
 
-        [AdminAuthentication]
         [HttpPost]
+        [AdminAuthentication]
         public ActionResult Index(string key)
         {
             if(key.Length == 0)
@@ -40,8 +40,8 @@ namespace Mall.Controllers
             return View();
         }
 
-        [AdminAuthentication]
         [ValidateInput(false)]
+        [AdminAuthentication]
         public ActionResult Update(int? id)
         {
             if (id.HasValue)
@@ -52,8 +52,8 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
-        [AdminAuthentication]
         [ValidateInput(false)]
+        [AdminAuthentication]
         public ActionResult Update(News n, int? id)
         {
             n.PhotoUrl = TempData["FileName"] == null ? n.PhotoUrl : TempData["FileName"].ToString();
@@ -105,7 +105,6 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }  
 
-        [AdminAuthentication]
         [HttpPost]
         public ActionResult Delete(string ids)
         {
