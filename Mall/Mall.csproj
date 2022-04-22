@@ -184,6 +184,8 @@
     <Content Include="Views\Users\Update.cshtml" />
     <Content Include="Views\Deliveries\Index.cshtml" />
     <Content Include="Views\Deliveries\Update.cshtml" />
+    <Content Include="Views\Admin\Manager.cshtml" />
+    <Content Include="Views\Admin\Update.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />

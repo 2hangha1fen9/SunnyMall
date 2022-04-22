@@ -1,10 +1,10 @@
-﻿@model PagedList<Users>
+﻿@model PagedList<AdminUsers>
 @{
-    ViewBag.Title = "用户列表";
+    ViewBag.Title = "后台人员列表";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     string auth = MyAuthentication.GetAuth();
 }
-@if(auth != "1")
+@if (auth != "1")
 {
     return;
 }
@@ -12,7 +12,7 @@
     <h2>@ViewBag.Title</h2>
     <div class="btn-group" role="group" aria-label="Basic mixed styles example">
         <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
-        <button type="button" onclick="location.href='/Users/Update'" class="btn btn-success">添加</button>
+        <button type="button" onclick="location.href='/Admin/Update'" class="btn btn-success">添加</button>
     </div>
 </div>
 <table class="table" style="text-align: center" id="data">
@@ -20,11 +20,8 @@
         <tr>
             <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
             <td>用户名</td>
-            <td>昵称</td>
-            <td>邮箱</td>
             <td>密码</td>
-            <td>默认地址</td>
-            <td>状态</td>
+            <td>角色</td>
             <td>操作</td>
         </tr>
     </thead>
@@ -33,21 +30,16 @@
         {
             <tr>
                 <td>
-                    <input type="checkbox" class="ck ckn" value="@item.UserID" id="flexCheckDefault">
+                    <input type="checkbox" class="ck ckn" value="@item.AdminID" id="flexCheckDefault">
                 </td>
                 <td>@item.UserName</td>
-                <td>@item.Nick</td>
-                <td>@item.Email</td>
-                <td>  
-                    <a class="mask" onclick="show(this,'@item.Pwd')" href="#">********</a>   
-                </td>
-                <td>@if(@item.Deliveries1 != null) { @item.Deliveries1.Complete}</td>
-                <td style="color: @(item.States == 0 ? "red" : "green");">@(item.States == 0 ? "禁用" : "正常")</td>
                 <td>
-                    <a href="/Users/Update/@item.UserID" class="btn-sm btn-primary">编辑</a>
-                    <a href="/Users/Details/@item.UserID" class="btn-sm btn-success">详情</a>
-                    <a href="/Users/States/@item.UserID" class="btn-sm btn-warning">@(item.States == 0 ? "启用" : "禁用")</a>
-                    <a href="/Users/Delete/@item.UserID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
+                    <a class="mask" onclick="show(this,'@item.Pwd')" href="#">********</a>
+                </td> 
+                <td style="color: @(item.Role == 0 ? "green" : item.Role == 1 ? "orange" : "red")">@(item.Role == 0 ? "管理员" : item.Role == 1 ? "超级管理员" : "禁用")</td>
+                <td>
+                    <a href="/Admin/Update/@item.AdminID" class="btn-sm btn-primary">编辑</a>
+                    <a href="/Admin/Delete/@item.AdminID" class="btn-sm btn-danger" onclick="return confirm('是否确认删除')">删除</a>
                 </td>
             </tr>
         }
@@ -80,8 +72,8 @@
                     ids += $(e).val() + (i == (boxies.length - 1) ? "" : ",")
                 })
                 if (ids.length != 0) {
-                    $.post("/Users/Delete", { "ids": ids }, () => {
-                        location.href = "/Users"
+                    $.post("/Admin/Delete", { "ids": ids }, () => {
+                        location.href = "/Admin/Manager/"
                     })
                 } else {
                     $(".toast-body").text("你还未选中任何一条记录")

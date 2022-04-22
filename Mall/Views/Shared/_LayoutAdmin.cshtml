@@ -16,6 +16,7 @@
         .navbar-toggler + form {
             width: 100%
         }
+
     </style>
 </head>
 <body>
@@ -90,12 +91,18 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link @(Request.RawUrl.Contains("/Admin/Manager/") ? "active" : "")" href="/Admin/Manager/">
                                     <span data-feather="layers"></span>
-                                    网站首页
+                                    后台人员管理
                                 </a>
                             </li>
                         }
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="layers"></span>
+                                网站首页
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>

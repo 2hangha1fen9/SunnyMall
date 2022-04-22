@@ -121,6 +121,7 @@
           <Property Name="Nick" Type="nvarchar" MaxLength="50" />
           <Property Name="DeliveryID" Type="int" />
           <Property Name="States" Type="int" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime" Nullable="false" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -489,6 +490,7 @@
           <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Users" FromRole="Users" ToRole="Favorites" />
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
           <Property Name="States" Type="Int32" Nullable="false" />
+          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -835,6 +837,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="MallModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
