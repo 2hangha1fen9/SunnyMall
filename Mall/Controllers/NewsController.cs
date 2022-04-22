@@ -14,25 +14,21 @@ namespace Mall.Controllers
     public class NewsController : Controller
     {
         private NewsBLL bll = new NewsBLL();
-        // GET: News
-        [AdminAuthentication]
-        public ActionResult Index(int? id=1)
-        {
-            return View(bll.ListEntityByPage(id));
-        }
 
-        [HttpPost]
+
         [AdminAuthentication]
-        public ActionResult Index(string key)
+        public ActionResult Index(int? id = 1, string key = "")
         {
-            if(key.Length == 0)
+            if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityByPage(id));
             }
-            var news = bll.FindEntity(key);
+            var news = bll.FindEntityByPage(id,key);
+            TempData["Search"] = key;
             TempData["Message"] = $"检索到{news.Count()}条数据";
             return View(news);
         }
+
 
         [AllowAnonymous]
         public ActionResult Details(int? id)

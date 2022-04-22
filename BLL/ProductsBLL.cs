@@ -10,7 +10,7 @@ namespace BLL
 {
     public class ProductsBLL : BaseBLL<Products>
     {
-        public PagedList<Products> FindEntity(string key)
+        public PagedList<Products> FindEntityByPage(int? id, string key)
         {
             IQueryable<Products> products = ListEntity().Where(n => n.Title.Contains(key) ||
                                                                    n.Title.Contains(key) ||
@@ -19,7 +19,7 @@ namespace BLL
                                                                    n.Stock.ToString().Contains(key) || 
                                                                    n.Categories.CateName.Contains(key) || 
                                                                    n.States == (key == "下架" ? 0 : key == "上架" ? 1 : -1));
-            return products.ToList().OrderByDescending(n => n.PostTime).ToPagedList(1, products.Count());
+            return products.ToList().OrderByDescending(n => n.PostTime).ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<Products> ListEntityByPage(int? id = 1)

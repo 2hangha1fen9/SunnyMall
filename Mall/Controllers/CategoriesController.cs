@@ -13,25 +13,20 @@ namespace Mall.Controllers
     {
         private CategoriesBLL bll = new CategoriesBLL();
         
-        // GET: Categories
-        [AdminAuthentication]
-        public ActionResult Index(int? id=1)
-        {
-            return View(bll.ListEntityGroupByPage(id));
-        }
 
-        [HttpPost]
         [AdminAuthentication]
-        public ActionResult Index(string key)
+        public ActionResult Index(int? id = 1, string key = "")
         {
             if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityGroupByPage(id));
             }
-            var news = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
+            var cates = bll.FindEntityByPage(id, key);
+            TempData["Search"] = key;
+            TempData["Message"] = $"检索到{cates.Count()}条数据";
+            return View(cates);
         }
+
 
         [AdminAuthentication]
         public ActionResult Delete(int? id)

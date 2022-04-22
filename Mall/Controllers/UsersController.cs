@@ -14,20 +14,14 @@ namespace Mall.Controllers
         private UsersBLL bll = new UsersBLL();
 
         [AdminAuthentication]
-        public ActionResult Index(int? id = 1)
-        {
-            return View(bll.ListEntityByPage(id));
-        }
-
-        [HttpPost]
-        [AdminAuthentication]
-        public ActionResult Index(string key)
+        public ActionResult Index(int? id = 1, string key = "")
         {
             if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityByPage(id));
             }
-            var users = bll.FindEntity(key);
+            var users = bll.FindEntityByPage(id, key);
+            TempData["Search"] = key;
             TempData["Message"] = $"检索到{users.Count()}条数据";
             return View(users);
         }

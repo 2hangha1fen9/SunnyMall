@@ -9,11 +9,11 @@ namespace BLL
 {
     public class AdminUsersBLL : BaseBLL<AdminUsers>
     {
-        public PagedList<AdminUsers> FindEntity(string key)
+        public PagedList<AdminUsers> FindEntityByPage(int? id, string key)
         {
             IQueryable<AdminUsers> products = ListEntity().Where(n => n.UserName.Contains(key) ||
                                                                                  n.Role == (key == "管理员" ? 0 : key == "超级管理员" ? 1 : -9));
-            return products.ToList().ToPagedList(1, products.Count());
+            return products.ToList().ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<AdminUsers> ListEntityByPage(int? id = 1)

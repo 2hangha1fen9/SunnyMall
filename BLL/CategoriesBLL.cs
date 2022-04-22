@@ -10,10 +10,10 @@ namespace BLL
 {
     public class CategoriesBLL : BaseBLL<Categories>
     {
-        public PagedList<Categories> FindEntity(string key)
+        public PagedList<Categories> FindEntityByPage(int? id, string key)
         {
             IQueryable<Categories> news = ListEntity().Where(n => n.CateName.Contains(key) || n.States == (key == "正常" ? 0 : key == "禁用" ? 1 : 1));
-            return news.ToList().ToPagedList(1, news.Count());
+            return news.ToList().ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<Categories> ListEntityGroupByPage(int? id = 1)

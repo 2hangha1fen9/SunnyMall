@@ -16,22 +16,16 @@ namespace Mall.Controllers
         private PhotosBLL pll = new PhotosBLL();
 
         [AdminAuthentication]
-        public ActionResult Index(int? id = 1)
-        {
-            return View(bll.ListEntityByPage(id));
-        }
-
-        [HttpPost]
-        [AdminAuthentication]
-        public ActionResult Index(string key)
+        public ActionResult Index(int? id = 1, string key = "")
         {
             if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityByPage(id));
             }
-            var news = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
+            var products = bll.FindEntityByPage(id, key);
+            TempData["Search"] = key;
+            TempData["Message"] = $"检索到{products.Count()}条数据";
+            return View(products);
         }
 
         [UserAuthentication]

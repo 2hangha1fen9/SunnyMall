@@ -10,13 +10,13 @@ namespace BLL
 {
     public class OrdersBLL : BaseBLL<Orders>
     {
-        public PagedList<Orders> FindEntity(string key)
+        public PagedList<Orders> FindEntityByPage(int? id,string key)
         {
             IQueryable<Orders> news = ListEntity().Where(o => o.Users.UserName.Contains(key) || 
                                                                 o.Deliveries.Consignee.Contains(key) || 
                                                                 o.States == (key == "未付款" ? 0 : key == "已付款" ? 1 : key == "已发货" ? 2 : key == "已收货" ? 3 : key == "已关闭" ? -1 : -1));
             return news.ToList().OrderByDescending(n => n.Orderdate)
-                                    .ToPagedList(1, news.Count());
+                                    .ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<Orders> ListEntityByPage(int id,int? states)

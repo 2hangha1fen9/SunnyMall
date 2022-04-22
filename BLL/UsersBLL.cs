@@ -10,12 +10,12 @@ namespace BLL
 {
     public class UsersBLL : BaseBLL<Users>
     {
-        public PagedList<Users> FindEntity(string key)
+        public PagedList<Users> FindEntityByPage(int? id, string key)
         {
             IQueryable<Users> users = ListEntity().Where(u => u.UserName.Contains(key) ||
                                                                        u.Nick.Contains(key) || 
                                                                        u.Email.Contains(key));
-            return users.ToList().ToPagedList(1, users.Count());
+            return users.ToList().ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<Users> ListEntityByPage(int? id = 1)

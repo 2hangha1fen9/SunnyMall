@@ -70,13 +70,14 @@
 </table>
 <div style="margin: 50px 0px 50px 0px">
     @Html.Pager(Model, new PagerOptions
-        {
-        PageIndexParameterName = "id",
-        HorizontalAlign = "center",
-        CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
-        DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
-        PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
-        FirstPageText = "<<",
-        LastPageText = ">>"
-    })
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+})
 </div>

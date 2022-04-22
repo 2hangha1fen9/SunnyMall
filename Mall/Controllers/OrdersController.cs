@@ -15,23 +15,16 @@ namespace Mall.Controllers
 
         // GET: Orders
         [AdminAuthentication]
-        public ActionResult Index(int? id, int? states)
-        {
-            return View(bll.ListEntityByPage(id ?? 1,states));
-        }
-
-        
-        [HttpPost]
-        [AdminAuthentication]
-        public ActionResult Index(string key)
+        public ActionResult Index(int? id = 1, int? states = null, string key = "")
         {
             if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityByPage(id.Value,states));
             }
-            var orders = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{orders.Count()}条数据";
-            return View(orders);
+            var news = bll.FindEntityByPage(id.Value,key);
+            TempData["Search"] = key;
+            TempData["Message"] = $"检索到{news.Count()}条数据";
+            return View(news);
         }
 
 

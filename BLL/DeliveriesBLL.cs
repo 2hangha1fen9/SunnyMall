@@ -10,13 +10,13 @@ namespace BLL
 {
     public class DeliveriesBLL : BaseBLL<Deliveries>
     {
-        public PagedList<Deliveries> FindEntity(string key)
+        public PagedList<Deliveries> FindEntityByPage(int? id, string key)
         {
             IQueryable<Deliveries> desliveries = ListEntity().Where(d => d.Complete.Contains(key) ||
                                                                                     d.Consignee.Contains(key) ||
                                                                                     d.Phone.Contains(key) ||
                                                                                     d.Users.UserName.Contains(key));
-            return desliveries.ToList().ToPagedList(1, desliveries.Count());
+            return desliveries.ToList().ToPagedList(id ?? 1, 10);
         }
 
         public PagedList<Deliveries> ListEntityByPage(int? id = 1)

@@ -16,7 +16,6 @@
         .navbar-toggler + form {
             width: 100%
         }
-
     </style>
 </head>
 <body>
@@ -26,9 +25,18 @@
                 data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <form action="@ViewContext.RouteData.Values["controller"].ToString()" method="post">
-            <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" name="key">
-        </form>
+        @if (Request.RawUrl.Contains("/Manager"))
+        {
+            <form action="/Admin/Manager" method="get">
+                <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" name="key" value="@TempData["Search"]">
+            </form>
+        }
+        else
+        {
+            <form action="@ViewContext.RouteData.Values["controller"].ToString()" method="get">
+                <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search" name="key" value="@TempData["Search"]">
+            </form>
+        }
         <div class="navbar-nav">
             <div class="nav-item text-nowrap">
                 @{string auth = MyAuthentication.GetAuth();}
@@ -47,7 +55,7 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link @(Request.RawUrl.Contains("/Admin") ? "active" : "")" href="/Admin">
+                            <a class="nav-link @(Request.RawUrl == ("/Admin") ? "active" : "")" href="/Admin">
                                 <span data-feather="home"></span>
                                 概况
                             </a>
@@ -91,7 +99,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @(Request.RawUrl.Contains("/Admin/Manager/") ? "active" : "")" href="/Admin/Manager/">
+                                <a class="nav-link @(Request.RawUrl.Contains("/Manager") ? "active" : "")" href="/Admin/Manager/">
                                     <span data-feather="layers"></span>
                                     后台人员管理
                                 </a>
@@ -107,7 +115,7 @@
                 </div>
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                @RenderBody()       
+                @RenderBody()
                 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 100">
                     <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                         <div class="toast-header">
@@ -119,7 +127,7 @@
                         </div>
                     </div>
                 </div>
-            </main>         
+            </main>
             <script>
                 $(() => {
                     var message = "@(TempData["Message"])"

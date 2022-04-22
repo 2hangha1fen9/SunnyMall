@@ -47,24 +47,17 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult Manager(int? id = 1)
-        {
-            return View(bll.ListEntityByPage(id));
-        }
-
-        [HttpPost]
-        [AdminAuthentication]
-        public ActionResult Manager(string key)
+        public ActionResult Manager(int? id = 1, string key = "")
         {
             if (key.Length == 0)
             {
-                return RedirectToAction("Index");
+                return View(bll.ListEntityByPage(id));
             }
-            var news = bll.FindEntity(key);
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
+            var users = bll.FindEntityByPage(id, key);
+            TempData["Search"] = key;
+            TempData["Message"] = $"检索到{users.Count()}条数据";
+            return View(users);
         }
-
 
         [AdminAuthentication]
         public ActionResult Update(int? id)
