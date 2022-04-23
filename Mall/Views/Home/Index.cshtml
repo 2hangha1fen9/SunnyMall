@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "阳光商城";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<News> news = new BLL.NewsBLL().ListEntity().OrderByDescending(n => n.States).ToList();
+    List<Products> newProducts = new BLL.ProductsBLL().ListEntity().Where(p => p.States == 1).OrderByDescending(p => p.PostTime).Take(4).ToList();
+    List<Products> hotProducts = new BLL.ProductsBLL().ListEntity().Where(p => p.States == 1).OrderByDescending(p => p.OrdersDetails.Count()).Take(8).ToList();
+}
+
+<div id="carouselExampleControls" class="carousel slide container d-flex flex-wrap  rounded-3" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @{bool first = true;}
+        @foreach (var item in news)
+        {
+            <div class="carousel-item  @(first ? "active" : "")">
+                <img src="@item.PhotoUrl" class="d-block w-100 rounded-3" alt="...">
+            </div>
+            @(first = false)
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+
+
+<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+    <h2 class ="fw-bold">新品推荐</h2>
+</div>
+<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+    @foreach (var item in newProducts)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">&yen;@item.Price.ToString("0.00")</h5>
+                <p class="card-text text-truncate">@item.Title</p>
+                <a href="/Products/Details/@item.ProductID" class="btn btn-primary">查看详情</a>
+            </div>
+        </div>
+    }
+</div>
+
+<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+    <h2 class ="fw-bold">热门推荐</h2>
+</div>
+<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+    @foreach (var item in hotProducts)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">&yen;@item.Price.ToString("0.00")</h5>
+                <p class="card-text text-truncate">@item.Title</p>
+                <a href="/Products/Details/@item.ProductID" class="btn btn-primary">查看详情</a>
+            </div>
+        </div>
+    }
+</div>

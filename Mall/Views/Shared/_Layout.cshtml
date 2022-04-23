@@ -1,0 +1,182 @@
+﻿@{
+    List<Categories> categories = new BLL.CategoriesBLL().ListEntity("").Where(c => c.States == 1).ToList();
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="/Content/bootstrap.css">
+    <link rel="stylesheet" href="~/Content/slick-theme.css">
+    <script src="/Scripts/jquery-3.2.1.min.js"></script>
+    <script src="~/Scripts/popper.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/slick.min.js"></script>
+    <style>
+
+
+
+        body {
+            background-color: rgba(0, 0, 0, 0.064);
+        }
+        
+        .py-3,
+        .footer {
+            background-color: white;
+        }
+
+        .item {
+            margin-top: 20px;
+        }
+
+        .item h2 {
+            width: 100%;
+            border-bottom: 2px solid rgb(173, 166, 166);
+        }
+
+        .card {
+            margin: 10px;
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .card-title {
+            color: rgba(255, 0, 0, 0.696)
+        }
+
+        .card-text {
+            display: inline-block;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .footer {
+            width: 100%;
+            margin-top: 150px;
+            margin-bottom: -20px;
+        }
+
+        .money {
+            color: rgba(255, 0, 0, 0.596);
+        }
+
+        .range{
+            white-space: nowrap;
+        }
+        .range input{
+            display: inline;
+        }
+
+        .info h1,
+        h5 {
+            margin: 30px 0px 30px 0px;
+        }
+
+        .info .count {
+            margin: 30px 0px 30px 0px;
+        }
+
+        .market-price {
+            text-decoration: line-through;
+        }
+
+        .price {
+            font-size: 30px;
+            color: orange;
+            font-weight: bolder;
+        }
+
+        .tab-pane {
+            width: 100%;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <nav class="py-2 bg-light border-bottom">
+            <div class="container d-flex flex-wrap">
+                <ul class="nav me-auto">
+                    <li class="nav-item">
+                        <a href="/Home" class="nav-link link-dark px-2 active" aria-current="page">首页</a>
+                    </li>
+                    <li class="nav-item"><a href="/News/List" class="nav-link link-dark px-2">资讯</a></li>
+                    <li class="nav-item"><a href="/Products/List" class="nav-link link-dark px-2">全部商品</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link link-dark px-2">|</a></li>
+                    @foreach (var item in categories)
+                    {
+                        
+                        <li class="nav-item">
+                            <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" href="/Products/List?cates=@item.CateName" role="button" aria-expanded="false">@item.CateName</a>
+                            <ul class="dropdown-menu">
+                                @foreach (var sub in item.Categories1)
+                                {
+                                    <li><a class="dropdown-item" href="/Products/List?cates=@sub.CateName">@sub.CateName</a></li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+                <ul class="nav">
+                    @if (MyAuthentication.IsLogin())
+                    {
+                        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link link-dark px-2">
+                                购物车 <span class="badge bg-secondary">0</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">登录</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">注册</a></li>
+                    }
+                </ul>
+            </div>
+        </nav>
+        <header class="py-3 mb-4 border-bottom" style="box-shadow: 0px 16px 10px -8px #d6d6d6;">
+            <div class="container d-flex flex-wrap justify-content-center">
+                <a href="/Home" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
+                    <span class="fs-4">☀️阳光商城</span>
+                </a>
+                <form action="@if (Request.RawUrl.Contains("/New")) { @Html.Raw("/News/List")}else { @Html.Raw("/Products/List")}" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                    <input type="hidden" name="cates" value="@TempData["cates"]" />
+                    <input type="hidden" name="orderBy" value="@TempData["orderBy"]" />
+                    <input type="hidden" name="sortBy" value="@TempData["sortBy"]" />
+                    <input type="hidden" name="priceMin" value="@TempData["priceMin"]" />
+                    <input type="hidden" name="priceMax" value="@TempData["priceMax"]" />
+                    <input type="search" class="form-control" placeholder="Search..." value="@TempData["key"]" name="key" aria-label="Search">
+                </form>
+            </div>
+        </header>
+    </div>
+    <div>
+        @RenderBody()
+    </div>
+    <div class="footer">
+        <div class="container">
+            <footer class="py-3 my-4">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                    <li class="nav-item"><a href="/Home" class="nav-link px-2 text-muted">首页</a></li>
+                    <li class="nav-item"><a href="/Products/List" class="nav-link px-2 text-muted">全部商品</a></li>
+                    <li class="nav-item"><a href="/News/List" class="nav-link px-2 text-muted">促销资讯</a></li>
+                    <li class="nav-item"><a href="/Users" class="nav-link px-2 text-muted">个人中心</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">关于</a></li>
+                </ul>
+                <p class="text-center text-muted">☀️阳光商城</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>

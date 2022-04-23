@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Webdiyer.WebControls.Mvc;
 
 namespace Mall.Controllers
 {
@@ -16,23 +17,62 @@ namespace Mall.Controllers
         private PhotosBLL pll = new PhotosBLL();
 
         [AdminAuthentication]
-        public ActionResult Index(int? id = 1, string key = "")
+        public ActionResult Index(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string pricecMin = "", string priceMax = "")
         {
-            if (key.Length == 0)
+            var products = bll.ListEntity(key, cates, orderBy, sortBy, pricecMin, priceMax);
+            if(key.Length > 0)
             {
-                return View(bll.ListEntityByPage(id));
+                TempData["Message"] = $"检索到{products.Count()}条数据";
             }
-            var products = bll.FindEntityByPage(id, key);
             TempData["Search"] = key;
-            TempData["Message"] = $"检索到{products.Count()}条数据";
-            return View(products);
+            return View(products.ToPagedList(id.Value,10));
         }
 
-        [UserAuthentication]
-        [AdminAuthentication]
-        public ActionResult Details(int? id)
+        public ActionResult List(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
-            return View();
+            var products = bll.ListEntity(key, cates, orderBy, sortBy, priceMin, priceMax).Where(p => p.States == 1);
+            if (key.Length > 0)
+            {
+                TempData["Message"] = $"找到{products.Count()}个关于 \"{key}\" 的商品";
+            }
+            TempData["key"] = key;
+            TempData["cates"] = cates;
+            TempData["orderBy"] = orderBy;
+            TempData["sortBy"] = sortBy;
+            TempData["priceMin"] = priceMin;
+            TempData["priceMax"] = priceMax;
+            return View(products.ToPagedList(id.Value, 17));
+        }
+
+        public ActionResult Details(int? id,int? appraiseLevel = -1, int? appraiseOrderBy = 1, int? appraiseSortBy = 1)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            TempData["appraiseLevel"] = appraiseLevel;
+            TempData["appraiseOrderBy"] = appraiseOrderBy;
+            TempData["appraiseSortBy"] = appraiseSortBy;
+            Products products = bll.FindEntityById(id.Value);
+            List<Appraises> appraise = products.Appraises.ToList();
+            if(appraiseLevel != -1)
+            {
+                appraise = appraise.Where(a => a.Grade == appraiseLevel).ToList();
+            }
+
+            if(appraiseOrderBy == 1)
+            {
+                if(appraiseSortBy == 1)
+                {
+                    appraise = appraise.OrderByDescending(a => a.RateTime).ToList();
+                }
+                else
+                {
+                    appraise = appraise.OrderBy(a => a.RateTime).ToList();
+                }
+            }
+            ViewBag.Appraise = appraise;   
+            return View(products);
         }
 
         [ValidateInput(false)]
@@ -117,6 +157,24 @@ namespace Mall.Controllers
                 TempData["Message"] = "无效的ID列表";
             }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult AppraiseDelete(int? id,string aid)
+        {
+            if (!id.HasValue || aid.Length == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AppraisesBLL appraisesBLL = new AppraisesBLL();
+            if (appraisesBLL.DeleteEntityById(int.Parse(aid)))
+            {
+                TempData["Message"] = "删除成功";
+            }
+            else
+            {
+                TempData["Message"] = "无效的ID列表";
+            }
+            return RedirectToAction("Details",new { id = id.Value });
         }
 
         [AdminAuthentication]

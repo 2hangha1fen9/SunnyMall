@@ -19,21 +19,27 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "")
         {
-            if (key.Length == 0)
+            var news = bll.ListEntity(key);
+            if(key.Length > 0)
             {
-                return View(bll.ListEntityByPage(id));
+                TempData["Message"] = $"检索到{news.Count()}条数据";
             }
-            var news = bll.FindEntityByPage(id,key);
             TempData["Search"] = key;
-            TempData["Message"] = $"检索到{news.Count()}条数据";
-            return View(news);
+            return View(news.ToPagedList(id.Value,10));
         }
 
+        public ActionResult List(int? id = 1,string key="")
+        {
+            return Index(id,key);
+        }
 
-        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
-            return View();
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            return View(bll.FindEntityById(id.Value));
         }
 
         [ValidateInput(false)]

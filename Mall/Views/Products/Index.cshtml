@@ -51,7 +51,7 @@
                 <td style="color: @(item.States == 1 ? "green" : "red");">@(item.States == 1 ? "上架" : "下架")</td>
                 <td>
                     <a href="/Products/Update/@item.ProductID" class="btn-sm btn-primary">编辑</a>
-                    <a href="/Products/Details/@item.ProductID" class="btn-sm btn-success">详情</a>
+                    <a href="/Products/Details/@item.ProductID" class="btn-sm btn-success" target="_blank">详情</a>
                     <a href="/Products/Photos/@item.ProductID" class="btn-sm btn-info">管理图片</a>
                     <a href="/Products/States/@item.ProductID" class="btn-sm btn-dark">@(item.States == 0 ? "上架" : "下架")</a>
                     @if (auth == "1")

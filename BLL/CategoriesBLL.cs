@@ -10,20 +10,13 @@ namespace BLL
 {
     public class CategoriesBLL : BaseBLL<Categories>
     {
-        public PagedList<Categories> FindEntityByPage(int? id, string key)
+        public List<Categories> ListEntity(string key)
         {
-            IQueryable<Categories> news = ListEntity().Where(n => n.CateName.Contains(key) || n.States == (key == "正常" ? 0 : key == "禁用" ? 1 : 1));
-            return news.ToList().ToPagedList(id ?? 1, 10);
-        }
-
-        public PagedList<Categories> ListEntityGroupByPage(int? id = 1)
-        {
-            IQueryable<Categories> cates = ListEntity().Where(c => c.Categories1.Count() != 0 || c.ParentID == null);
-            return cates.ToList().ToPagedList(id ?? 1,5);
-        }
-
-        public List<Categories> ListEntityGroup()
-        {
+            if(key.Length > 0)
+            {
+                IQueryable<Categories> news = ListEntity().Where(n => n.CateName.Contains(key) || n.States == (key == "正常" ? 0 : key == "禁用" ? 1 : -1));
+                return news.ToList();
+            }
             return ListEntity().Where(c => c.Categories1.Count() != 0 || c.ParentID == null).ToList();
         }
 

@@ -10,25 +10,73 @@ namespace BLL
 {
     public class ProductsBLL : BaseBLL<Products>
     {
-        public PagedList<Products> FindEntityByPage(int? id, string key)
+        public List<Products> ListEntity(string key, string cates, string orderBy, string sortBy, string priceMin, string priceMax)
         {
-            IQueryable<Products> products = ListEntity().Where(n => n.Title.Contains(key) ||
+            IQueryable<Products> products = ListEntity();
+            if (cates.Length > 0)
+            {
+                products = products.Where(p => p.Categories.CateName == cates);
+            }
+            if (key.Length > 0)
+            {
+                products = products.Where(n => n.Title.Contains(key) ||
                                                                    n.Title.Contains(key) ||
-                                                                   n.MarketPrice.ToString().Contains(key) ||
-                                                                   n.Price.ToString().Contains(key) ||
-                                                                   n.Stock.ToString().Contains(key) || 
-                                                                   n.Categories.CateName.Contains(key) || 
+                                                                   n.Categories.CateName.Contains(key) ||
                                                                    n.States == (key == "下架" ? 0 : key == "上架" ? 1 : -1));
-            return products.ToList().OrderByDescending(n => n.PostTime).ToPagedList(id ?? 1, 10);
-        }
-
-        public PagedList<Products> ListEntityByPage(int? id = 1)
-        {
-            return ListEntity()
-                    .ToList()
-                    .AsQueryable()
-                    .OrderByDescending(n => n.PostTime)
-                    .ToPagedList(id ?? 1, 10);
+            }
+            if (orderBy.Length > 0)
+            {
+                if (sortBy == "1")
+                {
+                    if (orderBy == "Price")
+                    {
+                        products = products.OrderByDescending(p => p.Price);
+                    } 
+                    else if (orderBy == "PostTime")
+                    {
+                        products = products.OrderByDescending(p => p.PostTime);
+                    }
+                    else 
+                    {
+                        products = products.OrderByDescending(p => p.OrdersDetails.Count());
+                    }
+                }
+                else
+                {
+                    if (orderBy == "Price")
+                    {
+                        products = products.OrderBy(p => p.Price);
+                    }
+                    else if (orderBy == "PostTime")
+                    {
+                        products = products.OrderBy(p => p.PostTime);
+                    }
+                    else
+                    {
+                        products = products.OrderBy(p => p.OrdersDetails.Count());
+                    }
+                }
+            }
+            if (priceMin.Length > 0 && priceMax.Length > 0)
+            {
+                int min = int.Parse(priceMin);
+                int max = int.Parse(priceMax);
+                if (min < max)
+                {
+                    products = products.Where(p => p.Price >= min && p.Price <= max);
+                }
+            }
+            else if(priceMin.Length > 0)
+            {
+                int min = int.Parse(priceMin);
+                products = products.Where(p => p.Price >= min);
+            }
+            else if (priceMax.Length > 0)
+            {
+                int max = int.Parse(priceMax);
+                products = products.Where(p => p.Price <= max);
+            }
+            return products.ToList();
         }
 
         PhotosBLL pll = new PhotosBLL();
@@ -47,7 +95,8 @@ namespace BLL
             string[] ids = idList.Split(',');
             foreach (var item in ids)
             {
-                var photos = pll.ListEntityByCondition(p => p.ProductID == int.Parse(item));
+                int id = int.Parse(item);
+                var photos = pll.ListEntityByCondition(p => p.ProductID == id);
                 if (photos.Count() > 0)
                 {
                     pll.DeleteEntity(photos);

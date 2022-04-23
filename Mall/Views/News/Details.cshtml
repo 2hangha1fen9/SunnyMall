@@ -1,0 +1,16 @@
+﻿@model News
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="item  container" style="text-align:center;">
+    <h1>@Model.Title</h1>
+    <p>
+        <span>标签: @Model.NType</span> | <span>发布时间: @Model.PushTime</span>
+    </p>
+</div>
+
+<div class="item d-flex flex-wrap container align-items-center">
+    @Html.Raw(Model.Content)
+</div>

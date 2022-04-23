@@ -50,6 +50,7 @@
     <Compile Include="CategoriesBLL.cs" />
     <Compile Include="DeliveriesBLL.cs" />
     <Compile Include="FavoriesBLL.cs" />
+    <Compile Include="HomeBLL.cs" />
     <Compile Include="NewsBLL.cs" />
     <Compile Include="OrdersBLL.cs" />
     <Compile Include="OrdersDetailsBLL.cs" />

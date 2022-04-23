@@ -1,0 +1,36 @@
+﻿@model PagedList<News>
+@{
+    ViewBag.Title = "资讯合集";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+    <h2 class="fw-bold">@ViewBag.Title</h2>
+    <span>@TempData["Message"]</span>
+</div>
+<div class="item d-flex flex-wrap container align-items-center">
+    @foreach (var item in Model)
+    {
+        <div class="card mb-3" style="height: 100%;">
+            <img src="@item.PhotoUrl" alt="...">
+            <div class="card-body">
+                <h5 class="card-title"><a href="/News/Details/@item.NewsID" target="_blank">@item.Title</a></h5>
+                <p class="card-text"><small class="text-muted">@item.PushTime</small></p>
+            </div>
+        </div>
+    }
+</div>
+<div style="margin: 50px 0px 50px 0px">
+    @Html.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+})
+</div>
+

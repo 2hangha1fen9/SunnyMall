@@ -74,7 +74,7 @@ namespace BLL
         /// 获取所有实体
         /// </summary>
         /// <returns></returns>
-        public IQueryable<T> ListEntity()
+        public virtual IQueryable<T> ListEntity()
         {
             return dal.List();
         }

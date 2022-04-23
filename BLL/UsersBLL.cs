@@ -10,20 +10,16 @@ namespace BLL
 {
     public class UsersBLL : BaseBLL<Users>
     {
-        public PagedList<Users> FindEntityByPage(int? id, string key)
+        public List<Users> ListEntity(string key)
         {
-            IQueryable<Users> users = ListEntity().Where(u => u.UserName.Contains(key) ||
-                                                                       u.Nick.Contains(key) || 
+            if(key.Length > 0)
+            {
+                IQueryable<Users> users = ListEntity().Where(u => u.UserName.Contains(key) ||
+                                                                       u.Nick.Contains(key) ||
                                                                        u.Email.Contains(key));
-            return users.ToList().ToPagedList(id ?? 1, 10);
-        }
-
-        public PagedList<Users> ListEntityByPage(int? id = 1)
-        {
-            return ListEntity()
-                    .ToList()
-                    .AsQueryable()
-                    .ToPagedList(id ?? 1, 10);
+                return users.ToList();
+            }
+            return ListEntity().ToList();
         }
         public override bool DeleteEntityById(int id)
         {

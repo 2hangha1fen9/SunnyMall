@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Webdiyer.WebControls.Mvc;
 
 namespace Mall.Controllers
 {
@@ -16,14 +17,13 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "")
         {
-            if (key.Length == 0)
+            var users = bll.ListEntity(key);
+            if(key.Length > 0)
             {
-                return View(bll.ListEntityByPage(id));
+                TempData["Message"] = $"检索到{users.Count()}条数据";
             }
-            var users = bll.FindEntityByPage(id, key);
             TempData["Search"] = key;
-            TempData["Message"] = $"检索到{users.Count()}条数据";
-            return View(users);
+            return View(users.ToPagedList(id.Value,10));
         }
 
         [ValidateInput(false)]

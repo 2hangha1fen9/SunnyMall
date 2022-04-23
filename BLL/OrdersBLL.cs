@@ -10,30 +10,20 @@ namespace BLL
 {
     public class OrdersBLL : BaseBLL<Orders>
     {
-        public PagedList<Orders> FindEntityByPage(int? id,string key)
+        public List<Orders> ListEntity(string key,int? states)
         {
-            IQueryable<Orders> news = ListEntity().Where(o => o.Users.UserName.Contains(key) || 
-                                                                o.Deliveries.Consignee.Contains(key) || 
-                                                                o.States == (key == "未付款" ? 0 : key == "已付款" ? 1 : key == "已发货" ? 2 : key == "已收货" ? 3 : key == "已关闭" ? -1 : -1));
-            return news.ToList().OrderByDescending(n => n.Orderdate)
-                                    .ToPagedList(id ?? 1, 10);
-        }
-
-        public PagedList<Orders> ListEntityByPage(int id,int? states)
-        {
+            if(key.Length > 0)
+            {
+                IQueryable<Orders> news = ListEntity().Where(o => o.Users.UserName.Contains(key) ||
+                                                               o.Deliveries.Consignee.Contains(key) ||
+                                                               o.States == (key == "未付款" ? 0 : key == "已付款" ? 1 : key == "已发货" ? 2 : key == "已收货" ? 3 : key == "已关闭" ? -1 : -1));
+                return news.ToList().OrderByDescending(n => n.Orderdate).ToList();
+            }
             if (states.HasValue)
             {
-                return ListEntityByCondition(o => o.States == states.Value)
-                       .ToList()
-                       .AsQueryable()
-                       .OrderByDescending(n => n.Orderdate)
-                       .ToPagedList(id, 10);
+                return ListEntityByCondition(o => o.States == states.Value).OrderByDescending(n => n.Orderdate).ToList();
             }
-            return ListEntity()
-                    .ToList()
-                    .AsQueryable()
-                    .OrderByDescending(n => n.Orderdate)
-                    .ToPagedList(id, 10);
+            return ListEntity().OrderByDescending(n => n.Orderdate).ToList();
         }
 
         public override bool DeleteEntityById(int id)

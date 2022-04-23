@@ -136,6 +136,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DeliveriesController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
@@ -166,6 +167,9 @@
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Content\slick-theme.css" />
+    <Content Include="Scripts\slick.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -186,6 +190,12 @@
     <Content Include="Views\Deliveries\Update.cshtml" />
     <Content Include="Views\Admin\Manager.cshtml" />
     <Content Include="Views\Admin\Update.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Products\List.cshtml" />
+    <Content Include="Views\News\List.cshtml" />
+    <Content Include="Views\News\Details.cshtml" />
+    <Content Include="Views\Products\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />
