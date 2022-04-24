@@ -1,0 +1,44 @@
+﻿@model PagedList<Appraises>
+@{
+    ViewBag.Title = "我的评价";
+    Layout = "~/Views/Shared/_LayoutUsers.cshtml";
+}
+
+<table class="table" style="text-align: center" id="data">
+    <thead>
+        <tr>
+            <td>商品名</td>
+            <td>评价等级</td>
+            <td>评价时间</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Products.Title</td>
+                <td>@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : item.Grade == 2 ? "差评" : "")</td>
+                <td>@item.RateTime</td>
+                <td>
+                    <a href="/Appraises/Update/@item.AppraiseID" class="btn-sm btn-primary">编辑</a>
+                    <a href="/Appraises/Delete/@item.AppraiseID" class="btn-sm btn-info">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Html.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+})
+</div>
+

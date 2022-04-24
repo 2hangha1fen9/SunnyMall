@@ -16,6 +16,7 @@ namespace BLL
             {
                 IQueryable<Orders> news = ListEntity().Where(o => o.Users.UserName.Contains(key) ||
                                                                o.Deliveries.Consignee.Contains(key) ||
+                                                               o.OrdersDetails.Any(a => a.Products.Title.Contains(key)) ||
                                                                o.States == (key == "未付款" ? 0 : key == "已付款" ? 1 : key == "已发货" ? 2 : key == "已收货" ? 3 : key == "已关闭" ? -1 : -1));
                 return news.ToList().OrderByDescending(n => n.Orderdate).ToList();
             }

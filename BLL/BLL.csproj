@@ -49,7 +49,7 @@
     <Compile Include="BaseBLL.cs" />
     <Compile Include="CategoriesBLL.cs" />
     <Compile Include="DeliveriesBLL.cs" />
-    <Compile Include="FavoriesBLL.cs" />
+    <Compile Include="FavoritesBLL.cs" />
     <Compile Include="HomeBLL.cs" />
     <Compile Include="NewsBLL.cs" />
     <Compile Include="OrdersBLL.cs" />

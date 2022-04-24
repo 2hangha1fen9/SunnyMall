@@ -26,7 +26,7 @@ namespace BLL
             Users user = FindEntityById(id);
             if(user.Favorites.Count() > 0)
             {
-                new FavoriesBLL().DeleteEntity(user.Favorites);
+                new FavoritesBLL().DeleteEntity(user.Favorites);
             }
             if (user.Appraises.Count() > 0)
             {
@@ -51,7 +51,7 @@ namespace BLL
                 Users user = FindEntityById(int.Parse(item));
                 if (user.Favorites.Count() > 0)
                 {
-                    new FavoriesBLL().DeleteEntity(user.Favorites);
+                    new FavoritesBLL().DeleteEntity(user.Favorites);
                 }
                 if (user.Appraises.Count() > 0)
                 {

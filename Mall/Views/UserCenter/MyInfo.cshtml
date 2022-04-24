@@ -1,0 +1,32 @@
+﻿@model Users
+@{
+    ViewBag.Title = "我的资料";
+    Layout = "~/Views/Shared/_LayoutUsers.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="users" onsubmit="return sub()" method="post">
+            <input type="hidden" name="UserID" value="@if (Model != null) {@Model.UserID} else { @Html.Raw("-1")}" />
+            <div class="col-md-6">
+                <label class="form-label">登录名</label>
+                <input type="text" class="form-control" readonly name="UserName" value="@if (Model != null) {@Model.UserName}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">邮箱</label>
+                <input type="email" class="form-control" readonly name="Email" value="@if (Model != null) {@Model.Email}">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">昵称</label>
+                <input type="text" class="form-control" name="Nick" value="@if (Model != null) {@Model.Nick}">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+

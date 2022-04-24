@@ -13,7 +13,9 @@
         @foreach (var item in news)
         {
             <div class="carousel-item  @(first ? "active" : "")">
-                <img src="@item.PhotoUrl" class="d-block w-100 rounded-3" alt="...">
+                <a href="/News/Details/@item.NewsID" target="_blank">
+                    <img src="@item.PhotoUrl" class="d-block w-100 rounded-3" alt="...">
+                </a>
             </div>
             @(first = false)
         }

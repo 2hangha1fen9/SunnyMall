@@ -15,6 +15,8 @@
     <script src="/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
     <script src="~/Scripts/slick.min.js"></script>
+    <script src="/Scripts/ckeditor.js"></script>
+    <script src="/Scripts/cheditor-upload.js"></script>
     <style>
 
         body {
@@ -129,10 +131,12 @@
                     }
                 </ul>
                 <ul class="nav">
+                    @{int uid = MyAuthentication.GetUserID();}
                     @if (MyAuthentication.IsLogin())
                     {
+
                         <li class="nav-item"><a href="/Home/LoginOut" class="nav-link link-dark px-2">退出登录</a></li>
-                        <li class="nav-item"><a href="/UserCenter" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
                         <li class="nav-item">
                             <a href="#" class="nav-link link-dark px-2">
                                 购物车 <span class="badge bg-secondary">0</span>
@@ -152,7 +156,7 @@
                 <a href="/Home" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
                     <span class="fs-4">☀️阳光商城</span>
                 </a>
-                <form action="@if (Request.RawUrl.Contains("/New")) { @Html.Raw("/News/List")}else { @Html.Raw("/Products/List")}" method="get" class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
+                <form action="@if (Request.RawUrl.Contains("/New")) { @Html.Raw("/News/List")} else if (Request.RawUrl.Contains("/MyOrder")){ @Html.Raw("/Orders/MyOrder")} else if (Request.RawUrl.Contains("/Favorites")){ @Html.Raw("/Favorites")} else if (Request.RawUrl.Contains("/Appraises")){ @Html.Raw("/Appraises")}  else { @Html.Raw("/Products/List")} " method="get" class="col-12 col-lg-auto mb-3 mb-lg-0" role="search">
                     <input type="hidden" name="cates" value="@TempData["cates"]" />
                     <input type="hidden" name="orderBy" value="@TempData["orderBy"]" />
                     <input type="hidden" name="sortBy" value="@TempData["sortBy"]" />
@@ -164,8 +168,24 @@
         </header>
     </div>
     <div class="main">
-
-        @RenderBody()
+        <div class="item container"
+             style="display: flex;flex-direction: column;background-color: white;width: 100%;" ">
+            <div class="item d-flex flex-wrap container align-items-center justify-content-between">
+                <h3 class="fw-bold">用户中心</h3>
+            </div>
+            <div class="btn-group">
+                <a href="/UserCenter" class="btn btn-secondary  @(Request.RawUrl == "/UserCenter" ? "active" : "")">我的</a>
+                <a href="/UserCenter/MyInfo" class="btn btn-secondary @(Request.RawUrl == "/UserCenter/MyInfo" ? "active" : "")">个人资料</a>
+                <a href="/Deliveries/Create" class="btn btn-secondary @(Request.RawUrl == "/Deliveries/Create" ? "active" : "")">收货地址</a>
+                <a href="/Orders/MyOrder" class="btn btn-secondary @(Request.RawUrl == "/Orders/MyOrder" ? "active" : "")">我的订单</a>
+                <a href="/Appraises" class="btn btn-secondary @(Request.RawUrl == "/Appraises" ? "active" : "")">评价管理</a>
+                <a href="/Favorites" class="btn btn-secondary @(Request.RawUrl == "/Favorites" ? "active" : "")">收藏夹</a>
+                <a href="/UserCenter/ChangePwd" class="btn btn-secondary @(Request.RawUrl == "/UserCenter/ChangePwd" ? "active" : "")">修改密码</a>
+            </div>
+            <div>
+                @RenderBody()
+            </div>
+        </div>
     </div>
     <div class="footer">
         <div class="container">
@@ -174,7 +194,7 @@
                     <li class="nav-item"><a href="/Home" class="nav-link px-2 text-muted">首页</a></li>
                     <li class="nav-item"><a href="/Products/List" class="nav-link px-2 text-muted">全部商品</a></li>
                     <li class="nav-item"><a href="/News/List" class="nav-link px-2 text-muted">促销资讯</a></li>
-                    <li class="nav-item"><a href="/UserCenter" class="nav-link px-2 text-muted">个人中心</a></li>
+                    <li class="nav-item"><a href="/Users" class="nav-link px-2 text-muted">个人中心</a></li>
                     <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">关于</a></li>
                 </ul>
                 <p class="text-center text-muted">☀️阳光商城</p>

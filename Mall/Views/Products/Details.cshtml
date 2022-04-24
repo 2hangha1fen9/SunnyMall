@@ -2,7 +2,8 @@
 @{
     ViewBag.Title = "商品详情";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string auth = MyAuthentication.GetAuth();
+    Users user = ViewBag.user;
+    List<Favorites> favorites = ViewBag.Favorites;
 }
 
 <div class="item d-flex flex-wrap container align-items-center justify-content-between">
@@ -45,6 +46,14 @@
                     </div>
                     <button type="button" class="btn btn-success">立即购买</button>
                     <button type="button" class="btn btn-primary">加入购物车</button>
+                    @if (favorites.Any(f => f.ProductID == Model.ProductID))
+                    {
+                        <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">取消收藏</a>
+                    }
+                    else
+                    {
+                        <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">添加收藏</a>
+                    }
                 </div>
             </div>
         </div>
@@ -88,11 +97,11 @@
                 </form>
                 @foreach (var item in ViewBag.Appraise)
                 {
-                    <div class="card" style="width: 100%;justify-content: flex-start;height: 100%;">
-                        <div class="card-header">【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName @if(auth == "0" || auth == "1") { <a href="/Products/AppraiseDelete/@Model.ProductID?aid=@item.AppraiseID" onclick="confirm('是否删除此批评论')">删除</a>}</div>
+                    <div class="card" style="justify-content: flex-start;height: 100%;">
+                        <div class="card-header">【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName @if(user.States == 0 || user.States == 1) { <a href="/Products/AppraiseDelete/@Model.ProductID?aid=@item.AppraiseID" onclick="confirm('是否删除此批评论')">删除</a>}</div>
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
-                                <p>@item.Content</p>
+                                <p>@Html.Raw(item.Content)</p>
                                 <footer class="blockquote-footer">
                                     @item.RateTime
                                 </footer>

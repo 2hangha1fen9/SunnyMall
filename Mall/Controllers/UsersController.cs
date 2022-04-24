@@ -27,7 +27,6 @@ namespace Mall.Controllers
         }
 
         [ValidateInput(false)]
-        [UserAuthentication]
         [AdminAuthentication]
         public ActionResult Update(int? id)
         {
@@ -39,7 +38,6 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
-        [UserAuthentication]
         [AdminAuthentication]
         [ValidateInput(false)]
         public ActionResult Update(Users n, int? id)
@@ -122,12 +120,39 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "无效的ID";
             }
-            users.States = users.States == 0 ? 1 : 0;
+            users.States = users.States == 2 ? 3 : 2;
             if (bll.UpdateEntity(users))
             {
                 TempData["Message"] = "操作成功";
             }
             return RedirectToAction("Index");
+        }
+
+        public ActionResult Activation(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Users user = bll.FindEntityByCondition(u => u.ActivationCode == id);
+            if (user != null)
+            {
+                user.States = 2;
+                if (bll.UpdateEntity(user))
+                {
+
+                    TempData["Message"] = "激活成功";
+                }
+                else
+                {
+                    TempData["Message"] = "激活失败";
+                }
+                return RedirectToAction("Login", "Home");
+            }
+            ContentResult result = new ContentResult();
+            result.Content = "激活失败,URL非法";
+            result.ContentType = "text/html";
+            return result;
         }
     }
 }

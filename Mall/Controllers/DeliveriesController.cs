@@ -45,6 +45,7 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
+        
         [AdminAuthentication]
         [HttpPost]
         public ActionResult Delete(string ids)
@@ -64,7 +65,6 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
-        [UserAuthentication]
         [AdminAuthentication]
         [ValidateInput(false)]
         public ActionResult Update(int? id)
@@ -78,9 +78,7 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
-        [UserAuthentication]
         [AdminAuthentication]
-        [ValidateInput(false)]
         public ActionResult Update(Deliveries n, int? id)
         {
             if (id.HasValue)
@@ -108,6 +106,75 @@ namespace Mall.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        [UserAuthentication]
+        public ActionResult Create()
+        {
+            int uid = MyAuthentication.GetUserID();
+            Users user = ull.FindEntityById(uid);
+            ViewBag.Deliveries = user.Deliveries.OrderByDescending(d => d.DeliveryID == user.DeliveryID);
+            ViewBag.User = user;
+            return View();
+        }
+
+        [HttpPost]
+        [UserAuthentication]
+        public ActionResult Create(Deliveries n)
+        {
+            int uid = MyAuthentication.GetUserID();
+            Users user = ull.FindEntityById(uid);
+            if(user != null)
+            {
+                n.UserID = user.UserID;
+                if (bll.AddEntity(n) != null)
+                {
+                    TempData["Message"] = "添加成功";
+                }
+                else
+                {
+                    TempData["Message"] = "添加失败";
+                }
+            }
+            return RedirectToAction("Create");
+        }
+
+        [UserAuthentication]
+        public ActionResult SetDefault(int? id)
+        {
+            if (id.HasValue)
+            {
+                int uid = MyAuthentication.GetUserID();
+                Users user = ull.FindEntityById(uid);
+                user.DeliveryID = id.Value;
+                if (ull.UpdateEntity(user))
+                {
+                    TempData["Message"] = "设置成功";
+                }
+                else
+                {
+                    TempData["Message"] = "设置失败";
+                }
+            }
+            return RedirectToAction("Create");
+        }
+
+        [UserAuthentication]
+        public ActionResult Remove(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if (bll.DeleteEntityById(id.Value))
+            {
+                TempData["Message"] = "删除成功";
+            }
+            else
+            {
+                TempData["Message"] = "无效的ID列表";
+            }
+            return RedirectToAction("Create");
         }
     }
 }

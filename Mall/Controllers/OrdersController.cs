@@ -18,15 +18,59 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, int? states = null, string key = "")
         {
-            var news = bll.ListEntity(key,states);
+            var orders = bll.ListEntity(key,states);
             if (key.Length > 0)
             {
-                TempData["Message"] = $"检索到{news.Count()}条数据";
+                TempData["Message"] = $"检索到{orders.Count()}条数据";
             }
             TempData["Search"] = key;
-            return View(news.ToPagedList(id.Value,10));
+            return View(orders.ToPagedList(id.Value,10));
         }
 
+        [UserAuthentication]
+        public ActionResult MyOrder(int? id = 1, int? states = null, string key = "")
+        {
+            int uid = MyAuthentication.GetUserID();
+            var orders = bll.ListEntity(key, states).Where(o => o.UserID == uid);
+            if (key.Length > 0)
+            {
+                TempData["Message"] = $"检索到{orders.Count()}条数据";
+            }
+            TempData["Search"] = key;
+            return View(orders.ToPagedList(id.Value, 10));
+        }
+
+        [UserAuthentication]
+        public ActionResult Pay(int id)
+        {
+            return View();
+        }
+
+        [UserAuthentication]
+        public ActionResult Confirm(int id)
+        {
+            Orders orders = bll.FindEntityById(id);
+            orders.States = 3;
+            if (bll.UpdateEntity(orders))
+            {
+                TempData["Message"] = "确认收货成功";
+            }
+            return RedirectToAction("MyOrder");
+        }
+
+        [UserAuthentication]
+        public ActionResult OrderDelete(int id)
+        {
+            if (bll.DeleteEntityById(id))
+            {
+                TempData["Message"] = "删除成功";
+            }
+            else
+            {
+                TempData["Message"] = "无效的ID";
+            }
+            return RedirectToAction("MyOrder");
+        }
 
         [AdminAuthentication]
         public ActionResult Delete(int? id)

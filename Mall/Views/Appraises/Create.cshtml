@@ -1,0 +1,81 @@
+﻿@model Appraises
+@{
+    ViewBag.Title = "评价商品";
+    Layout = "~/Views/Shared/_LayoutUsers.cshtml";
+    Products products = ViewBag.products;
+    Users users = ViewBag.users;
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="news" onsubmit="return sub()" method="post">
+            <input type="hidden" name="UserID" value="@users.UserID" />
+            <input type="hidden" name="ProductID" value="@products.ProductID" />
+            <div class="mb-3 row">
+                <label for="staticEmail" class="col-sm-2 col-form-label">商品名</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="@products.Title">
+                </div>
+            </div>
+            <div class="col-6">
+                <label class="form-label">图片预览</label>
+                <img src="@if(products.Photos.Count() > 0) {@products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="img-fluid rounded" id="photo">
+            </div>
+            <div class="col-12">
+                <label class="form-label">内容<span class="text-danger">*</span></label>
+                <div id="editor">
+                </div>
+                <input type="hidden" name="Content" id="content" value="" />
+                @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">好评</label>
+                <input class="form-check-input" type="radio" name="Grade" id="flexRadioDefault1" checked value=0>
+            </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">中评</label>
+                <input class="form-check-input" type="radio" name="Grade" id="flexRadioDefault1" value=1>
+            </div>
+            <div class="form-check form-switch col-12" style="margin-left:10px">
+                <label class="form-check-label" for="flexSwitchCheckDefault">差评</label>
+                <input class="form-check-input" type="radio" name="Grade" id="flexRadioDefault1" value=2>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">评价</button>
+                <a href="/Orders/MyOrder" class="btn btn-primary">返回</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    var ed;
+    window.onload = () => {
+        editor = ClassicEditor.create(document.querySelector('#editor'), {
+            extraPlugins: [MyUploadAdapterPlugin]
+        }).then(editor => {
+            ed = editor;
+        });
+
+        $("#news").validate({
+            rules: {
+                Content: {required: true}
+            },
+            messages: {
+                Content: { required: "请键入内容"}
+            }
+        })
+    }
+    function sub() {
+        if (confirm("是否发布评论?")) {
+            $("#content").val(ed.getData())
+            return true
+        }
+        else {
+            return false
+        }
+    }
+</script>
+

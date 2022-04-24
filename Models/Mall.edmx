@@ -122,6 +122,7 @@
           <Property Name="DeliveryID" Type="int" />
           <Property Name="States" Type="int" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime" Nullable="false" />
+          <Property Name="ActivationCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -491,6 +492,7 @@
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
           <Property Name="States" Type="Int32" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ActivationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -837,6 +839,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="MallModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
                 <ScalarProperty Name="RegisterDate" ColumnName="RegisterDate" />
                 <ScalarProperty Name="States" ColumnName="States" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />

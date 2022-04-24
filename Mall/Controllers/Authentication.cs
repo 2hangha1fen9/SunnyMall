@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using BLL;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -113,10 +114,8 @@ namespace Mall
         /// <returns></returns>
         public static Users GetUser()
         {
-            using(Entities context = new Entities())
-            {
-                return context.Users.Find(GetUserID());
-            }
+            UsersBLL bll = new UsersBLL();
+            return bll.FindEntityById(GetUserID());
         }
     }
    
@@ -125,7 +124,7 @@ namespace Mall
     { 
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (!MyAuthentication.IsLogin() || (MyAuthentication.GetAuth() != "1" && MyAuthentication.GetAuth() != "0"))
+            if (!MyAuthentication.IsLogin() || !(MyAuthentication.GetAuth() == "1" || MyAuthentication.GetAuth() == "0"))
             {
                 HttpContext.Current.Response.Redirect("~/Admin/Login", true);
             }
@@ -136,7 +135,7 @@ namespace Mall
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
-            if (!MyAuthentication.IsLogin() || (MyAuthentication.GetAuth() != "-1" && MyAuthentication.GetAuth() != "1" && MyAuthentication.GetAuth() != "0"))
+            if (!MyAuthentication.IsLogin() || MyAuthentication.GetAuth() != "2")
             {
                 HttpContext.Current.Response.Redirect("~/Home/Login", true);
             }

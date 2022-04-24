@@ -1,0 +1,69 @@
+﻿@model Users
+@{
+    ViewBag.Title = "阳光商城用户登录";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<News> news = new BLL.NewsBLL().ListEntity().OrderByDescending(n => n.States).ToList();
+}
+
+<div class="container col-xl-10 col-xxl-8 px-4 py-5">
+    <div class="row align-items-center g-lg-5 py-5">
+        <div class="col-lg-7 text-center text-lg-start">
+            <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @{bool first = true;}
+                    @foreach (var item in news)
+                    {
+                        <div class="carousel-item  @(first ? "active" : "")">
+                            <a href="/News/Details/@item.NewsID" target="_blank">
+                                <img src="@item.PhotoUrl" class="d-block w-100 rounded-3" alt="...">
+                            </a>
+                        </div>
+                        @(first = false)
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 mx-auto col-lg-5">
+            <form class="p-4 p-md-5 border rounded-3 bg-light" id="login" method="post">
+                @Html.AntiForgeryToken()
+                <h4>用户登录</h4>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="floatingInput" placeholder="LoginName" name="UserName">
+                    <label for="floatingInput">请输入用户名</label>
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="Pwd">
+                    <label for="floatingPassword">请输入密码</label>
+                    @Html.ValidationMessageFor(model => model.Pwd, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-floating mb-3" style="display:flex;justify-content:center;align-items:center;">
+                    <input type="text" class="form-control" id="floatingPassword" placeholder="Code" name="Code">
+                    <label for="floatingPassword">请输入验证码</label>
+                    <img src="/Home/CheckCode" class="rounded-3" style="height: 50px;margin-left: 10px;" onclick="changeCheckCode(this)" />
+                </div>
+                <input class="w-100 btn btn-lg btn-primary" type="submit" value="登录"></input>
+                @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(() => {
+        $("#login").validate({
+            rules: {
+                UserName: { required: true },
+                Pwd: { required: true },
+                Code: { required: true }
+            },
+            messages: {
+                UserName: { required: "请输入用户名" },
+                Pwd: { required: "请输入密码" },
+                Code: { required: "请输入验证码" }
+            }
+        })
+    })
+    function changeCheckCode(img) {
+        img.src = "/Home/CheckCode?" + new Date().getTime();
+    }
+</script>

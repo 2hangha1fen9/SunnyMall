@@ -15,6 +15,7 @@ namespace Mall.Controllers
         private ProductsBLL bll = new ProductsBLL();
         private CategoriesBLL cll = new CategoriesBLL();
         private PhotosBLL pll = new PhotosBLL();
+        private FavoritesBLL fll = new FavoritesBLL();
 
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string pricecMin = "", string priceMax = "")
@@ -71,7 +72,10 @@ namespace Mall.Controllers
                     appraise = appraise.OrderBy(a => a.RateTime).ToList();
                 }
             }
-            ViewBag.Appraise = appraise;   
+            Users user = MyAuthentication.GetUser();
+            ViewBag.User = user;
+            ViewBag.Appraise = appraise;
+            ViewBag.Favorites = fll.ListEntityByCondition(f => f.UserID == user.UserID).ToList();
             return View(products);
         }
 

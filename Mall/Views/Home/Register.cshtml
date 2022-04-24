@@ -1,0 +1,66 @@
+﻿@model Users
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="container">
+    <div class="col-md-10 mx-auto col-lg-5">
+        <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" id="register">
+            <h4>用户注册</h4>
+            <div class="mb-3">
+                <label for="UserName" class="form-label">登录名</label>
+                <input type="text" class="form-control" id="UserName" name="UserName">
+                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3">
+                <label for="Pwd" class="form-label">密码</label>
+                <input type="password" class="form-control" id="Pwd" name="Pwd">
+                @Html.ValidationMessageFor(model => model.Pwd, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3">
+                <label for="RePwd" class="form-label">确认密码</label>
+                <input type="password" class="form-control" id="RePwd" name="RePwd">
+            </div>
+            <div class="mb-3">
+                <label for="Email" class="form-label">邮箱</label>
+                <input type="email" class="form-control" name="Email" id="exampleInputEmail1" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">我们会在注册之后发送一封激活邮件,请确保邮箱可用</div>
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+            <label for="exampleInputPassword1" class="form-label">验证码</label>
+
+            <div class="mb-3" style="display:flex;justify-content:center;align-items:center;">
+                <input type="password" class="form-control" id="exampleInputPassword1" name="Code" id="Code">
+                <img src="/Home/CheckCode" class="rounded-3" style="height: 50px;margin-left: 10px;"
+                     onclick="changeCheckCode(this)" />
+            </div>
+            <input class="w-100 btn btn btn-primary" type="submit" value="注册" />
+            @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
+        </form>
+    </div>
+</div>
+<script>
+    $(() => {
+        $("#register").validate({
+            rules: {
+                UserName: { required: true, minlength: 8 },
+                Pwd: { required: true, minlength: 8 },
+                RePwd: { required: true, equalTo: "#Pwd"},
+                Email: { required: true, email: true },
+                Code: { required: true}
+            },
+            messages: {
+                UserName: { required: "请输入用户名", minlength: "用户名长度最低8位" },
+                Pwd: { required: "请输入密码", minlength: "密码长度最低8位" },
+                RePwd: { required: "请确认密码" , equalTo: "两次密码输入不一致" },
+                Email: { required: "请输入邮箱", email: "邮箱格式不正确" },
+                Code: { required: "请输入验证码" }
+            }
+        })
+    })
+    function changeCheckCode(img) {
+        img.src = "/Home/CheckCode?" + new Date().getTime();
+    }
+</script>

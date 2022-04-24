@@ -1,0 +1,47 @@
+﻿@model Users
+@{
+    ViewBag.Title = "修改密码";
+    Layout = "~/Views/Shared/_LayoutUsers.cshtml";
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+</div>
+<div class="card">
+    <div class="card-body">
+        <form class="row g-3" id="users" onsubmit="return sub()" method="post">
+
+            <div class="col-md-6">
+                <label class="form-label">新密码</label>
+                <input type="password" class="form-control" id="NewPwd" name="NewPwd">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">确认密码</label>
+                <input type="password" class="form-control" id="RePwd" name="RePwd">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">原密码</label>
+                <input type="password" class="form-control" id="Pwd" name="Pwd">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">修改</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(() => {
+        $("#users").validate({
+            rules: {
+                Pwd: { required: true},
+                NewPwd: { required: true, minlength: 8 },
+                RePwd: { required: true, equalTo: "#NewPwd" },
+            },
+            messages: {
+                Pwd: { required: "请输入原密码" },
+                NewPwd: { required: "请输入密码", minlength: "密码长度最低8位" },
+                RePwd: { required: "请确认密码", equalTo: "两次密码输入不一致" },
+            }
+        })
+    })
+</script>

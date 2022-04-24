@@ -4,12 +4,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Webdiyer.WebControls.Mvc;
 
 namespace BLL
 {
-    public class FavoriesBLL : BaseBLL<Favorites>
+    public class FavoritesBLL : BaseBLL<Favorites>
     {
+        public List<Favorites> ListEntity(string key)
+        {
+            if (key.Length > 0)
+            {
+                IQueryable<Favorites> favorites = ListEntity().Where(n => n.Products.Title.Contains(key));    
+                return favorites.ToList();
+            }
+            return ListEntity().ToList();
+        }
         public override bool DeleteEntityById(int id)
         {
             return dal.Delete("FavoriteID", id);
