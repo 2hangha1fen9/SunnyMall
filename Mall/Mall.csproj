@@ -57,6 +57,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Activities" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web.DynamicData" />
@@ -135,6 +136,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppraisesController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\DeliveriesController.cs" />
     <Compile Include="Controllers\FavoritesController.cs" />
@@ -162,11 +164,10 @@
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\cheditor-upload.js" />
     <Content Include="Scripts\ckeditor.js" />
-    <None Include="Scripts\jquery-1.4.4-vsdoc.js" />
-    <Content Include="Scripts\jquery-1.4.4.js" />
-    <Content Include="Scripts\jquery-1.4.4.min.js" />
     <Content Include="Scripts\jquery-3.2.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
@@ -211,6 +212,9 @@
     <Content Include="Views\Appraises\Index.cshtml" />
     <Content Include="Views\Appraises\Update.cshtml" />
     <Content Include="Views\Favorites\Index.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\_Cart.cshtml" />
+    <Content Include="Views\Orders\CheckOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />

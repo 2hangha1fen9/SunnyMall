@@ -14,96 +14,138 @@
     <script src="/Scripts/bootstrap.min.js"></script>
     <script src="/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/slick.min.js"></script>
     <script src="/Scripts/ckeditor.js"></script>
     <script src="/Scripts/cheditor-upload.js"></script>
     <style>
 
-        body {
-            background-color: rgba(0, 0, 0, 0.064);
-        }
+          html {
+              height: 100%;
+          }
 
-        .py-3,
-        .footer {
-            background-color: white;
-        }
+          body {
+              background-color: rgba(0, 0, 0, 0.064);
+              display: flex;
+              flex-direction: column;
+              height: 100%;
+          }
 
-        .item {
-            margin-top: 20px;
-        }
+          header {
+              /* 我们希望 header 采用固定的高度，只占用必须的空间 */
+              /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+              flex: 0 0 auto;
+          }
 
-            .item h2 {
-                width: 100%;
-                border-bottom: 2px solid rgb(173, 166, 166);
-            }
+          .main {
+              /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
+        而其他元素该属性值为0，因此不会得到多余的空间*/
+              /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+              flex: 1 0 auto;
+          }
 
-        .card {
-            margin: 10px;
-            display: flex;
-            height: 100%;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+          footer {
+              /* 和 header 一样，footer 也采用固定高度*/
+              /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+              flex: 0 0 auto;
+          }
 
-        img {
-            width: 100%;
-            height: auto;
-            max-width: 100%;
-            max-height: 100%;
-        }
+          .py-3,
+          .footer {
+              background-color: white;
+          }
 
-        .card-title {
-            color: rgba(255, 0, 0, 0.696)
-        }
+          .item {
+              margin-top: 20px;
+          }
 
-        .card-text {
-            display: inline-block;
-            overflow: hidden;
-            width: 100%;
-        }
+              .item h2 {
+                  width: 100%;
+                  border-bottom: 2px solid rgb(173, 166, 166);
+              }
 
-        .footer {
-            width: 100%;
-            margin-top: 150px;
-            margin-bottom: -20px;
-        }
+          .card {
+              margin: 10px;
+              display: flex;
+              height: 100%;
+              flex-direction: column;
+              justify-content: space-between;
+          }
 
-        .money {
-            color: rgba(255, 0, 0, 0.596);
-        }
+          img {
+              width: 100%;
+              height: auto;
+              max-width: 100%;
+              max-height: 100%;
+          }
 
-        .range {
-            white-space: nowrap;
-        }
+          .card-title {
+              color: rgba(255, 0, 0, 0.696)
+          }
 
-            .range input {
-                display: inline;
-            }
+          .card-text {
+              display: inline-block;
+              overflow: hidden;
+              width: 100%;
+          }
 
-        .info h1,
-        h5 {
-            margin: 30px 0px 30px 0px;
-        }
+          .footer {
+              width: 100%;
+              margin-top: 150px;
+              margin-bottom: -20px;
+          }
 
-        .info .count {
-            margin: 30px 0px 30px 0px;
-        }
+          .money {
+              color: rgba(255, 0, 0, 0.596);
+          }
 
-        .market-price {
-            text-decoration: line-through;
-        }
+          .range {
+              white-space: nowrap;
+          }
 
-        .price {
-            font-size: 30px;
-            color: orange;
-            font-weight: bolder;
-        }
+              .range input {
+                  display: inline;
+              }
 
-        .tab-pane {
-            width: 100%;
-            padding: 10px;
-        }
+          .info h1,
+          h5 {
+              margin: 30px 0px 30px 0px;
+          }
+
+          .info .count {
+              margin: 30px 0px 30px 0px;
+          }
+
+          .market-price {
+              text-decoration: line-through;
+          }
+
+          .price {
+              font-size: 30px;
+              color: orange;
+              font-weight: bolder;
+          }
+
+          .tab-pane {
+              width: 100%;
+              padding: 10px;
+          }
     </style>
+    <script>
+        $(() => {
+            showMessage()
+        })
+        function showMessage(msg) {
+            var message = "@(TempData["Message"])"
+            if (message) {
+                new bootstrap.Toast(document.getElementById('liveToast')).show()
+            }
+            if (msg) {
+                $("#message").text(msg)
+                new bootstrap.Toast(document.getElementById('liveToast')).show()
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="header">
@@ -138,7 +180,7 @@
                         <li class="nav-item"><a href="/Home/LoginOut" class="nav-link link-dark px-2">退出登录</a></li>
                         <li class="nav-item"><a href="#" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link link-dark px-2">
+                            <a href="/Cart" class="nav-link link-dark px-2">
                                 购物车 <span class="badge bg-secondary">0</span>
                             </a>
                         </li>
@@ -187,7 +229,7 @@
             </div>
         </div>
     </div>
-    <div class="footer">
+    <footer class="footer">
         <div class="container">
             <footer class="py-3 my-4">
                 <ul class="nav justify-content-center border-bottom pb-3 mb-3">
@@ -200,7 +242,7 @@
                 <p class="text-center text-muted">☀️阳光商城</p>
             </footer>
         </div>
-    </div>
+    </footer>
     <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 100">
         <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
@@ -212,14 +254,7 @@
             </div>
         </div>
     </div>
-    <script>
-        $(() => {
-            var message = "@(TempData["Message"])"
-            if (message){
-                new bootstrap.Toast(document.getElementById('liveToast')).show()
-            }
-        })
-    </script>
+   
 </body>
 
 </html>

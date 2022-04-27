@@ -13,8 +13,6 @@ namespace Mall.Controllers
     {
 
         [HttpPost]
-        [UserAuthentication]
-        [AdminAuthentication]
         public JsonResult UploadFile(HttpPostedFileBase upload)
         {
             var res = new JsonResult();

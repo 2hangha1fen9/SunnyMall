@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     List<News> news = new BLL.NewsBLL().ListEntity().OrderByDescending(n => n.States).ToList();
     List<Products> newProducts = new BLL.ProductsBLL().ListEntity().Where(p => p.States == 1).OrderByDescending(p => p.PostTime).Take(4).ToList();
-    List<Products> hotProducts = new BLL.ProductsBLL().ListEntity().Where(p => p.States == 1).OrderByDescending(p => p.OrdersDetails.Count()).Take(8).ToList();
+    List<Products> hotProducts = new BLL.ProductsBLL().ListEntity().Where(p => p.States == 1).OrderByDescending(p => p.OrdersDetails.Sum(pp => pp.Quantity)).Take(8).ToList();
 }
 
 <div id="carouselExampleControls" class="carousel slide container d-flex flex-wrap  rounded-3" data-bs-ride="carousel">

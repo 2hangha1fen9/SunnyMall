@@ -13,6 +13,7 @@ namespace Mall.Controllers
     public class OrdersController : Controller
     {
         private OrdersBLL bll = new OrdersBLL();
+        private OrdersDetailsBLL ordersDetailsBLL = new OrdersDetailsBLL();
 
         // GET: Orders
         [AdminAuthentication]
@@ -38,6 +39,33 @@ namespace Mall.Controllers
             }
             TempData["Search"] = key;
             return View(orders.ToPagedList(id.Value, 10));
+        }
+
+        [HttpPost]
+        [UserAuthentication]
+        public ActionResult CheckOrder()
+        {
+            Users user = MyAuthentication.GetUser();
+            ViewBag.Deliveries = user.Deliveries.ToList();
+            ViewBag.User = user;
+            return View(ordersDetailsBLL.CheckDetail(user));
+        }
+
+        [UserAuthentication]
+        public ActionResult CheckOrder(int id)
+        {
+            Users user = MyAuthentication.GetUser();
+            ViewBag.Deliveries = user.Deliveries.ToList();
+            ViewBag.User = user;
+            return View(ordersDetailsBLL.CheckDetail(id, user));
+        }
+        
+        [UserAuthentication]
+        public ActionResult ConfirmOrder(int id)
+        {
+            Users user = MyAuthentication.GetUser();
+
+            return View();
         }
 
         [UserAuthentication]

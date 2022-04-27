@@ -11,8 +11,7 @@ namespace Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-
+    
     public partial class Users
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,6 +21,7 @@ namespace Models
             this.Deliveries = new HashSet<Deliveries>();
             this.Favorites = new HashSet<Favorites>();
             this.Orders = new HashSet<Orders>();
+            this.Cart = new HashSet<Cart>();
         }
     
         public int UserID { get; set; }
@@ -43,5 +43,7 @@ namespace Models
         public virtual ICollection<Favorites> Favorites { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Orders> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
     }
 }

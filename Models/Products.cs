@@ -21,6 +21,7 @@ namespace Models
             this.Favorites = new HashSet<Favorites>();
             this.OrdersDetails = new HashSet<OrdersDetails>();
             this.Photos = new HashSet<Photos>();
+            this.Cart = new HashSet<Cart>();
         }
     
         public int ProductID { get; set; }
@@ -42,5 +43,7 @@ namespace Models
         public virtual ICollection<OrdersDetails> OrdersDetails { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Photos> Photos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Cart { get; set; }
     }
 }

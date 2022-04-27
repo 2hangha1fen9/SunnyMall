@@ -86,9 +86,17 @@ namespace DAL
         /// <returns></returns>
         public bool Update(T t)
         {
-            context.Set<T>().Attach(t);
-            context.Entry(t).State = EntityState.Modified;
-            return context.SaveChanges() > 0;
+            try
+            {
+                context.Set<T>().Attach(t);
+                context.Entry(t).State = EntityState.Modified;
+                return context.SaveChanges() > 0;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            
         }
 
         /// <summary>

@@ -109,12 +109,16 @@ namespace Mall.Controllers
         }
 
         [UserAuthentication]
-        public ActionResult Create()
+        public ActionResult Create(int? id)
         {
             int uid = MyAuthentication.GetUserID();
             Users user = ull.FindEntityById(uid);
             ViewBag.Deliveries = user.Deliveries.OrderByDescending(d => d.DeliveryID == user.DeliveryID);
             ViewBag.User = user;
+            if (id.HasValue)
+            {
+                ViewBag.Deliverie = bll.FindEntityById(id.Value);
+            }
             return View();
         }
 
@@ -127,7 +131,18 @@ namespace Mall.Controllers
             if(user != null)
             {
                 n.UserID = user.UserID;
-                if (bll.AddEntity(n) != null)
+                if(n.DeliveryID > 0)
+                {
+                    if (bll.UpdateEntity(n))
+                    {
+                        TempData["Message"] = "更新成功";
+                    }
+                    else
+                    {
+                        TempData["Message"] = "更新失败";
+                    }
+                }
+                else if (bll.AddEntity(n) != null)
                 {
                     TempData["Message"] = "添加成功";
                 }

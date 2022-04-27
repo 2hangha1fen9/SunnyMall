@@ -10,15 +10,29 @@
     <script src="/Scripts/jquery-3.2.1.min.js"></script>
     <script src="/Scripts/jquery.validate.min.js"></script>
     <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="/Scripts/ckeditor.js"></script>
     <script src="/Scripts/cheditor-upload.js"></script>
     <style>
-
-
         .navbar-toggler + form {
             width: 100%
         }
     </style>
+    <script>
+        $(() => {
+            showMessage()
+        })
+        function showMessage(msg) {
+            var message = "@(TempData["Message"])"
+            if (message) {
+                new bootstrap.Toast(document.getElementById('liveToast')).show()
+            }
+            if (msg) {
+                $("#message").text(msg)
+                new bootstrap.Toast(document.getElementById('liveToast')).show()
+            }
+        }
+    </script>
 </head>
 <body>
     <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -130,14 +144,7 @@
                     </div>
                 </div>
             </main>
-            <script>
-                $(() => {
-                    var message = "@(TempData["Message"])"
-                    if (message){
-                        new bootstrap.Toast(document.getElementById('liveToast')).show()
-                    }
-                })
-            </script>
+
         </div>
     </div>
 </body>

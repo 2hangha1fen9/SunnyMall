@@ -46,6 +46,10 @@
             <td>@if (item.Deliveries != null) {@item.Deliveries.Consignee}</td>
             <td>@item.Users.UserName</td>
             <td>
+                @if (item.OrdersDetails.Count() > 0)
+                {
+                    <a class="btn-sm btn-info" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)">查看详情</a>
+                }
                 @if (item.States == 0)
                 {
                     <a href="/Orders/Close/@item.OrdersID" class="btn-sm btn-danger" onclick="return confirm('是否关闭该订单')">关闭订单</a>
@@ -56,18 +60,15 @@
                 }
                 @if (auth == "1")
                 {
-                    <a href="/Orders/Delete/@item.OrdersID" onclick="return confirm('是否确认删除')" class="btn-sm btn-primary">删除订单</a>
+                    <a href="/Orders/Delete/@item.OrdersID" onclick="return confirm('是否确认删除')" class="btn-sm btn-danger">删除订单</a>
                 }
-                @if (item.OrdersDetails.Count() > 0)
-                {
-                    <a class="btn-sm btn-info" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)">查看详情</a>
-                }
+
                 <div class="collapse" id="order@(item.OrdersID)">
                     <div>
                         <table class="table" style="text-align: center;line-height: 20px;" id="data">
                             <thead class="table-secondary">
                                 <tr>
-                                    <td>预览</td>
+                                    <td></td>
                                     <td>商品名</td>
                                     <td>数量</td>
                                     <td>小计</td>

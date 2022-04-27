@@ -16,6 +16,7 @@ namespace Mall.Controllers
         private CategoriesBLL cll = new CategoriesBLL();
         private PhotosBLL pll = new PhotosBLL();
         private FavoritesBLL fll = new FavoritesBLL();
+        private CartBLL cartBLL = new CartBLL();
 
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string pricecMin = "", string priceMax = "")
@@ -72,10 +73,15 @@ namespace Mall.Controllers
                     appraise = appraise.OrderBy(a => a.RateTime).ToList();
                 }
             }
-            Users user = MyAuthentication.GetUser();
-            ViewBag.User = user;
+
             ViewBag.Appraise = appraise;
-            ViewBag.Favorites = fll.ListEntityByCondition(f => f.UserID == user.UserID).ToList();
+
+            if(MyAuthentication.GetAuth() == "2")
+            {
+                Users user = MyAuthentication.GetUser();
+                ViewBag.User = user;
+                ViewBag.Favorites = fll.ListEntityByCondition(f => f.UserID == user.UserID).ToList();
+            }
             return View(products);
         }
 
@@ -249,5 +255,7 @@ namespace Mall.Controllers
  
             return RedirectToAction("Photos", new { id = id.Value });
         }
+
+        
     }
 }

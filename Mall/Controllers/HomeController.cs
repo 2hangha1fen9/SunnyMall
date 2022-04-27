@@ -79,7 +79,7 @@ namespace Mall.Controllers
                     user.RegisterDate = DateTime.Now;
                     if (UsersBLL.AddEntity(user) != null)
                     {
-                        MailHelper.SendMail(user.Email, $"[阳光商城]邮箱验证", MailHelper.Register(user.UserName, $"https://{Request.Url.Host}/UserCenter/Activation/{user.ActivationCode}"));
+                        MailHelper.SendMail(user.Email, $"[阳光商城]邮箱验证", MailHelper.Register(user.UserName, $"http://{Request.Url.Host}:{Request.Url.Port}/UserCenter/Activation/{user.ActivationCode}"));
                         TempData["Message"] = "注册成功,请访问你的邮箱进行激活!";
                         return RedirectToAction("Login");
                     }

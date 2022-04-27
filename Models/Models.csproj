@@ -56,6 +56,9 @@
     <Compile Include="Appraises.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>
+    <Compile Include="Cart.cs">
+      <DependentUpon>Mall.tt</DependentUpon>
+    </Compile>
     <Compile Include="Categories.cs">
       <DependentUpon>Mall.tt</DependentUpon>
     </Compile>

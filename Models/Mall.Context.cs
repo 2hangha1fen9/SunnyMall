@@ -36,5 +36,6 @@ namespace Models
         public virtual DbSet<Photos> Photos { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
     }
 }

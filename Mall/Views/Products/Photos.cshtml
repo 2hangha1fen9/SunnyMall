@@ -82,6 +82,7 @@
             xhr.send(data)
             xhr.onload = () => {
                 if (xhr.readyState == 4 && xhr.status == 200) {
+                    console.log(xhr.responseText)
                     location.href = "/Products/Photos/" + JSON.parse(xhr.responseText).ProductID
                 }
             }

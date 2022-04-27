@@ -1,27 +1,23 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "收货地址管理";
     Layout = "~/Views/Shared/_LayoutUsers.cshtml";
 }
 
-
-<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
-    <h2>添加收货地址</h2>
-</div>
 <div class="card">
     <div class="card-body">
         <form class="row g-3" id="deliveries" method="post">
+            <input type="hidden" name="DeliveryID" value="@(ViewBag.Deliverie == null ? -1 : ViewBag.Deliverie.DeliveryID)" />
             <div class="col-md-6">
                 <label class="form-label">收货人<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="Consignee">
+                <input type="text" class="form-control" name="Consignee" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Consignee)">
             </div>
             <div class="col-md-6">
                 <label class="form-label">详细地址<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="Complete">
+                <input type="text" class="form-control" name="Complete" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Complete)">
             </div>
             <div class="col-md-6">
                 <label class="form-label">手机号<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="Phone">
+                <input type="text" class="form-control" name="Phone" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Phone)">
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-success">提交</button>
@@ -44,7 +40,7 @@
             {
                 <a href="/Deliveries/SetDefault/@item.DeliveryID">设为默认</a>
                 <a href="/Deliveries/Remove/@item.DeliveryID" class="link-danger">删除</a>
-            }】@item.Consignee (@item.Phone)
+            } <a href="/Deliveries/Create/@item.DeliveryID">编辑</a>】@item.Consignee (@item.Phone)
         </div>
         <div class="card-body">
             <blockquote class="blockquote mb-0">

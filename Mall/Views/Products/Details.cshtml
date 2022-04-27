@@ -4,6 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     Users user = ViewBag.user;
     List<Favorites> favorites = ViewBag.Favorites;
+    string auth = MyAuthentication.GetAuth();
 }
 
 <div class="item d-flex flex-wrap container align-items-center justify-content-between">
@@ -31,28 +32,32 @@
             <div class="col-md-6">
                 <div class="card-body info">
                     <h1 class="title">@Model.Title</h1>
-                    <h5 class="market-price">市场价: &yen;@Model.MarketPrice</h5>
-                    <h5 class="price">活动价: &yen;@Model.Price</h5>
+                    <h5 class="market-price">市场价: &yen;@Model.MarketPrice.ToString("0.00")</h5>
+                    <h5 class="price">活动价: &yen;@Model.Price.ToString("0.00")</h5>
                     <h5 class="stock">库存: @Model.Stock 件</h5>
                     <div class="btn-group count" role="group" aria-label="Basic example" style="width: 40%;">
                         <span class="btn btn-secondary">销量 @Model.OrdersDetails.Sum(p => p.Quantity)</span>
                         <span class="btn btn-secondary">累计评价 @Model.Appraises.Count()</span>
                     </div>
-                    <div class="input-group mb-3" role="group" aria-label="Basic example" style="width: 100%;">
-                        <span class="input-group-text">购买数量:</span>
-                        <input class="input-group-text" type="number" style="width: 90px;" class="form-control"
-                               value="1">
-                        <span class="input-group-text">件</span>
-                    </div>
-                    <button type="button" class="btn btn-success">立即购买</button>
-                    <button type="button" class="btn btn-primary">加入购物车</button>
-                    @if (favorites.Any(f => f.ProductID == Model.ProductID))
+
+                    @if (MyAuthentication.GetAuth() == "2")
                     {
-                        <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">取消收藏</a>
-                    }
-                    else
-                    {
-                        <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">添加收藏</a>
+                        <div class="input-group mb-3" role="group" aria-label="Basic example" style="width: 100%;">
+                            <span class="input-group-text">购买数量:</span>
+                            <input class="input-group-text" oninput="if(value < 0)value=0" type="number" style="width: 90px;" class="form-control"
+                                   value="1">
+                            <span class="input-group-text">件</span>
+                        </div>
+                        <button type="button" class="btn btn-success">立即购买</button>
+                        <a href="/Cart/AddProduct/@Model.ProductID" type="button" class="btn btn-primary">加入购物车</a>
+                        if (favorites.Any(f => f.ProductID == Model.ProductID))
+                        {
+                            <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">取消收藏</a>
+                        }
+                        else
+                        {
+                            <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">添加收藏</a>
+                        }
                     }
                 </div>
             </div>
@@ -62,10 +67,12 @@
         <nav>
             <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
                 <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
-                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">详细信息
+                        type="button" role="tab" aria-controls="nav-home" aria-selected="true">
+                    详细信息
                 </button>
                 <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile"
-                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">评论(@Model.Appraises.Count())
+                        type="button" role="tab" aria-controls="nav-profile" aria-selected="false">
+                    评论(@Model.Appraises.Count())
                 </button>
             </div>
         </nav>
@@ -78,10 +85,10 @@
                 <form action="/Products/Details/@Model.ProductID" method="get" role="search">
                     <div class="input-group mb-3">
                         <select class="form-select" aria-label="Default select example" name="appraiseLevel">
-                            <option value="-1" @if (TempData["appraiseLevel"].ToString() == "All") { @Html.Raw("selected") }>全部</option>
-                            <option value="0" @if (TempData["appraiseLevel"].ToString() == "Good") { @Html.Raw("selected") }>好评</option>
-                            <option value="1" @if (TempData["appraiseLevel"].ToString() == "Mediuem") { @Html.Raw("selected") }>中评</option>
-                            <option value="2" @if (TempData["appraiseLevel"].ToString() == "Bad") { @Html.Raw("selected") }>差评</option>
+                            <option value="-1" @if (TempData["appraiseLevel"].ToString() == "-1") { @Html.Raw("selected") }>全部</option>
+                            <option value="0" @if (TempData["appraiseLevel"].ToString() == "0") { @Html.Raw("selected") }>好评</option>
+                            <option value="1" @if (TempData["appraiseLevel"].ToString() == "1") { @Html.Raw("selected") }>中评</option>
+                            <option value="2" @if (TempData["appraiseLevel"].ToString() == "2") { @Html.Raw("selected") }>差评</option>
                         </select>
                         <select class="form-select" aria-label="Default select example" name="appraiseOrderBy">
                             <option value="1" @if (TempData["appraiseOrderBy"].ToString() == "1") { @Html.Raw("selected") }>按时间</option>
@@ -98,7 +105,8 @@
                 @foreach (var item in ViewBag.Appraise)
                 {
                     <div class="card" style="justify-content: flex-start;height: 100%;">
-                        <div class="card-header">【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName @if(user.States == 0 || user.States == 1) { <a href="/Products/AppraiseDelete/@Model.ProductID?aid=@item.AppraiseID" onclick="confirm('是否删除此批评论')">删除</a>}</div>
+                        <div class="card-header">【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName @if (auth == "0" || auth == "1")
+                        {<a href="/Products/AppraiseDelete/@Model.ProductID?aid=@item.AppraiseID" onclick="confirm('是否删除此批评论')">删除</a>}</div>
                         <div class="card-body">
                             <blockquote class="blockquote mb-0">
                                 <p>@Html.Raw(item.Content)</p>

@@ -14,9 +14,9 @@
         <input type="hidden" name="cates" value="@TempData["cates"]" />
         <div class="input-group mb-3">
             <span class="input-group-text">价格区间:</span>
-            <input type="number" style="width:10px" class="form-control" placeholder="最低价" aria-label="priceMin" name="priceMin" value="@TempData["priceMin"]" id="min">
+            <input type="number" style="width:10px" class="form-control" oninput="if(value < 0)value=0" placeholder="最低价" aria-label="priceMin" name="priceMin" value="@TempData["priceMin"]" id="min">
             <span class="input-group-text">~</span>
-            <input type="number" class="form-control" placeholder="最高价" aria-label="priceMax" name="priceMax" value="@TempData["priceMax"]" id="max">
+            <input type="number" class="form-control" placeholder="最高价" oninput="if(value < 0)value=0" aria-label="priceMax" name="priceMax" value="@TempData["priceMax"]" id="max">
             <select class="form-select" aria-label="Default select example" name="orderBy">
                 <option value="Count" @if (TempData["orderBy"].ToString() == "Count") { @Html.Raw("selected") } id="order">销量</option>
                 <option value="Price" @if (TempData["orderBy"].ToString() == "Price") { @Html.Raw("selected") }>价格</option>

@@ -1,0 +1,100 @@
+﻿@model List<Cart>
+@{
+    ViewBag.Title = "我的购物车";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    body {
+        background-color: rgba(0, 0, 0, 0.064);
+    }
+
+    .py-3,
+    .footer {
+        background-color: white;
+    }
+
+    .item {
+        margin-top: 20px;
+    }
+
+        .item h2 {
+            width: 100%;
+            border-bottom: 2px solid rgb(173, 166, 166);
+        }
+
+    .card {
+        margin: 10px;
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    img {
+        width: 100%;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .card-title {
+        color: rgba(255, 0, 0, 0.696)
+    }
+
+    .card-text {
+        display: inline-block;
+        overflow: hidden;
+        width: 100%;
+    }
+
+    .footer {
+        width: 100%;
+        margin-top: 150px;
+        margin-bottom: -20px;
+    }
+
+    .money {
+        color: rgba(255, 0, 0, 0.596);
+    }
+
+    .range {
+        white-space: nowrap;
+    }
+
+        .range input {
+            display: inline;
+        }
+
+    .info h1,
+    h5 {
+        margin: 30px 0px 30px 0px;
+    }
+
+    .info .count {
+        margin: 30px 0px 30px 0px;
+    }
+
+    .market-price {
+        text-decoration: line-through;
+    }
+
+    .price {
+        font-size: 30px;
+        color: orange;
+        font-weight: bolder;
+    }
+
+    .tab-pane {
+        width: 100%;
+        padding: 10px;
+    }
+</style>
+
+<div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;" ">
+    <h3 class="fw-bold" style="margin-top: 20px">我的购物车</h3>
+    <div id="ajax">
+        @Html.Partial("_Cart", Model)
+    </div>
+</div>

@@ -25,6 +25,16 @@
           <Property Name="Grade" Type="int" Nullable="false" />
           <Property Name="RateTime" Type="datetime" Nullable="false" />
         </EntityType>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ProductID" Type="int" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Checked" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Categories">
           <Key>
             <PropertyRef Name="CateID" />
@@ -122,7 +132,7 @@
           <Property Name="DeliveryID" Type="int" />
           <Property Name="States" Type="int" Nullable="false" />
           <Property Name="RegisterDate" Type="datetime" Nullable="false" />
-          <Property Name="ActivationCode" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActivationCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -144,6 +154,30 @@
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Appraises">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Products">
+          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Cart">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -283,6 +317,7 @@
         <EntityContainer Name="MallModelStoreContainer">
           <EntitySet Name="AdminUsers" EntityType="Self.AdminUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Appraises" EntityType="Self.Appraises" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Categories" EntityType="Self.Categories" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Deliveries" EntityType="Self.Deliveries" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Favorites" EntityType="Self.Favorites" Schema="dbo" store:Type="Tables" />
@@ -299,6 +334,14 @@
           <AssociationSet Name="FK_Appraises_Users" Association="Self.FK_Appraises_Users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Appraises" EntitySet="Appraises" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Products" Association="Self.FK_Cart_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
           </AssociationSet>
           <AssociationSet Name="FK_Categories_Categories" Association="Self.FK_Categories_Categories">
             <End Role="Categories" EntitySet="Categories" />
@@ -474,6 +517,7 @@
           <NavigationProperty Name="Favorites" Relationship="Self.FK_Favorites_Products" FromRole="Products" ToRole="Favorites" />
           <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Products" FromRole="Products" ToRole="OrdersDetails" />
           <NavigationProperty Name="Photos" Relationship="Self.FK_Photos_Products" FromRole="Products" ToRole="Photos" />
+          <NavigationProperty Name="Cart" Relationship="MallModel.FK_Cart_Products" FromRole="Products" ToRole="Cart" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -492,7 +536,8 @@
           <NavigationProperty Name="Orders" Relationship="Self.FK_Orders_Users" FromRole="Users" ToRole="Orders" />
           <Property Name="States" Type="Int32" Nullable="false" />
           <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="ActivationCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActivationCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cart" Relationship="MallModel.FK_Cart_Users" FromRole="Users" ToRole="Cart" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
           <End Role="Products" Type="Self.Products" Multiplicity="1" />
@@ -714,8 +759,53 @@
             <End Role="Products" EntitySet="Products" />
             <End Role="Photos" EntitySet="Photos" />
           </AssociationSet>
-        </EntityContainer>
-      </Schema>
+          <EntitySet Name="Cart" EntityType="MallModel.Cart" />
+          <AssociationSet Name="FK_Cart_Products" Association="MallModel.FK_Cart_Products">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cart_Users" Association="MallModel.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartID" />
+          </Key>
+          <Property Name="CartID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ProductID" Type="Int32" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Products" Relationship="MallModel.FK_Cart_Products" FromRole="Cart" ToRole="Products" />
+          <NavigationProperty Name="Users" Relationship="MallModel.FK_Cart_Users" FromRole="Cart" ToRole="Users" />
+          <Property Name="Checked" Type="Int32" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Cart_Products">
+          <End Type="MallModel.Products" Role="Products" Multiplicity="1" />
+          <End Type="MallModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Products">
+              <PropertyRef Name="ProductID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="ProductID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cart_Users">
+          <End Type="MallModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MallModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -848,6 +938,17 @@
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Nick" ColumnName="Nick" />
                 <ScalarProperty Name="DeliveryID" ColumnName="DeliveryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cart">
+            <EntityTypeMapping TypeName="MallModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="Checked" ColumnName="Checked" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CartID" ColumnName="CartID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
