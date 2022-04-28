@@ -102,7 +102,7 @@ namespace Mall.Controllers
         public ActionResult CheckCode()
         {
             Random r = new Random();
-            string letter = "1Aa2Bb3Cc4Dd5Ee6Ff7Gg8Hh9Ii0JjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz";
+            string letter = "Aa2Bb3Cc4Dd5Ee6Ff7Gg8Hh9JjKkMmNnPpQqRrSsTtUuVvWwXxYyZz";
             string code = "";
             int codeLength = 5;
             for (int i = 0; i < codeLength; i++)

@@ -215,6 +215,8 @@
     <Content Include="Views\Cart\Index.cshtml" />
     <Content Include="Views\Cart\_Cart.cshtml" />
     <Content Include="Views\Orders\CheckOrder.cshtml" />
+    <Content Include="Views\Orders\Cashier.cshtml" />
+    <Content Include="Views\Orders\Pay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />

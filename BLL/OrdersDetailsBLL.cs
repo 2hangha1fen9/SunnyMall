@@ -28,13 +28,14 @@ namespace BLL
             return ordersDetails;
         }
 
-        public List<OrdersDetails> CheckDetail(int pid,Users user)
+        public List<OrdersDetails>CheckDetail(int pid,int quantity, Users user)
         {
             List<OrdersDetails> ordersDetails = new List<OrdersDetails>();
             Products products = productsBLL.FindEntityById(pid);
             OrdersDetails detail = new OrdersDetails();
             detail.ProductID = products.ProductID;
             detail.Products = products;
+            detail.Quantity = quantity;
             ordersDetails.Add(detail);
             return ordersDetails;
         }

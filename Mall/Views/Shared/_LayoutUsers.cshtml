@@ -173,17 +173,18 @@
                     }
                 </ul>
                 <ul class="nav">
-                    @{int uid = MyAuthentication.GetUserID();}
                     @if (MyAuthentication.IsLogin())
                     {
-
                         <li class="nav-item"><a href="/Home/LoginOut" class="nav-link link-dark px-2">退出登录</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
-                        <li class="nav-item">
-                            <a href="/Cart" class="nav-link link-dark px-2">
-                                购物车 <span class="badge bg-secondary">0</span>
-                            </a>
-                        </li>
+                        <li class="nav-item"><a href="/UserCenter" class="nav-link link-dark px-2">@MyAuthentication.GetUserName()</a></li>
+                        if (MyAuthentication.GetAuth() == "2")
+                        {
+                            <li class="nav-item">
+                                <a href="/Cart" class="nav-link link-dark px-2">
+                                    购物车 <span class="badge bg-secondary">@MyAuthentication.GetUser().Cart.Count()</span>
+                                </a>
+                            </li>
+                        }
                     }
                     else
                     {

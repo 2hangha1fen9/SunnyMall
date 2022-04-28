@@ -12,6 +12,7 @@ namespace BLL
     public class OrdersBLL : BaseBLL<Orders>
     {
         ProductsBLL productsBLL = new ProductsBLL();
+        CartBLL cartBLL = new CartBLL();
 
         public List<Orders> ListEntity(string key,int? states)
         {
@@ -30,7 +31,7 @@ namespace BLL
             return ListEntity().OrderByDescending(n => n.Orderdate).ToList();
         }
 
-        public Orders ConfirmOrder(Users user,int deliverieID)
+        public Orders CreateOrder(Users user,int deliverieID)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -45,6 +46,7 @@ namespace BLL
                     {
                         OrdersDetails details = new OrdersDetails();
                         details.ProductID = cartItem.ProductID;
+                        details.Products = cartItem.Products;
                         details.Quantity = cartItem.Quantity;
                         cartItem.Products.Stock -= cartItem.Quantity;
                         if (!productsBLL.UpdateEntity(cartItem.Products))
@@ -57,8 +59,12 @@ namespace BLL
                     Orders confirm = AddEntity(orders);
                     if (confirm != null)
                     {
-                        scope.Complete();
-                        return confirm;
+                        if (cartBLL.DeleteEntity(cart))
+                        {
+                            scope.Complete();
+                            return confirm;
+                        }
+                        return null;
                     }
                     else
                     {
@@ -72,9 +78,8 @@ namespace BLL
             }
         }
 
-        public Orders ConfirmOrder(Users user, int pid,int quantity,int deliverieID)
+        public Orders CreateOrder(Users user, int pid,int quantity,int deliverieID)
         {
-            
             using (TransactionScope scope = new TransactionScope())
             {
                 try
@@ -87,6 +92,7 @@ namespace BLL
                     Products products = productsBLL.FindEntityById(pid);
                     OrdersDetails details = new OrdersDetails();
                     details.ProductID = products.ProductID;
+                    details.Products = products;
                     details.Quantity = quantity;
                     products.Stock -= quantity;
                     if (!productsBLL.UpdateEntity(products))

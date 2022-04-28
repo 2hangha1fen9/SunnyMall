@@ -23,7 +23,7 @@ namespace BLL
             return false;
         }
 
-        public bool AddProduct(int pid,Users user)
+        public bool AddProduct(int pid,int quantity, Users user)
         {
             Cart cart = user.Cart.FirstOrDefault(c => c.ProductID == pid);
             if (cart != null)
@@ -35,7 +35,7 @@ namespace BLL
                 cart = new Cart();
                 cart.ProductID = pid;
                 cart.UserID = user.UserID;
-                cart.Quantity = 1;
+                cart.Quantity = quantity;
                 return AddEntity(cart) != null;
             }
         }
@@ -91,11 +91,6 @@ namespace BLL
                 flag = RemoveToFavories(int.Parse(id),user);
             }
             return flag;
-        }
-
-        public void ClearCarts(Users user)
-        {
-            DeleteEntity(user.Cart);
         }
 
         public override bool DeleteEntityById(int id)

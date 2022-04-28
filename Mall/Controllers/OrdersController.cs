@@ -41,6 +41,10 @@ namespace Mall.Controllers
             return View(orders.ToPagedList(id.Value, 10));
         }
 
+        /// <summary>
+        /// 购物车确认订单
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         [UserAuthentication]
         public ActionResult CheckOrder()
@@ -51,27 +55,91 @@ namespace Mall.Controllers
             return View(ordersDetailsBLL.CheckDetail(user));
         }
 
+        /// <summary>
+        /// GET /Orders/CheckOrder/
+        /// 一键购买确认订单
+        /// </summary>
+        /// <param name="id">产品id</param>
+        /// <param name="quantity">数量</param>
+        /// <returns></returns>
         [UserAuthentication]
-        public ActionResult CheckOrder(int id)
+        public ActionResult CheckOrder(int pid,int quantity)
         {
             Users user = MyAuthentication.GetUser();
             ViewBag.Deliveries = user.Deliveries.ToList();
             ViewBag.User = user;
-            return View(ordersDetailsBLL.CheckDetail(id, user));
+            ViewBag.OnKeyBuy = true;
+            ViewBag.Quantity = quantity;
+            ViewBag.Pid = pid;
+            return View(ordersDetailsBLL.CheckDetail(pid, quantity, user));
         }
         
+        /// <summary>
+        /// 创建订单
+        /// </summary>
+        /// <param name="id">收货地址</param>
+        /// <param name="pid">产品id</param>
+        /// <param name="quantity">数量</param>
+        /// <returns></returns>
         [UserAuthentication]
-        public ActionResult ConfirmOrder(int id)
+        public ActionResult CreateOrder(int id,int? pid,int? quantity)
         {
             Users user = MyAuthentication.GetUser();
+            Orders orders;
+            if (pid.HasValue && quantity.HasValue)
+            {
+                orders = bll.CreateOrder(user,pid.Value,quantity.Value,id);
+            }
+            else
+            {
+                orders = bll.CreateOrder(user, id);
+            }
+            if(orders != null)
+            {
+                return RedirectToAction("Cashier", new { id = orders.OrdersID });
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
 
-            return View();
+        [UserAuthentication]
+        public ActionResult Cashier(int id)
+        {
+            return View(bll.FindEntityById(id));
+        }
+
+        [HttpPost]
+        [UserAuthentication]
+        public ActionResult Cashier(Orders o)
+        {
+            Orders orders = bll.FindEntityById(o.OrdersID);
+            if(orders != null)
+            {
+                orders.PayType = o.PayType;
+                if (bll.UpdateEntity(orders))
+                {
+                    return RedirectToAction("Pay", new { id = orders.OrdersID });
+                }
+            }
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         [UserAuthentication]
         public ActionResult Pay(int id)
         {
-            return View();
+            Orders orders = bll.FindEntityById(id);
+            if (orders != null)
+            {
+                orders.States = 1;
+                if (bll.UpdateEntity(orders))
+                {
+                    TempData["PayResult"] = "支付成功";
+                }
+                else
+                {
+                    TempData["PayResult"] = "支付失败";
+                }
+            }
+            return View(orders);
         }
 
         [UserAuthentication]
@@ -79,6 +147,7 @@ namespace Mall.Controllers
         {
             Orders orders = bll.FindEntityById(id);
             orders.States = 3;
+            orders.DeliveryDate = DateTime.Now;
             if (bll.UpdateEntity(orders))
             {
                 TempData["Message"] = "确认收货成功";
@@ -96,6 +165,26 @@ namespace Mall.Controllers
             else
             {
                 TempData["Message"] = "无效的ID";
+            }
+            return RedirectToAction("MyOrder");
+        }
+
+        [UserAuthentication]
+        public ActionResult OrderClose(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Orders order = bll.FindEntityById(id.Value);
+            if (order == null)
+            {
+                TempData["Message"] = "无效的ID";
+            }
+            order.States = -1;
+            if (bll.UpdateEntity(order))
+            {
+                TempData["Message"] = "关闭成功";
             }
             return RedirectToAction("MyOrder");
         }
@@ -148,7 +237,6 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
-        [UserAuthentication]
         [AdminAuthentication]
         public ActionResult Send(int? id)
         {

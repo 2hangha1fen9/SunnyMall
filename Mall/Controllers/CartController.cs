@@ -35,10 +35,10 @@ namespace Mall.Controllers
         }
 
         [UserAuthentication]
-        public ActionResult AddProduct(int id)
+        public ActionResult AddProduct(int id,int? quantity = 1)
         {
             Users user = MyAuthentication.GetUser();
-            if (cartBLL.AddProduct(id, user))
+            if (cartBLL.AddProduct(id, quantity.Value, user))
             {
                 TempData["Message"] = "添加成功";
             }

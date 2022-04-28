@@ -6,7 +6,7 @@
 
 @if (((List<Orders>)ViewBag.NoPayOrders).Count() > 0)
 {
-    <h3>未付款订单</h3>
+    <h3 style="display:flex;justify-content:space-between;align-content:center;margin:20px">未付款订单</h3>
     <table class="table" style="text-align: center" id="data">
         <thead>
             <tr>
@@ -24,7 +24,7 @@
                     <td>@item.Total.ToString("0.00")</td>
                     <td>@item.Orderdate</td>
                     <td>
-                        <a href="/Orders/Pay/@item.OrdersID" class="btn-sm btn-primary">去付款</a>
+                        <a href="/Orders/Cashier/@item.OrdersID" class="btn-sm btn-primary">去付款</a>
                     </td>
                 </tr>
             }
@@ -79,34 +79,6 @@
                     <td>@item.Orderdate</td>
                     <td>
                         <a href="/Orders/Confirm/@item.OrdersID" class="btn-sm btn-primary">确认收货</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@if (((List<Orders>)ViewBag.NoAppraiseOrders).Count() > 0)
-{
-    <h3>未评价订单</h3>
-    <table class="table" style="text-align: center" id="data">
-        <thead>
-            <tr>
-                <td>订单编号</td>
-                <td>总价</td>
-                <td>下单时间</td>
-                <td>操作</td>
-            </tr>
-        </thead>
-        <tbody style="line-height: 50px;">
-            @foreach (var item in ViewBag.NoAppraiseOrders)
-            {
-                <tr>
-                    <td>@item.OrdersID</td>
-                    <td>@item.Total.ToString("0.00")</td>
-                    <td>@item.Orderdate</td>
-                    <td>
-                        <a href="/Appraises/Create/@item.OrdersID" class="btn-sm btn-primary">去评价</a>
                     </td>
                 </tr>
             }

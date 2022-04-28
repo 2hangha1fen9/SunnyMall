@@ -22,7 +22,6 @@ namespace Mall.Controllers
             ViewBag.NoPayOrders = ordersBLL.ListEntity("",0).Where(o => o.UserID == uid).ToList();
             ViewBag.NoSendOrders = ordersBLL.ListEntity("",1).Where(o => o.UserID == uid).ToList();
             ViewBag.NoGiveOrders = ordersBLL.ListEntity("",2).Where(o => o.UserID == uid).ToList();
-            ViewBag.NoAppraiseOrders = ordersBLL.ListEntity("", 3).Where(o => o.UserID == uid).ToList();
             return View();
         }
 

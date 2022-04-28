@@ -28,6 +28,7 @@ namespace Models
         public Nullable<System.DateTime> DeliveryDate { get; set; }
         public int States { get; set; }
         public string Remark { get; set; }
+        public Nullable<int> PayType { get; set; }
     
         public virtual Deliveries Deliveries { get; set; }
         public virtual Users Users { get; set; }

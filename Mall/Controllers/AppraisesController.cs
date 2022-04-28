@@ -39,6 +39,23 @@ namespace Mall.Controllers
             return View();
         }
 
+        [HttpPost]
+        [ValidateInput(false)]
+        [UserAuthentication]
+        public ActionResult Create(Appraises a)
+        {
+            a.RateTime = DateTime.Now;
+            if (ModelState.IsValid && (appraisesBLL.AddEntity(a) != null))
+            {
+                TempData["Message"] = "评价成功";
+            }
+            else
+            {
+                TempData["Message"] = "评价失败";
+            }
+            return RedirectToAction("Index");
+        }
+
         [UserAuthentication]
         public ActionResult Update(int id)
         {
@@ -62,19 +79,17 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
-        [ValidateInput(false)]
+        // GET: Appraises
         [UserAuthentication]
-        public ActionResult Create(Appraises a)
+        public ActionResult Delete(int id)
         {
-            a.RateTime = DateTime.Now;
-            if (ModelState.IsValid && (appraisesBLL.AddEntity(a) != null))
+            if(appraisesBLL.DeleteEntityById(id))
             {
-                TempData["Message"] = "评价成功";
+                TempData["Message"] = "删除成功";
             }
             else
             {
-                TempData["Message"] = "评价失败";
+                TempData["Message"] = "删除失败";
             }
             return RedirectToAction("Index");
         }

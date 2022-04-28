@@ -5,7 +5,7 @@
     List<Deliveries> deliveries = ViewBag.Deliveries;
     Users user = ViewBag.User;
 }
-<form action="/Orders/ConfirmOrder" method="get">
+<form action="/Orders/CreateOrder" method="get">
     <div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;" ">
         <h2 class="fw-bold" style="margin-top: 20px">确认订单</h2>
         <ul class="list-group" style="margin-top: 10px;margin-bottom: 50px">
@@ -18,6 +18,11 @@
             }
         </ul>
         <h4>订单信息</h4>
+        @if (ViewBag.OnKeyBuy)
+        {
+            <input type="hidden" name="pid" value="@ViewBag.Pid" />
+            <input type="hidden" name="quantity" value="@ViewBag.Quantity" />
+        }
         <table class="table" style="text-align: center" id="data">
             <thead>
                 <tr>
@@ -48,7 +53,7 @@
         </p>
         <p>
             <button type="submit" class="btn btn-success">提交订单</button>
-            <a href="/Cart" type="submit" class="btn btn-primary">返回</a>
+            <button href="/Cart" type="button" class="btn btn-primary" onclick="window.history.go(-1)">返回</button>
         </p>
     </div>
 </form>

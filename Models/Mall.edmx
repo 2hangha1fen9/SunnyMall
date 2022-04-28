@@ -86,6 +86,7 @@
           <Property Name="DeliveryDate" Type="date" />
           <Property Name="States" Type="int" Nullable="false" />
           <Property Name="Remark" Type="nvarchar" MaxLength="500" />
+          <Property Name="PayType" Type="int" />
         </EntityType>
         <EntityType Name="OrdersDetails">
           <Key>
@@ -476,6 +477,7 @@
           <NavigationProperty Name="Deliveries" Relationship="Self.FK_Orders_Deliveries" FromRole="Orders" ToRole="Deliveries" />
           <NavigationProperty Name="Users" Relationship="Self.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
           <NavigationProperty Name="OrdersDetails" Relationship="Self.FK_OrdersDetails_Orders" FromRole="Orders" ToRole="OrdersDetails" />
+          <Property Name="PayType" Type="Int32" />
         </EntityType>
         <EntityType Name="OrdersDetails">
           <Key>
@@ -879,6 +881,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="MallModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="PayType" ColumnName="PayType" />
                 <ScalarProperty Name="OrdersID" ColumnName="OrdersID" />
                 <ScalarProperty Name="Orderdate" ColumnName="Orderdate" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />

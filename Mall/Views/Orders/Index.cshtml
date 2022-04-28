@@ -46,17 +46,13 @@
             <td>@if (item.Deliveries != null) {@item.Deliveries.Consignee}</td>
             <td>@item.Users.UserName</td>
             <td>
+                @if (item.States == 1)
+                {
+                    <a href="/Orders/Send/@item.OrdersID" class="btn-sm btn-success" onclick="return confirm('是否发货')">发货</a>
+                }
                 @if (item.OrdersDetails.Count() > 0)
                 {
                     <a class="btn-sm btn-info" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)">查看详情</a>
-                }
-                @if (item.States == 0)
-                {
-                    <a href="/Orders/Close/@item.OrdersID" class="btn-sm btn-danger" onclick="return confirm('是否关闭该订单')">关闭订单</a>
-                }
-                else if (item.States == 1)
-                {
-                    <a href="/Orders/Send/@item.OrdersID" class="btn-sm btn-success" onclick="return confirm('是否发货')">发货</a>
                 }
                 @if (auth == "1")
                 {
