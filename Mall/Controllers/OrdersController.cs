@@ -120,31 +120,31 @@ namespace Mall.Controllers
             Orders orders = bll.FindEntityById(o.OrdersID);
             if(orders != null)
             {
-                if (bll.UpdateEntity(orders))
+                if(o.PayType == 0)
                 {
-                    return RedirectToAction("Pay", new { id = orders.OrdersID });
+                    return RedirectToAction("Index", "Alipay", orders);
                 }
             }
             return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         [UserAuthentication]
-        public ActionResult Pay(int id)
+        public ActionResult Pay()
         {
-            Orders orders = bll.FindEntityById(id);
-            if (orders != null)
+            string tradeNo = Request.QueryString["out_trade_no"];
+            decimal totalAmount = decimal.Parse(Request.QueryString["total_amount"]);
+            Orders order = bll.FindEntityByCondition(o => o.SerialID == tradeNo);
+            if (order != null && order.Total.Value == totalAmount)
             {
-                orders.States = 1;
-                if (bll.UpdateEntity(orders))
+                order.PayType = 0;
+                order.States = 1;
+                if (bll.UpdateEntity(order))
                 {
-                    TempData["PayResult"] = "支付成功";
-                }
-                else
-                {
-                    TempData["PayResult"] = "支付失败";
+                    return View(order);
                 }
             }
-            return View(orders);
+
+            return View();
         }
 
         [UserAuthentication]

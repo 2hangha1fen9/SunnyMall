@@ -89,6 +89,7 @@
           <Property Name="Remark" Type="nvarchar" MaxLength="500" />
           <Property Name="ExpressNumber" Type="nvarchar" MaxLength="100" />
           <Property Name="ExpressType" Type="nvarchar" MaxLength="50" />
+          <Property Name="PayType" Type="int" />
         </EntityType>
         <EntityType Name="OrdersDetails">
           <Key>
@@ -774,6 +775,7 @@
           <NavigationProperty Name="Deliveries" Relationship="MallModel.FK_Orders_Deliveries" FromRole="Orders" ToRole="Deliveries" />
           <NavigationProperty Name="Users" Relationship="MallModel.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
           <NavigationProperty Name="OrdersDetails" Relationship="MallModel.FK_OrdersDetails_Orders" FromRole="Orders" ToRole="OrdersDetails" />
+          <Property Name="PayType" Type="Int32" />
         </EntityType>
         <Association Name="FK_Orders_Deliveries">
           <End Type="MallModel.Deliveries" Role="Deliveries" Multiplicity="0..1" />
@@ -947,6 +949,7 @@
           <EntitySetMapping Name="Orders">
             <EntityTypeMapping TypeName="MallModel.Orders">
               <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="PayType" ColumnName="PayType" />
                 <ScalarProperty Name="ExpressType" ColumnName="ExpressType" />
                 <ScalarProperty Name="ExpressNumber" ColumnName="ExpressNumber" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />

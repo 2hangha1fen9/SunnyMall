@@ -161,8 +161,9 @@
                     @foreach (var item in categories)
                     {
 
-                        <li class="nav-item">
-                            <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" href="/Products/List?cates=@item.CateName" role="button" aria-expanded="false">@item.CateName</a>
+                        <li class="nav-item" style="display:flex">
+                            <a class="nav-link link-dark px-2" href="/Products/List?cates=@item.CateName" role="button">@item.CateName</a>
+                            <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 @foreach (var sub in item.Categories1)
                                 {

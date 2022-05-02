@@ -15,7 +15,7 @@ namespace BLL
             IQueryable<Products> products = ListEntity();
             if (cates.Length > 0)
             {
-                products = products.Where(p => p.Categories.CateName == cates);
+                products = products.Where(p => p.Categories.CateName == cates || p.Categories.Categories2.CateName == cates);
             }
             if (key.Length > 0)
             {

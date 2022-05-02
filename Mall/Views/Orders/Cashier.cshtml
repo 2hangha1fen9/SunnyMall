@@ -6,8 +6,8 @@
 
 <div class="item container" style="background-color: white;width: 100%">
     <div style="display:flex;justify-content:center;align-items:center">
-        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" style="color:darkseagreen;margin: 10px" class="bi bi-cart-check-fill" viewBox="0 0 16 16">
-            <path d="M.5 1a.5.5 0 0 0 0 1h1.11l.401 1.607 1.498 7.985A.5.5 0 0 0 4 12h1a2 2 0 1 0 0 4 2 2 0 0 0 0-4h7a2 2 0 1 0 0 4 2 2 0 0 0 0-4h1a.5.5 0 0 0 .491-.408l1.5-8A.5.5 0 0 0 14.5 3H2.89l-.405-1.621A.5.5 0 0 0 2 1H.5zM6 14a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm7 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-1.646-7.646-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708.708z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50"" fill="currentColor" style="color:darkseagreen;margin: 10px" class="bi bi-bag-check-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
         </svg>
         <div>
             <p style="font-size: 25px;margin-top:20px;margin-bottom:0px">
@@ -21,11 +21,11 @@
     <h2 style="margin-top:30px">支付方式</h2>
     <form action="/Orders/Cashier" method="post">
         <input type="hidden" name="OrdersID" value="@Model.OrdersID"/>
-        <div>
+        <div class="col-6">
             <ul class="list-group" style="margin-top: 10px;margin-bottom: 50px">
-                <li class="list-group-item">
+                <li class="list-group-item" style="display:flex;align-items:center">
                     <input class="form-check-input" type="radio" checked name="PayType" value="0">
-                    
+                    <img src="/Content/Images/58_168_白底.png" style="width:100px;height:100%;"/>
                 </li>
                 <li class="list-group-item">
                     <input class="form-check-input" type="radio" name="PayType" value="1">

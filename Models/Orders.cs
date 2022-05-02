@@ -31,6 +31,7 @@ namespace Models
         public string Remark { get; set; }
         public string ExpressNumber { get; set; }
         public string ExpressType { get; set; }
+        public Nullable<int> PayType { get; set; }
     
         public virtual Deliveries Deliveries { get; set; }
         public virtual Users Users { get; set; }

@@ -59,5 +59,95 @@ namespace Mall.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   查找类似 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAk9lBUvRIxMN8PuIifNnY9qzJ6LL3xp8lAeyL0cuSbTqYRBkoxCg84qp74qwhYZtsCSM4/tHcKbbFN/AZaOx8agtoBMOPruZ0ZJWhHoDe11qxrjifnSNcH6PiogED//9NkAa0a5pI9TzPIw25057WBLo9Z+x8nEnl1Doe9fShHDW+GnVKIuYSgvp/VYnv12qVJvqjnN3xQYv7ewBuQheyccCTOEU+jZeKct/qL5v2vZ2ybJRCI54iyJMxUWgoyYNHv424MgunG9n0gqm8NheaUpu8gqZsBe9vZivhyT9xMrftdK1eAUXJSLdgVzuKWqpNwlztvHVcl1sYoOrluN4FowIDAQAB 的本地化字符串。
+        /// </summary>
+        internal static string AlipayPublicKey {
+            get {
+                return ResourceManager.GetString("AlipayPublicKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 2021000119681243 的本地化字符串。
+        /// </summary>
+        internal static string AppID {
+            get {
+                return ResourceManager.GetString("AppID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 UTF-8 的本地化字符串。
+        /// </summary>
+        internal static string Charset {
+            get {
+                return ResourceManager.GetString("Charset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 json 的本地化字符串。
+        /// </summary>
+        internal static string Format {
+            get {
+                return ResourceManager.GetString("Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 https://openapi.alipaydev.com/gateway.do 的本地化字符串。
+        /// </summary>
+        internal static string GatewayUrl {
+            get {
+                return ResourceManager.GetString("GatewayUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 MIIEogIBAAKCAQEAiKNYxxz5ipq+PMO2Iw02TSHceqA95u5o18tRw8uy/AhpdZMl1ytcxY5Ti20efJr1K1COXUjk3m4esd3vT2//PKyxMB2pSzwiOXnOoHl1M/apTK/kpURmO10nybFRAk6zMGcRIP3G8nVvXycE4kiSXONfCf81nWuR9EWO9Lt3D1lJvVDHLYHLgqlIw2e/K1yX7geBxqxAX+kXJVknIp6GFSgqfzpfrHpG7E1kajJbf+XwHN5hnBwWMRFGvCw34yttRtGba5A9r0xDjLugsXO8VbOaOwvXdsz+j/fM1cybwa5T0kiD2ACky7QO+WGwkaF6zzw7CVdIGoJyMe1qfae8CwIDAQABAoIBABPKvXBSFR9rnMTGgJqBLm1ryzkD/xN1U0B21ggreGije0spnmCVimGfZSCcFL9t3reAeq6ugWBqyQ1wnVp/WZRbW2sh0MTyF+8FYtXB4iU9xHY0QEVkK/7LVpkTky1nYvNO6p9Bw1CZjCFX [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string MerchantPrivateKey {
+            get {
+                return ResourceManager.GetString("MerchantPrivateKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似  的本地化字符串。
+        /// </summary>
+        internal static string NotifyUrl {
+            get {
+                return ResourceManager.GetString("NotifyUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 http://82.156.207.90:9103/Orders/Pay 的本地化字符串。
+        /// </summary>
+        internal static string ReturnUrl {
+            get {
+                return ResourceManager.GetString("ReturnUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 RSA2 的本地化字符串。
+        /// </summary>
+        internal static string SignType {
+            get {
+                return ResourceManager.GetString("SignType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 1.0 的本地化字符串。
+        /// </summary>
+        internal static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
     }
 }
