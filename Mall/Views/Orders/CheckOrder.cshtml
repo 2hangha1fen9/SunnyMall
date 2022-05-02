@@ -6,7 +6,7 @@
     Users user = ViewBag.User;
 }
 <form action="/Orders/CreateOrder" method="get">
-    <div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;" ">
+    <div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;">
         <h2 class="fw-bold" style="margin-top: 20px">确认订单</h2>
         <ul class="list-group" style="margin-top: 10px;margin-bottom: 50px">
             @foreach (var item in deliveries)
@@ -17,8 +17,9 @@
                 </li>
             }
         </ul>
+
         <h4>订单信息</h4>
-        @if (ViewBag.OnKeyBuy)
+        @if (ViewBag.OnKeyBuy != null)
         {
             <input type="hidden" name="pid" value="@ViewBag.Pid" />
             <input type="hidden" name="quantity" value="@ViewBag.Quantity" />
@@ -51,6 +52,10 @@
         <p style="font-size: 20px">
             <span id="count" style="color: orange;">@Model.Sum(c => c.Quantity)</span> 件商品 | 总计: &yen; <span id="sum" style="color: orange;">@Model.Sum(c => (c.Quantity * c.Products.Price)).ToString("0.00")</span>
         </p>
+        <div class="form-floating" style="margin-bottom: 30px">
+            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="remark" style="height: 100px"></textarea>
+            <label for="floatingTextarea2">备注</label>
+        </div>
         <p>
             <button type="submit" class="btn btn-success">提交订单</button>
             <button href="/Cart" type="button" class="btn btn-primary" onclick="window.history.go(-1)">返回</button>

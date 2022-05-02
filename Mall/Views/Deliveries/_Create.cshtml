@@ -1,0 +1,91 @@
+﻿<div class="card">
+    <div class="card-body">
+        @using (Ajax.BeginForm("Create", "", new AjaxOptions
+        {
+            UpdateTargetId = "ajax",
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnFailure = "showMessage('添加失败')"
+        }, new
+        {
+            @class = "row g-3",
+            id = "deliveries"
+        }))
+        {
+            <input type="hidden" name="DeliveryID" value="@(ViewBag.Deliverie == null ? -1 : ViewBag.Deliverie.DeliveryID)" />
+            <div class="col-md-6">
+                <label class="form-label">收货人<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Consignee" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Consignee)">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">详细地址<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Complete" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Complete)">
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">手机号<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" name="Phone" value="@(ViewBag.Deliverie == null ? "" : ViewBag.Deliverie.Phone)">
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-success">提交</button>
+            </div>
+        }
+    </div>
+</div>
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>收货地址</h2>
+</div>
+@foreach (var item in ViewBag.Deliveries)
+{
+    <div class="card" style="justify-content: flex-start;height: 100%;">
+        <div class="card-header">
+            【@if (item.DeliveryID == ViewBag.user.DeliveryID)
+            {
+                @Html.Raw("默认地址")
+            }
+            else
+            {
+                @Ajax.ActionLink("设为默认", "SetDefault", "Deliveries", new { id = item.DeliveryID }, new AjaxOptions
+                {
+                    UpdateTargetId = "ajax",
+                    InsertionMode = InsertionMode.Replace,
+                    OnSuccess = "showMessage('设置成功')",
+                    OnFailure = "showMessage('设置失败')"
+                })
+                @Ajax.ActionLink("删除", "Remove", "Deliveries", new { id = item.DeliveryID }, new AjaxOptions
+                {
+                    UpdateTargetId = "ajax",
+                    InsertionMode = InsertionMode.Replace,
+                    Confirm = "是否确认删除",
+                    OnSuccess = "showMessage('删除成功')",
+                    OnFailure = "showMessage('删除失败')"
+                }, new { @class = "link-danger" })
+            }
+            @Ajax.ActionLink("编辑", "Create", "Deliveries", new { id = item.DeliveryID }, new AjaxOptions
+            {
+                UpdateTargetId = "ajax",
+                InsertionMode = InsertionMode.Replace,
+            }) 】@item.Consignee (@item.Phone)
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@item.Complete</p>
+            </blockquote>
+        </div>
+    </div>
+}
+<script>
+    window.onload = () => {
+        $("#deliveries").validate({
+            rules: {
+                Consignee: { required: true },
+                Complete: { required: true },
+                Phone: { required: true, maxlength: 11 },
+            },
+            messages: {
+                Consignee: { required: "请输入收货人" },
+                Complete: { required: "请输入详细地址" },
+                Phone: { required: "请输入手机号", maxlength: '请输入有效手机号' },
+            }
+        })
+    }
+</script>

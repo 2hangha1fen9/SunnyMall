@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "我的";
     Layout = "~/Views/Shared/_LayoutUsers.cshtml";
 }
 
@@ -13,18 +13,57 @@
                 <td>订单编号</td>
                 <td>总价</td>
                 <td>下单时间</td>
+                <td>备注</td>
                 <td>操作</td>
             </tr>
         </thead>
         <tbody style="line-height: 50px;">
-            @foreach (var item in ViewBag.NoPayOrders)
+            @foreach (var item in (List<Orders>)ViewBag.NoPayOrders)
             {
                 <tr>
-                    <td>@item.OrdersID</td>
-                    <td>@item.Total.ToString("0.00")</td>
+                    <td>@item.SerialID</td>
+                    <td>@item.Total</td>
                     <td>@item.Orderdate</td>
+                    <td>@item.Remark</td>
                     <td>
                         <a href="/Orders/Cashier/@item.OrdersID" class="btn-sm btn-primary">去付款</a>
+                        <a class="btn-sm btn-info" role="button" href="/Orders/OrderDetails/@item.OrdersID">查看详情</a>
+                        @if (item.OrdersDetails.Count() > 0)
+                        {
+                            <a class="btn-sm btn-info dropdown-toggle" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)"></a>
+                        }
+                        <div class="collapse" id="order@(item.OrdersID)">
+                            <div>
+                                <table class="table" style="text-align: center;line-height: 20px;" id="data">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <td></td>
+                                            <td>商品名</td>
+                                            <td>数量</td>
+                                            <td>小计</td>
+                                            <td>操作</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var sub in item.OrdersDetails)
+                                        {
+                                            <tr>
+                                                <td><img src="@if(sub.Products.Photos.Count() > 0) {@sub.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px;"></td>
+                                                <td>@sub.Products.Title</td>
+                                                <td>@sub.Quantity</td>
+                                                <td>@((sub.Quantity * sub.Products.Price).ToString("0.00"))</td>
+                                                <td>
+                                                    @if (item.States == 3)
+                                                    {
+                                                        <a href="/Appraises/Create/@sub.ProductID" class="btn-sm btn-primary">去评价</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }
@@ -41,17 +80,57 @@
                 <td>订单编号</td>
                 <td>总价</td>
                 <td>下单时间</td>
+                <td>备注</td>
                 <td>操作</td>
             </tr>
         </thead>
         <tbody style="line-height: 50px;">
-            @foreach (var item in ViewBag.NoSendOrders)
+            @foreach (var item in (List<Orders>)ViewBag.NoSendOrders)
             {
                 <tr>
-                    <td>@item.OrdersID</td>
-                    <td>@item.Total.ToString("0.00")</td>
+                    <td>@item.SerialID</td>
+                    <td>@item.Total</td>
                     <td>@item.Orderdate</td>
-                    <td></td>
+                    <td>@item.Remark</td>
+                    <td>
+                        <a class="btn-sm btn-info" role="button" href="/Orders/OrderDetails/@item.OrdersID">查看详情</a>
+                        @if (item.OrdersDetails.Count() > 0)
+                        {
+                            <a class="btn-sm btn-info dropdown-toggle" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)"></a>
+                        }
+                        <div class="collapse" id="order@(item.OrdersID)">
+                            <div>
+                                <table class="table" style="text-align: center;line-height: 20px;" id="data">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <td></td>
+                                            <td>商品名</td>
+                                            <td>数量</td>
+                                            <td>小计</td>
+                                            <td>操作</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var sub in item.OrdersDetails)
+                                        {
+                                            <tr>
+                                                <td><img src="@if(sub.Products.Photos.Count() > 0) {@sub.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px;"></td>
+                                                <td>@sub.Products.Title</td>
+                                                <td>@sub.Quantity</td>
+                                                <td>@((sub.Quantity * sub.Products.Price).ToString("0.00"))</td>
+                                                <td>
+                                                    @if (item.States == 3)
+                                                    {
+                                                        <a href="/Appraises/Create/@sub.ProductID" class="btn-sm btn-primary">去评价</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -67,18 +146,56 @@
                 <td>订单编号</td>
                 <td>总价</td>
                 <td>下单时间</td>
+                <td>备注</td>
                 <td>操作</td>
             </tr>
         </thead>
         <tbody style="line-height: 50px;">
-            @foreach (var item in ViewBag.NoGiveOrders)
+            @foreach (var item in (List<Orders>)ViewBag.NoGiveOrders)
             {
                 <tr>
-                    <td>@item.OrdersID</td>
-                    <td>@item.Total.ToString("0.00")</td>
+                    <td>@item.SerialID</td>
+                    <td>@item.Total</td>
                     <td>@item.Orderdate</td>
+                    <td>@item.Remark</td>
                     <td>
-                        <a href="/Orders/Confirm/@item.OrdersID" class="btn-sm btn-primary">确认收货</a>
+                        <a class="btn-sm btn-info" role="button" href="/Orders/OrderDetails/@item.OrdersID">查看详情</a>
+                        @if (item.OrdersDetails.Count() > 0)
+                        {
+                            <a class="btn-sm btn-info dropdown-toggle" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)"></a>
+                        }
+                        <div class="collapse" id="order@(item.OrdersID)">
+                            <div>
+                                <table class="table" style="text-align: center;line-height: 20px;" id="data">
+                                    <thead class="table-secondary">
+                                        <tr>
+                                            <td></td>
+                                            <td>商品名</td>
+                                            <td>数量</td>
+                                            <td>小计</td>
+                                            <td>操作</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var sub in item.OrdersDetails)
+                                        {
+                                            <tr>
+                                                <td><img src="@if(sub.Products.Photos.Count() > 0) {@sub.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px;"></td>
+                                                <td>@sub.Products.Title</td>
+                                                <td>@sub.Quantity</td>
+                                                <td>@((sub.Quantity * sub.Products.Price).ToString("0.00"))</td>
+                                                <td>
+                                                    @if (item.States == 3)
+                                                    {
+                                                        <a href="/Appraises/Create/@sub.ProductID" class="btn-sm btn-primary">去评价</a>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </td>
                 </tr>
             }

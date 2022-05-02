@@ -33,7 +33,7 @@ namespace Mall.Controllers
             ViewBag.up = pll.ListEntityByCondition(p => p.States == 1).Count();
             ViewBag.down = pll.ListEntityByCondition(p => p.States == 0).Count();
             ViewBag.warn = pll.ListEntityByCondition(p => p.Stock > 10).Count();
-            ViewBag.count = pll.ListEntity().Count();
+            ViewBag.ProductCount = pll.ListEntity().Count();
             ViewBag.today = ull.ListEntityByCondition(u => u.RegisterDate.Day == DateTime.Now.Day).Count();
             ViewBag.yesterday = ull.ListEntityByCondition(u => u.RegisterDate.Day == d.Day).Count();
             ViewBag.month = ull.ListEntityByCondition(u => u.RegisterDate.Month == DateTime.Now.Month).Count();

@@ -6,121 +6,30 @@
 }
 
 <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
-    <div>
-        @{
-            var states = Request.QueryString["states"] == null ? 5 : int.Parse(Request.QueryString["states"]);
-        }
-        <select class="form-select" aria-label="Default select example" onchange="filter()" id="filter">
-            <option value="5" @(states == 5 ? "selected" : "")>全部</option>
-            <option value="0" @(states == 0 ? "selected" : "")>未付款</option>
-            <option value="1" @(states == 1 ? "selected" : "")>已付款</option>
-            <option value="2" @(states == 2 ? "selected" : "")>已发货</option>
-            <option value="3" @(states == 3 ? "selected" : "")>已收货</option>
-            <option value="-1" @(states == -1 ? "selected" : "")>已关闭</option>
+    @using (Ajax.BeginForm("MyOrder", "Orders", new AjaxOptions
+    {
+        UpdateTargetId = "ajax",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "GET",
+    }, new { id="filter"}))
+    {
+        <select class="form-select" aria-label="Default select example" onchange="$(this).submit()" id="filter" name="states">
+            <option>全部</option>
+            <option value="0">未付款</option>
+            <option value="1">已付款</option>
+            <option value="2">已发货</option>
+            <option value="3">已收货</option>
+            <option value="-1">已关闭</option>
         </select>
-    </div>
-</div>
-<table class="table" style="text-align: center" id="data">
-    <thead>
-        <tr>
-            <td>下单日期</td>
-            <td>订单金额</td>
-            <td>订单状态</td>
-            <td>备注</td>
-            <td>操作</td>
-        </tr>
-    </thead>
-    <tbody style="line-height: 50px;">
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Orderdate</td>
-                <td>@item.Total.Value.ToString("0.00")</td>
-                <td>
-                    @(item.States == 0 ? "未付款" : item.States == 1 ? "已付款" : item.States == 2 ? "已发货" : item.States == 3 ? "已收货" : item.States == 4 ? "已评价" : "已关闭")
-                </td>
-                <td>@item.Remark</td>
-                <td>
-                    @if (item.States == 0)
-                    {
-                        <a href="/Orders/Cashier/@item.OrdersID" class="btn-sm btn-success">去付款</a>
-                        <a href="/Orders/OrderClose/@item.OrdersID" class="btn-sm btn-danger" onclick="return confirm('是否关闭该订单')">关闭订单</a>
-                    }
-                    else if (item.States == 2)
-                    {
-                        <a href="/Orders/Confirm/@item.OrdersID" class="btn-sm btn-success" onclick="return confirm('是否确认收货')">确认收货</a>
-                    }
-                    @if (item.States == -1)
-                    {
-                        <a href="/Orders/OrderDelete/@item.OrdersID" onclick="return confirm('是否确认删除')" class="btn-sm btn-primary">删除订单</a>
-                    }
-                    @if (item.OrdersDetails.Count() > 0)
-                    {
-                        <a class="btn-sm btn-info" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)">查看详情</a>
-                    }
-                    <div class="collapse" id="order@(item.OrdersID)">
-                        <div>
-                            <table class="table" style="text-align: center;line-height: 20px;" id="data">
-                                <thead class="table-secondary">
-                                    <tr>
-                                        <td></td>
-                                        <td>商品名</td>
-                                        <td>数量</td>
-                                        <td>小计</td>
-                                        <td>操作</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var sub in item.OrdersDetails)
-                                    {
-                                        <tr>
-                                            <td><img src="@if(sub.Products.Photos.Count() > 0) {@sub.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px;"></td>
-                                            <td>@sub.Products.Title</td>
-                                            <td>@sub.Quantity</td>
-                                            <td>@((sub.Quantity * sub.Products.Price).ToString("0.00"))</td>
-                                            <td>
-                                                @if (item.States == 3)
-                                                {
-                                                    <a href="/Appraises/Create/@sub.ProductID" class="btn-sm btn-primary">去评价</a>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<div style="margin: 50px 0px 50px 0px">
-    @Html.Pager(Model, new PagerOptions
-{
-    PageIndexParameterName = "id",
-    HorizontalAlign = "center",
-    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
-    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
-    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
-    FirstPageText = "<<",
-    LastPageText = ">>",
-    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
-})
-</div>
-<script>
-    $(() => {
-        location.pathname
-    })
-    function filter() {
-        if ($("#filter option:selected").val() == 5) {
-            location.href = "/Orders/MyOrder"
-        }
-        else {
-            console.log($("#filter option:selected").val())
-            location.href = "/Orders/MyOrder?states=" + $("#filter option:selected").val()
-        }
     }
-</script>
+</div>
+
+<div id="ajax">
+    @Html.Partial("_MyOrder",Model)
+</div>
+@section scripts
+{
+    @{Html.RegisterMvcPagerScriptResource();}
+}
 
 

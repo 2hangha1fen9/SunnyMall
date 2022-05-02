@@ -13,7 +13,10 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            MailHelper.SendMail("207168599@qq.com", $"[阳光商城]邮箱验证", MailHelper.Register("注册", $"/UserCenter/"));
+            string date = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string user = "22";
+
+
         }
     }
 }

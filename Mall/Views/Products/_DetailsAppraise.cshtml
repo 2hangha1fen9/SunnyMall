@@ -1,0 +1,32 @@
+﻿@model List<Appraises>
+@{ 
+    string auth = MyAuthentication.GetAuth();
+}
+@foreach (var item in Model)
+{
+    <div class="card" style="justify-content: flex-start;height: 100%;">
+        <div class="card-header">
+            【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName 
+            @if (auth == "0" || auth == "1")
+            {
+                @Ajax.ActionLink("删除", "AppraiseDelete", new { id = item.ProductID,aid=item.AppraiseID }, new AjaxOptions
+            {
+                UpdateTargetId = "appraise",
+                InsertionMode = InsertionMode.Replace,
+                OnSuccess = "showMessage('删除成功')"
+            }, new
+            {
+                onclick = "confirm('是否删除此批评论')"
+            });
+            }
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@Html.Raw(item.Content)</p>
+                <footer class="blockquote-footer">
+                    @item.RateTime
+                </footer>
+            </blockquote>
+        </div>
+    </div>
+}

@@ -1,16 +1,23 @@
 ﻿@model PagedList<Products>
 @{
-    ViewBag.Title = $"商品列表  {TempData["cates"]}";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = $"商品列表  {TempData["cates"]}";
 }
 
-
-<div class="item d-flex flex-wrap container align-items-center justify-content-between">
+<div class="item d-flex flex-wrap container align-items-center justify-content-between" id="head">
     <div style="width:100%">
         <h2 class="fw-bold">@ViewBag.Title</h2>
         <span>@TempData["Message"]</span>
     </div>
-    <form action="/Products/List" method="get" role="search">
+    @using (Ajax.BeginForm("List", "", new AjaxOptions
+    {
+        UpdateTargetId = "ajax",
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "GET",
+        
+    },new { id="filter"}))
+    {
+        <input type="hidden" name="key" value="@TempData["Search"]"/>
         <input type="hidden" name="cates" value="@TempData["cates"]" />
         <div class="input-group mb-3">
             <span class="input-group-text">价格区间:</span>
@@ -18,44 +25,24 @@
             <span class="input-group-text">~</span>
             <input type="number" class="form-control" placeholder="最高价" oninput="if(value < 0)value=0" aria-label="priceMax" name="priceMax" value="@TempData["priceMax"]" id="max">
             <select class="form-select" aria-label="Default select example" name="orderBy">
-                <option value="Count" @if (TempData["orderBy"].ToString() == "Count") { @Html.Raw("selected") } id="order">销量</option>
-                <option value="Price" @if (TempData["orderBy"].ToString() == "Price") { @Html.Raw("selected") }>价格</option>
-                <option value="PostTime" @if (TempData["orderBy"].ToString() == "PostTime") { @Html.Raw("selected") }>上架时间</option>
+                <option value="Count" id="order">销量</option>
+                <option value="Price">价格</option>
+                <option value="Appraise">评论数</option>
+                <option value="PostTime">上架时间</option>
             </select>
             <select class="form-select" aria-label="Default select example" name="sortBy">
-                <option value="1" @if (TempData["sortBy"].ToString() == "1") { @Html.Raw("selected") } id="sort">降序</option>
-                <option value="0" @if (TempData["sortBy"].ToString() == "0") { @Html.Raw("selected") }>升序</option>
+                <option value="1" id="sort">降序</option>
+                <option value="0" >升序</option>
             </select>
-            <a class="btn btn-secondary" href="/Products/List">清空</a>
+            <button class="btn btn-secondary" type="button" onclick="document.getElementById('filter').reset(); $('#filter').submit()" >重置</button>
             <button class="btn btn-secondary" type="submit">确定</button>
-        </div>
-    </form>
-    
-</div>
-<div class="item d-flex flex-wrap container align-items-center">
-    @foreach (var item in Model)
-    {
-        <div class="card" style="width: 18rem;">
-            <img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">&yen;@item.Price.ToString("0.00")</h5>
-                <p class="card-text text-truncate">@item.Title</p>
-                <a href="/Products/Details/@item.ProductID" class="btn btn-primary">查看详情</a>
-            </div>
         </div>
     }
 </div>
-<div style="margin: 50px 0px 50px 0px">
-    @Html.Pager(Model, new PagerOptions
-{
-    PageIndexParameterName = "id",
-    HorizontalAlign = "center",
-    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
-    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
-    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
-    FirstPageText = "<<",
-    LastPageText = ">>",
-    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
-})
+<div id="ajax">
+    @Html.Partial("_CardList", Model)
 </div>
-
+@section scripts
+{
+    @{Html.RegisterMvcPagerScriptResource();}
+}

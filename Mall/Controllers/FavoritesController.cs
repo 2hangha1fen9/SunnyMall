@@ -3,6 +3,7 @@ using Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Webdiyer.WebControls.Mvc;
@@ -13,6 +14,7 @@ namespace Mall.Controllers
     {
         FavoritesBLL favoritesBLL = new FavoritesBLL(); 
         // GET: Favorites
+        [UserAuthentication]
         public ActionResult Index(int? id =1,string key = "")
         {
             var favorites = favoritesBLL.ListEntity(key);
@@ -32,26 +34,32 @@ namespace Mall.Controllers
             favorites.UserID = uid;
             favorites.ProductID = id.Value;
             Favorites reslut = favoritesBLL.FindEntityByCondition(f => f.UserID == uid && f.ProductID == id.Value);
-            if(reslut != null)
+            ContentResult content = new ContentResult();
+            if (reslut != null)
             {
                 if (favoritesBLL.DeleteEntity(reslut))
                 {
-                    TempData["Message"] = "取消收藏成功";
+                    content.Content = "添加收藏";
                 }
                 else
                 {
-                    TempData["Message"] = "取消收藏失败";
+                    content.Content = "取消收藏";
                 }
+                
             }
-            else if (favoritesBLL.AddEntity(favorites) != null)
+            else if ((reslut = favoritesBLL.AddEntity(favorites)) != null)
             {
-                TempData["Message"] = "收藏成功";
+                content.Content = "取消收藏";
             }
             else
             {
-                TempData["Message"] = "收藏失败";
+                content.Content = "添加收藏";
             }
-            return RedirectToAction("Details", "Products", new { id = id.Value });
+            if (Request.IsAjaxRequest())
+            {
+                return content;
+            }
+            return RedirectToAction("Index");
         }
     }
 }

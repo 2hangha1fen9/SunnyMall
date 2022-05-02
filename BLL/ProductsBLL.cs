@@ -36,6 +36,10 @@ namespace BLL
                     {
                         products = products.OrderByDescending(p => p.PostTime);
                     }
+                    else if(orderBy == "Appraise")
+                    {
+                        products = products.OrderByDescending(p => p.Appraises.Count());
+                    }
                     else 
                     {
                         products = products.OrderByDescending(p => p.OrdersDetails.Count());
@@ -50,6 +54,10 @@ namespace BLL
                     else if (orderBy == "PostTime")
                     {
                         products = products.OrderBy(p => p.PostTime);
+                    }
+                    else if (orderBy == "Appraise")
+                    {
+                        products = products.OrderBy(p => p.Appraises.Count());
                     }
                     else
                     {

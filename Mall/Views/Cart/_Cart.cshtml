@@ -29,7 +29,7 @@
             {
                 <tr>
                     <td>
-                        <input type="checkbox" class="ck ckn" value="@item.CartID" id="flexCheckDefault" name="cid" onclick="checkProduct(this)" @(item.Checked == 1  ? "checked" : "") >
+                        <input type="checkbox" class="ck ckn" value="@item.CartID" id="flexCheckDefault" name="cid" onclick="checkProduct(this)" @(item.Checked == 1 ? "checked" : "")>
                     </td>
                     <td><img src="@if (item.Products.Photos.Count() > 0) {@item.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px"></td>
                     <td>@item.Products.Title</td>
@@ -60,17 +60,23 @@
                            UpdateTargetId = "ajax",
                            InsertionMode = InsertionMode.Replace,
                            HttpMethod = "GET",
-                           OnFailure = $"showMessage('操作失败')",
-                           OnBegin = "confirm('是否将该商品移入收藏夹?')"
-                        }, new { @class = "btn-sm btn-success" })
-                        @Ajax.ActionLink("移除", "RemoveProduct", new { id = item.CartID }, new AjaxOptions
+                           OnFailure = $"showMessage('操作失败')"
+                        }, new
                         {
+                            @class = "btn-sm btn-success",
+                            onclick = "confirm('是否将该商品移入收藏夹?')"
+                        })
+                        @Ajax.ActionLink("移除", "RemoveProduct", new { id = item.CartID }, new AjaxOptions
+                       {
                            UpdateTargetId = "ajax",
                            InsertionMode = InsertionMode.Replace,
                            HttpMethod = "GET",
                            OnFailure = $"showMessage('删除失败')",
-                           OnBegin = "confirm('是否删除该商品?')",
-                        }, new { @class = "btn-sm btn-danger" })
+                       }, new
+                            {
+                           @class = "btn-sm btn-danger",
+                           onclick = "confirm('是否删除该商品?')"
+                       })
                     </td>
                 </tr>
             }
@@ -111,7 +117,7 @@
     function checkProduct(id) {
         $('#form').attr('action', `/Cart/Checked/${$(id).val()}`)
         $('#form').attr('method', 'get')
-        $('#form').attr('data-ajax-method','GET')
+        $('#form').attr('data-ajax-method', 'GET')
         $('#form').submit();
     }
 

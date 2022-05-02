@@ -31,7 +31,7 @@ namespace BLL
             return ListEntity().OrderByDescending(n => n.Orderdate).ToList();
         }
 
-        public Orders CreateOrder(Users user,int deliverieID)
+        public Orders CreateOrder(Users user,int deliverieID,string remark)
         {
             using (TransactionScope scope = new TransactionScope())
             {
@@ -39,9 +39,12 @@ namespace BLL
                 {
                     List<Cart> cart = user.Cart.Where(c => c.Checked == 1).ToList();
                     Orders orders = new Orders();
+                    orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
                     orders.Orderdate = DateTime.Now;
                     orders.DeliveryID = deliverieID;
                     orders.UserID = user.UserID;
+                    orders.Remark = remark;
+
                     foreach (Cart cartItem in cart)
                     {
                         OrdersDetails details = new OrdersDetails();
@@ -78,16 +81,18 @@ namespace BLL
             }
         }
 
-        public Orders CreateOrder(Users user, int pid,int quantity,int deliverieID)
+        public Orders CreateOrder(Users user, int pid,int quantity,int deliverieID, string remark)
         {
             using (TransactionScope scope = new TransactionScope())
             {
                 try
                 {
                     Orders orders = new Orders();
+                    orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
                     orders.Orderdate = DateTime.Now;
                     orders.DeliveryID = deliverieID;
                     orders.UserID = user.UserID;
+                    orders.Remark = remark;
 
                     Products products = productsBLL.FindEntityById(pid);
                     OrdersDetails details = new OrdersDetails();

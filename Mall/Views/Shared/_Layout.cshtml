@@ -28,103 +28,103 @@
             height: 100%;
         }
 
-          header {
-              /* 我们希望 header 采用固定的高度，只占用必须的空间 */
-              /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
-              flex: 0 0 auto;
-          }
+        header {
+            /* 我们希望 header 采用固定的高度，只占用必须的空间 */
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
 
-          .main {
-              /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
+        .main {
+            /* 将 flex-grow 设置为1，该元素会占用全部可使用空间
         而其他元素该属性值为0，因此不会得到多余的空间*/
-              /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
-              flex: 1 0 auto;
-          }
+            /* 1 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 1 0 auto;
+        }
 
-          footer {
-              /* 和 header 一样，footer 也采用固定高度*/
-              /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
-              flex: 0 0 auto;
-          }
+        footer {
+            /* 和 header 一样，footer 也采用固定高度*/
+            /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
+            flex: 0 0 auto;
+        }
 
-          .py-3,
-          .footer {
-              background-color: white;
-          }
+        .py-3,
+        .footer {
+            background-color: white;
+        }
 
-          .item {
-              margin-top: 20px;
-          }
+        .item {
+            margin-top: 20px;
+        }
 
-              .item h2 {
-                  width: 100%;
-                  border-bottom: 2px solid rgb(173, 166, 166);
-              }
+            .item h2 {
+                width: 100%;
+                border-bottom: 2px solid rgb(173, 166, 166);
+            }
 
-          .card {
-              margin: 10px;
-              display: flex;
-              height: 100%;
-              flex-direction: column;
-              justify-content: space-between;
-          }
+        .card {
+            margin: 10px;
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-          img {
-              width: 100%;
-              height: auto;
-              max-width: 100%;
-              max-height: 100%;
-          }
+        img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
 
-          .card-title {
-              color: rgba(255, 0, 0, 0.696)
-          }
+        .card-title {
+            color: rgba(255, 0, 0, 0.696)
+        }
 
-          .card-text {
-              display: inline-block;
-              overflow: hidden;
-              width: 100%;
-          }
+        .card-text {
+            display: inline-block;
+            overflow: hidden;
+            width: 100%;
+        }
 
-          .footer {
-              margin-top: 150px;
-          }
+        .footer {
+            margin-top: 150px;
+        }
 
-          .money {
-              color: rgba(255, 0, 0, 0.596);
-          }
+        .money {
+            color: rgba(255, 0, 0, 0.596);
+        }
 
-          .range {
-              white-space: nowrap;
-          }
+        .range {
+            white-space: nowrap;
+        }
 
-              .range input {
-                  display: inline;
-              }
+            .range input {
+                display: inline;
+            }
 
-          .info h1,
-          h5 {
-              margin: 30px 0px 30px 0px;
-          }
+        .info h1,
+        h5 {
+            margin: 30px 0px 30px 0px;
+        }
 
-          .info .count {
-              margin: 30px 0px 30px 0px;
-          }
+        .info .count {
+            margin: 30px 0px 30px 0px;
+        }
 
-          .market-price {
-              text-decoration: line-through;
-          }
+        .market-price {
+            text-decoration: line-through;
+        }
 
-          .price {
-              font-size: 30px;
-              color: orange;
-              font-weight: bolder;
-          }
+        .price {
+            font-size: 30px;
+            color: orange;
+            font-weight: bolder;
+        }
 
-          .tab-pane {
-              width: 100%;
-              padding: 10px;
-          }
+        .tab-pane {
+            width: 100%;
+            padding: 10px;
+        }
     </style>
     <script>
         $(() => {
@@ -156,8 +156,9 @@
                     @foreach (var item in categories)
                     {
 
-                        <li class="nav-item">
-                            <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" href="/Products/List?cates=@item.CateName" role="button" aria-expanded="false">@item.CateName</a>
+                        <li class="nav-item" style="display:flex">
+                            <a class="nav-link link-dark px-2" href="/Products/List?cates=@item.CateName" role="button">@item.CateName</a>
+                            <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
                                 @foreach (var sub in item.Categories1)
                                 {
@@ -176,7 +177,7 @@
                         {
                             <li class="nav-item">
                                 <a href="/Cart" class="nav-link link-dark px-2">
-                                    购物车 <span class="badge bg-secondary">@MyAuthentication.GetUser().Cart.Count()</span>
+                                    购物车
                                 </a>
                             </li>
                         }
@@ -200,13 +201,12 @@
                     <input type="hidden" name="sortBy" value="@TempData["sortBy"]" />
                     <input type="hidden" name="priceMin" value="@TempData["priceMin"]" />
                     <input type="hidden" name="priceMax" value="@TempData["priceMax"]" />
-                    <input type="search" class="form-control" placeholder="Search..." value="@TempData["key"]" name="key" aria-label="Search">
+                    <input type="search" class="form-control" placeholder="Search..." value="@TempData["Search"]" name="key" aria-label="Search">
                 </form>
             </div>
         </header>
     </div>
     <div class="main">
-
         @RenderBody()
     </div>
     <footer class="footer">
@@ -234,6 +234,7 @@
             </div>
         </div>
     </div>
+    @RenderSection("scripts", required: false)
 </body>
 
 </html>

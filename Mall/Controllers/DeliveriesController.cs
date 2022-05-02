@@ -111,45 +111,62 @@ namespace Mall.Controllers
         [UserAuthentication]
         public ActionResult Create(int? id)
         {
-            int uid = MyAuthentication.GetUserID();
-            Users user = ull.FindEntityById(uid);
-            ViewBag.Deliveries = user.Deliveries.OrderByDescending(d => d.DeliveryID == user.DeliveryID);
-            ViewBag.User = user;
+            Users user = FindDeliveries();
             if (id.HasValue)
             {
                 ViewBag.Deliverie = bll.FindEntityById(id.Value);
             }
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Create");
+            }
             return View();
+        }
+
+        private Users FindDeliveries()
+        {
+            int uid = MyAuthentication.GetUserID();
+            Users user = ull.FindEntityById(uid);
+            ViewBag.Deliveries = user.Deliveries.OrderByDescending(d => d.DeliveryID == user.DeliveryID);
+            ViewBag.User = user;
+            return user;
         }
 
         [HttpPost]
         [UserAuthentication]
         public ActionResult Create(Deliveries n)
         {
-            int uid = MyAuthentication.GetUserID();
-            Users user = ull.FindEntityById(uid);
-            if(user != null)
+            Users user = FindDeliveries();
+            if (user != null)
             {
                 n.UserID = user.UserID;
                 if(n.DeliveryID > 0)
                 {
-                    if (bll.UpdateEntity(n))
+                    Deliveries d = user.Deliveries.FirstOrDefault(m => m.DeliveryID == n.DeliveryID);
+                    if(d != null)
                     {
-                        TempData["Message"] = "更新成功";
+                        d.Consignee = n.Consignee;
+                        d.Complete = n.Complete;
+                        d.Phone = n.Phone;
+
+                        if (!bll.UpdateEntity(d))
+                        {
+                            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                        }
                     }
                     else
                     {
-                        TempData["Message"] = "更新失败";
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                     }
                 }
-                else if (bll.AddEntity(n) != null)
+                else if (bll.AddEntity(n) == null)
                 {
-                    TempData["Message"] = "添加成功";
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
-                else
-                {
-                    TempData["Message"] = "添加失败";
-                }
+            }
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Create");
             }
             return RedirectToAction("Create");
         }
@@ -157,21 +174,16 @@ namespace Mall.Controllers
         [UserAuthentication]
         public ActionResult SetDefault(int? id)
         {
+            Users user = FindDeliveries();
             if (id.HasValue)
             {
-                int uid = MyAuthentication.GetUserID();
-                Users user = ull.FindEntityById(uid);
                 user.DeliveryID = id.Value;
-                if (ull.UpdateEntity(user))
+                if (!ull.UpdateEntity(user))
                 {
-                    TempData["Message"] = "设置成功";
-                }
-                else
-                {
-                    TempData["Message"] = "设置失败";
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
                 }
             }
-            return RedirectToAction("Create");
+            return PartialView("_Create");
         }
 
         [UserAuthentication]
@@ -181,15 +193,12 @@ namespace Mall.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (bll.DeleteEntityById(id.Value))
+            if (!bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            else
-            {
-                TempData["Message"] = "无效的ID列表";
-            }
-            return RedirectToAction("Create");
+            Users user = FindDeliveries();
+            return PartialView("_Create");
         }
     }
 }

@@ -25,6 +25,7 @@ namespace Mall.Controllers
                 TempData["Message"] = $"检索到{orders.Count()}条数据";
             }
             TempData["Search"] = key;
+            TempData["States"] = states;
             return View(orders.ToPagedList(id.Value,10));
         }
 
@@ -38,6 +39,11 @@ namespace Mall.Controllers
                 TempData["Message"] = $"检索到{orders.Count()}条数据";
             }
             TempData["Search"] = key;
+            TempData["States"] = states;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_MyOrder", orders.ToPagedList(id.Value, 10));
+            }
             return View(orders.ToPagedList(id.Value, 10));
         }
 
@@ -82,17 +88,17 @@ namespace Mall.Controllers
         /// <param name="quantity">数量</param>
         /// <returns></returns>
         [UserAuthentication]
-        public ActionResult CreateOrder(int id,int? pid,int? quantity)
+        public ActionResult CreateOrder(int id,int? pid,int? quantity,string remark = "")
         {
             Users user = MyAuthentication.GetUser();
             Orders orders;
             if (pid.HasValue && quantity.HasValue)
             {
-                orders = bll.CreateOrder(user,pid.Value,quantity.Value,id);
+                orders = bll.CreateOrder(user,pid.Value,quantity.Value,id,remark);
             }
             else
             {
-                orders = bll.CreateOrder(user, id);
+                orders = bll.CreateOrder(user, id,remark);
             }
             if(orders != null)
             {
@@ -114,7 +120,6 @@ namespace Mall.Controllers
             Orders orders = bll.FindEntityById(o.OrdersID);
             if(orders != null)
             {
-                orders.PayType = o.PayType;
                 if (bll.UpdateEntity(orders))
                 {
                     return RedirectToAction("Pay", new { id = orders.OrdersID });
@@ -238,23 +243,38 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult Send(int? id)
+        public ActionResult Send(int id)
         {
-            if (!id.HasValue)
+            Orders order = bll.FindEntityById(id);
+            return View(order);
+        }
+
+        [HttpPost]
+        [AdminAuthentication]
+        public ActionResult Send(Orders o)
+        {
+            Orders order = bll.FindEntityById(o.OrdersID);
+            if(order != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Orders order = bll.FindEntityById(id.Value);
-            if (order == null)
-            {
-                TempData["Message"] = "无效的ID";
-            }
-            order.States = 2;
-            if (bll.UpdateEntity(order))
-            {
-                TempData["Message"] = "发货成功";
+                order.ExpressNumber = o.ExpressNumber;
+                order.ExpressType = o.ExpressType;
+                order.States = 2;
+                if(bll.UpdateEntity(order))
+                {
+                    TempData["Message"] = "发货成功";
+                }
+                else
+                {
+                    TempData["Message"] = "发货失败";
+                }
             }
             return RedirectToAction("Index");
+        }
+
+
+        public ActionResult OrderDetails(int id)
+        {
+            return View(bll.FindEntityById(id));
         }
     }
 }

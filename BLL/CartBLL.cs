@@ -23,12 +23,12 @@ namespace BLL
             return false;
         }
 
-        public bool AddProduct(int pid,int quantity, Users user)
+        public bool AddProduct(int pid, int quantity,Users user)
         {
             Cart cart = user.Cart.FirstOrDefault(c => c.ProductID == pid);
             if (cart != null)
             {
-                return AddQuantity(cart.CartID, 1);
+                return AddQuantity(cart.CartID, quantity);
             }
             else
             {

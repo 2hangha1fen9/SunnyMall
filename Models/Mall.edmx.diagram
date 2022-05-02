@@ -4,34 +4,34 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1" ZoomLevel="60">
-        <EntityTypeShape EntityType="MallModel.AdminUsers" Width="1.5" PointX="8.75" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Appraises" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Categories" Width="1.5" PointX="1.5" PointY="2.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Deliveries" Width="1.5" PointX="3" PointY="9.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Favorites" Width="1.5" PointX="6" PointY="4.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.News" Width="1.5" PointX="8.75" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Orders" Width="1.5" PointX="5.25" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.OrdersDetails" Width="1.5" PointX="7.5" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Photos" Width="1.5" PointX="6" PointY="1.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Products" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="MallModel.Users" Width="1.5" PointX="0.75" PointY="6" IsExpanded="true" />
-        <AssociationConnector Association="MallModel.FK_Appraises_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Appraises_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Categories_Categories" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Products_Categories" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Deliveries_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Orders_Deliveries" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Users_Deliveries1" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Favorites_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Favorites_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Orders_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_OrdersDetails_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_OrdersDetails_Products" ManuallyRouted="false" />
-        <AssociationConnector Association="MallModel.FK_Photos_Products" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="MallModel.Cart" Width="1.5" PointX="10" PointY="8.25" />
+      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1" ZoomLevel="63" ShowGrid="true" SnapToGrid="false">
+        <EntityTypeShape EntityType="MallModel.AdminUsers" Width="1.5" PointX="5.75" PointY="1.6255174153645833" />
+        <EntityTypeShape EntityType="MallModel.Appraises" Width="1.5" PointX="6.0000005000000005" PointY="7.448455810546875" />
+        <EntityTypeShape EntityType="MallModel.Cart" Width="1.5000000000000004" PointX="3.0000005000000005" PointY="4.548970540364583" />
+        <EntityTypeShape EntityType="MallModel.Categories" Width="1.5" PointX="1.5000005000000005" PointY="12.548970540364584" />
+        <EntityTypeShape EntityType="MallModel.Deliveries" Width="1.5" PointX="3" PointY="16.853935139973956" />
+        <EntityTypeShape EntityType="MallModel.Favorites" Width="1.5000000000000004" PointX="3.0000005000000005" PointY="7.7500000000000018" />
+        <EntityTypeShape EntityType="MallModel.News" Width="1.5" PointX="7.75" PointY="1.6255174153645839" />
+        <EntityTypeShape EntityType="MallModel.OrdersDetails" Width="1.5" PointX="7.5000009999999993" PointY="11.899908650716148" />
+        <EntityTypeShape EntityType="MallModel.Photos" Width="1.5" PointX="3.0000005000000005" PointY="0.75" />
+        <EntityTypeShape EntityType="MallModel.Products" Width="1.5000000000000002" PointX="0.7500005000000004" PointY="1.744852701822917" />
+        <EntityTypeShape EntityType="MallModel.Users" Width="1.5" PointX="0.75" PointY="6.7448527018229179" />
+        <AssociationConnector Association="MallModel.FK_Appraises_Products" />
+        <AssociationConnector Association="MallModel.FK_Appraises_Users" />
         <AssociationConnector Association="MallModel.FK_Cart_Products" />
         <AssociationConnector Association="MallModel.FK_Cart_Users" />
+        <AssociationConnector Association="MallModel.FK_Categories_Categories" />
+        <AssociationConnector Association="MallModel.FK_Products_Categories" />
+        <AssociationConnector Association="MallModel.FK_Deliveries_Users" />
+        <AssociationConnector Association="MallModel.FK_Users_Deliveries1" />
+        <AssociationConnector Association="MallModel.FK_Favorites_Products" />
+        <AssociationConnector Association="MallModel.FK_Favorites_Users" />
+        <AssociationConnector Association="MallModel.FK_OrdersDetails_Products" />
+        <AssociationConnector Association="MallModel.FK_Photos_Products" />
+        <EntityTypeShape EntityType="MallModel.Orders" Width="1.5" PointX="5.2500005" PointY="11.209411621093754" />
+        <AssociationConnector Association="MallModel.FK_Orders_Deliveries" />
+        <AssociationConnector Association="MallModel.FK_Orders_Users" />
+        <AssociationConnector Association="MallModel.FK_OrdersDetails_Orders" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -30,23 +30,25 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "操作失败";
             }
-            
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
-        [UserAuthentication]
+        [UserAuthentication]    
         public ActionResult AddProduct(int id,int? quantity = 1)
         {
             Users user = MyAuthentication.GetUser();
             if (cartBLL.AddProduct(id, quantity.Value, user))
             {
-                TempData["Message"] = "添加成功";
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             else
             {
-                TempData["Message"] = "添加失败";
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return RedirectToAction("Details", "Products", new { id = id });
         }
 
         [UserAuthentication]
@@ -57,7 +59,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "操作失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
         [HttpPost]
@@ -70,7 +76,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "操作失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
         [UserAuthentication]
@@ -85,7 +95,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "删除失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
         [HttpPost]
@@ -102,13 +116,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "删除失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
-        }
-
-        [UserAuthentication]
-        public ActionResult Settlement()
-        {
-            return View();
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
         [UserAuthentication]
@@ -123,7 +135,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "操作失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
 
         [HttpPost]
@@ -140,7 +156,11 @@ namespace Mall.Controllers
             {
                 TempData["Message"] = "操作失败";
             }
-            return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Cart", cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
+            }
+            return View(cartBLL.ListEntityByCondition(c => c.UserID == user.UserID).ToList());
         }
     }
 }

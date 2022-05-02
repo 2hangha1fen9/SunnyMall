@@ -27,15 +27,15 @@ namespace Models
     
         public virtual DbSet<AdminUsers> AdminUsers { get; set; }
         public virtual DbSet<Appraises> Appraises { get; set; }
+        public virtual DbSet<Cart> Cart { get; set; }
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<Deliveries> Deliveries { get; set; }
         public virtual DbSet<Favorites> Favorites { get; set; }
         public virtual DbSet<News> News { get; set; }
-        public virtual DbSet<Orders> Orders { get; set; }
         public virtual DbSet<OrdersDetails> OrdersDetails { get; set; }
         public virtual DbSet<Photos> Photos { get; set; }
         public virtual DbSet<Products> Products { get; set; }
         public virtual DbSet<Users> Users { get; set; }
-        public virtual DbSet<Cart> Cart { get; set; }
+        public virtual DbSet<Orders> Orders { get; set; }
     }
 }

@@ -181,7 +181,7 @@
                         {
                             <li class="nav-item">
                                 <a href="/Cart" class="nav-link link-dark px-2">
-                                    购物车 <span class="badge bg-secondary">@MyAuthentication.GetUser().Cart.Count()</span>
+                                    购物车
                                 </a>
                             </li>
                         }
@@ -205,7 +205,7 @@
                     <input type="hidden" name="sortBy" value="@TempData["sortBy"]" />
                     <input type="hidden" name="priceMin" value="@TempData["priceMin"]" />
                     <input type="hidden" name="priceMax" value="@TempData["priceMax"]" />
-                    <input type="search" class="form-control" placeholder="Search..." value="@TempData["key"]" name="key" aria-label="Search">
+                    <input type="search" class="form-control" placeholder="Search..." value="@TempData["Search"]" name="key" aria-label="Search">
                 </form>
             </div>
         </header>
@@ -214,7 +214,7 @@
         <div class="item container"
              style="display: flex;flex-direction: column;background-color: white;width: 100%;" ">
             <div class="item d-flex flex-wrap container align-items-center justify-content-between">
-                <h3 class="fw-bold">用户中心</h3>
+                <h3 class="fw-bold" id="center">用户中心</h3>
             </div>
             <div class="btn-group">
                 <a href="/UserCenter" class="btn btn-secondary  @(Request.RawUrl == "/UserCenter" ? "active" : "")">我的</a>
@@ -225,7 +225,7 @@
                 <a href="/Favorites" class="btn btn-secondary @(Request.RawUrl == "/Favorites" ? "active" : "")">收藏夹</a>
                 <a href="/UserCenter/ChangePwd" class="btn btn-secondary @(Request.RawUrl == "/UserCenter/ChangePwd" ? "active" : "")">修改密码</a>
             </div>
-            <div>
+            <div id="tab">
                 @RenderBody()
             </div>
         </div>
@@ -250,12 +250,12 @@
                 <strong class="me-auto">提示</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
-            <div class="toast-body">
+            <div class="toast-body" id="message">
                 @TempData["Message"]
             </div>
         </div>
     </div>
-   
+    @RenderSection("scripts", required: false)
 </body>
 
 </html>

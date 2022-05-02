@@ -1,0 +1,32 @@
+﻿@model PagedList<Products>
+
+<div class="item d-flex flex-wrap container align-items-center">
+    @foreach (var item in Model)
+    {
+        <div class="card" style="width: 18rem;">
+            <img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">&yen;@item.Price.ToString("0.00")</h5>
+                <p class="card-text text-truncate">@item.Title</p>
+                <a href="/Products/Details/@item.ProductID" target="_blank" class="btn btn-primary">查看详情</a>
+            </div>
+        </div>
+    }
+</div>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" }}
+},new MvcAjaxOptions {
+    UpdateTargetId="ajax",
+    OnComplete = "document.documentElement.scrollTop = document.getElementById('head').offsetTop",
+    DataFormId = "filter"
+})
+</div>

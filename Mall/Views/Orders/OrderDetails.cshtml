@@ -1,0 +1,65 @@
+﻿@model Orders
+@{
+    ViewBag.Title = "订单详情";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;">
+    <h2 class="fw-bold" style="margin-top: 20px">订单详情</h2>
+
+    <h4 style="margin-top: 20px">商品信息</h4>
+    <table class="table" style="text-align: center" id="data">
+        <thead>
+            <tr>
+                <td></td>
+                <td>商品名</td>
+                <td>单价</td>
+                <td>数量</td>
+                <td>小计</td>
+            </tr>
+        </thead>
+        <tbody style="line-height: 50px;">
+            @foreach (var item in Model.OrdersDetails)
+            {
+                <tr>
+                    <td>
+                        <img src="@if (item.Products.Photos.Count() > 0) {@item.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px">
+                    </td>
+                    <td>@item.Products.Title</td>
+                    <td>&yen;@item.Products.Price.ToString("0.00")</td>
+                    <td>@item.Quantity </td>
+                    <td>@((item.Products.Price * item.Quantity).ToString("0.00"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <p style="font-size: 20px">
+        <span id="count" style="color: orange;">@Model.OrdersDetails.Sum(c => c.Quantity)</span> 件商品 | 总计: &yen; <span id="sum" style="color: orange;">@Model.OrdersDetails.Sum(c => (c.Quantity * c.Products.Price)).ToString("0.00")</span>
+    </p>
+
+    <h4 style="margin-top: 20px">收货地址</h4>
+    <div class="card" style="justify-content: flex-start;height: 100%;">
+        <div class="card-header">
+            @Model.Deliveries.Consignee (@Model.Deliveries.Phone)
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <p>@Model.Deliveries.Complete</p>
+            </blockquote>
+        </div>
+    </div>
+
+    <h4 style="margin-top: 20px">详细信息</h4>
+    <div>
+        <p>订单编号: @Model.SerialID</p>
+        <p>用户名: @Model.Users.UserName</p>
+        <p>下单时间: @Model.Orderdate</p>
+        <p>订单状态:  @(Model.States == 0 ? "未付款" : Model.States == 1 ? "已付款" : Model.States == 2 ? "已发货" : Model.States == 3 ? "已收货" : "已关闭")</p>
+        @if (Model.States == 2)
+        {
+            <p>快递单号: @Model.ExpressNumber (@Model.ExpressType)</p>
+        }
+    </div>
+</div>
+

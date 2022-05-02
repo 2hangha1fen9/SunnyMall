@@ -4,13 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     Users user = ViewBag.user;
     List<Favorites> favorites = ViewBag.Favorites;
+    List<Appraises> appraises = ViewBag.Appraise;
+    FavoritesBLL favoritesBLL = new FavoritesBLL();
     string auth = MyAuthentication.GetAuth();
 }
 
 <div class="item d-flex flex-wrap container align-items-center justify-content-between">
     <h2 class="fw-bold">@ViewBag.Title</h2>
 </div>
-<div class="item d-flex flex-wrap container" style="display: flex;flex-direction: row;">
+<div class="item d-flex flex-wrap container" style="display: flex;flex-direction: row;" id="info">
     <div class="card mb-3 rounded-3" style="height: 100%;">
         <div class="row g-0">
             <div class="col-md-4">
@@ -48,19 +50,34 @@
                             <div class="input-group mb-3" role="group" aria-label="Basic example" style="width: 100%;">
                                 <span class="input-group-text">购买数量:</span>
                                 <input class="input-group-text" oninput="if(value < 1)value=1" type="number" style="width: 90px;" class="form-control"
-                                       value="1" name="quantity">
+                                       value="1" name="quantity" id="quantity" >
                                 <span class="input-group-text">件</span>
                             </div>
                             <button type="submit" class="btn btn-success">立即购买</button>
-                            <a href="/Cart/AddProduct/@Model.ProductID" type="button" class="btn btn-primary">加入购物车</a>
-                            @if (favorites.Any(f => f.ProductID == Model.ProductID))
-                            {
-                                <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">取消收藏</a>
+                            @Ajax.ActionLink("添加购物车", $"AddProduct/{Model.ProductID}", "Cart", "", new AjaxOptions
+                           {
+                               OnSuccess = "showMessage('添加成功')",
+                           }, new
+                           {
+                               onclick = $"$(this).attr('href',`/Cart/AddProduct/{Model.ProductID}?quantity=${{$('#quantity').val()}}`)",
+                               type = "button",
+                               @class = "btn btn-primary",
+                               id="addCart",
+                           })
+                            @{ string text = "添加收藏";}
+                            @if (favorites.Any(f => f.ProductID == Model.ProductID && f.UserID == user.UserID))
+                             {
+                                text = "取消收藏";  
                             }
-                            else
-                            {
-                                <a href="/Favorites/Like/@Model.ProductID" type="button" class="btn btn-info">添加收藏</a>
-                            }
+                            @Ajax.ActionLink(text,$"Like/{Model.ProductID}","Favorites","",new AjaxOptions
+                           {
+                                UpdateTargetId = "like",
+                                InsertionMode = InsertionMode.Replace,
+                           },new
+                           {
+                               id = "like",
+                               @class = "btn btn-info"
+                           })
                         </form>
                     }
                 </div>
@@ -86,43 +103,37 @@
             </div>
             <div class="tab-pane fade active" id="nav-profile" role="tabpanel"
                  aria-labelledby="nav-profile-tab">
-                <form action="/Products/Details/@Model.ProductID" method="get" role="search">
-                    <div class="input-group mb-3">
-                        <select class="form-select" aria-label="Default select example" name="appraiseLevel">
-                            <option value="-1" @if (TempData["appraiseLevel"].ToString() == "-1") { @Html.Raw("selected") }>全部</option>
-                            <option value="0" @if (TempData["appraiseLevel"].ToString() == "0") { @Html.Raw("selected") }>好评</option>
-                            <option value="1" @if (TempData["appraiseLevel"].ToString() == "1") { @Html.Raw("selected") }>中评</option>
-                            <option value="2" @if (TempData["appraiseLevel"].ToString() == "2") { @Html.Raw("selected") }>差评</option>
-                        </select>
-                        <select class="form-select" aria-label="Default select example" name="appraiseOrderBy">
-                            <option value="1" @if (TempData["appraiseOrderBy"].ToString() == "1") { @Html.Raw("selected") }>按时间</option>
-                            <option value="0" @if (TempData["appraiseOrderBy"].ToString() == "0") { @Html.Raw("selected") }>默认</option>
-                        </select>
-                        <select class="form-select" aria-label="Default select example" name="appraiseSortBy">
-                            <option value="1" @if (TempData["appraiseSortBy"].ToString() == "1") { @Html.Raw("selected") }>降序</option>
-                            <option value="0" @if (TempData["appraiseSortBy"].ToString() == "0") { @Html.Raw("selected") }>升序</option>
-                        </select>
-                        <a class="btn btn-secondary" href="/Products/Details/@Model.ProductID">清空</a>
-                        <button class="btn btn-secondary" type="submit">确定</button>
-                    </div>
-                </form>
-                @foreach (var item in ViewBag.Appraise)
+                @using (Ajax.BeginForm($"AppraiseList/{Model.ProductID}", "Products","", new AjaxOptions
                 {
-                    <div class="card" style="justify-content: flex-start;height: 100%;">
-                        <div class="card-header">
-                            【@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : "差评")】 @item.Users.UserName @if (auth == "0" || auth == "1")
-                            {<a href="/Products/AppraiseDelete/@Model.ProductID?aid=@item.AppraiseID" onclick="confirm('是否删除此批评论')">删除</a>}
-                        </div>
-                        <div class="card-body">
-                            <blockquote class="blockquote mb-0">
-                                <p>@Html.Raw(item.Content)</p>
-                                <footer class="blockquote-footer">
-                                    @item.RateTime
-                                </footer>
-                            </blockquote>
-                        </div>
-                    </div>
+                    UpdateTargetId = "appraise",
+                    InsertionMode = InsertionMode.Replace,
+                    HttpMethod = "GET"
+                },new { id="filter"}))
+                {
+                <div class="input-group mb-3">
+                    <select class="form-select" aria-label="Default select example" name="appraiseLevel">
+                        <option value="-1" @if (TempData["appraiseLevel"].ToString() == "-1") { @Html.Raw("selected") }>全部</option>
+                        <option value="0" @if (TempData["appraiseLevel"].ToString() == "0") { @Html.Raw("selected") }>好评</option>
+                        <option value="1" @if (TempData["appraiseLevel"].ToString() == "1") { @Html.Raw("selected") }>中评</option>
+                        <option value="2" @if (TempData["appraiseLevel"].ToString() == "2") { @Html.Raw("selected") }>差评</option>
+                    </select>
+                    <select class="form-select" aria-label="Default select example" name="appraiseOrderBy">
+                        <option value="1" @if (TempData["appraiseOrderBy"].ToString() == "1") { @Html.Raw("selected") }>按时间</option>
+                        <option value="0" @if (TempData["appraiseOrderBy"].ToString() == "0") { @Html.Raw("selected") }>默认</option>
+                    </select>
+                    <select class="form-select" aria-label="Default select example" name="appraiseSortBy">
+                        <option value="1" @if (TempData["appraiseSortBy"].ToString() == "1") { @Html.Raw("selected") }>降序</option>
+                        <option value="0" @if (TempData["appraiseSortBy"].ToString() == "0") { @Html.Raw("selected") }>升序</option>
+                    </select>
+                    <button class="btn btn-secondary" type="button" onclick="document.getElementById('filter').reset(); $('#filter').submit()">重置</button>
+                    <button class="btn btn-secondary" type="submit">确定</button>
+                </div>
                 }
+
+                <div id="appraise">
+                    @Html.Partial("_DetailsAppraise", Model.Appraises)
+                </div>
+                
             </div>
         </div>
     </div>

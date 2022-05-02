@@ -20,7 +20,7 @@ namespace Models
         public int Quantity { get; set; }
         public int States { get; set; }
     
-        public virtual Orders Orders { get; set; }
         public virtual Products Products { get; set; }
+        public virtual Orders Orders { get; set; }
     }
 }
