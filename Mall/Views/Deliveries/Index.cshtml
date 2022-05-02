@@ -1,6 +1,5 @@
 ﻿@model PagedList<Deliveries>
 @{
-    ViewBag.Title = "用户地址列表";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     string auth = MyAuthentication.GetAuth();
 }
@@ -8,83 +7,30 @@
 {
     return;
 }
-<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
-    <h2>@ViewBag.Title</h2>
-    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-        <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
-        <button type="button" onclick="location.href='/Deliveries/Update'" class="btn btn-success">添加</button>
-    </div>
-</div>
-<table class="table" style="text-align: center" id="data">
-    <thead class="table-dark">
-        <tr>
-            <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
-            <td>用户名</td>
-            <td>详细地址</td>
-            <td>收货人</td>
-            <td>手机号</td>
-            <td>操作</td>
-        </tr>
-    </thead>
-    <tbody style="line-height: 50px;">
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <input type="checkbox" class="ck ckn" value="@item.DeliveryID" id="flexCheckDefault">
-                </td>
-                <td>@item.Users.UserName</td>
-                <td>@item.Complete</td>
-                <td>@item.Consignee</td>
-                <td>@item.Phone</td>
-                <td>
-                    <a href="/Deliveries/Update/@item.DeliveryID" class="btn-sm btn-primary">编辑</a>
-                    <a href="/Deliveries/Delete/@item.DeliveryID" class="btn-sm btn-danger">删除</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<div style="margin: 50px 0px 50px 0px">
-    @Html.Pager(Model, new PagerOptions
-{
-    PageIndexParameterName = "id",
-    HorizontalAlign = "center",
-    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
-    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
-    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
-    FirstPageText = "<<",
-    LastPageText = ">>",
-    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
-})
-</div>
 
+@using (Ajax.BeginForm("Delete", "Deliveries", new AjaxOptions
+{
+    UpdateTargetId = "ajax",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    Confirm = "是否确认删除",
+    OnFailure = $"showMessage('操作失败')",
+    OnSuccess = "showMessage('删除成功')"
+}))
+{
+    <div id="ajax">
+        @Html.Partial("_Index", Model)
+    </div>
+}
+
+@section scripts
+{
+    @{Html.RegisterMvcPagerScriptResource();}
+}
 
 <script>
     function selectAll(o) {
         $(".ck").prop("checked", o.checked)
-    }
-    function deleteList() {
-        if (confirm('是否确认删除')) {
-            let boxies = $(":checked").not(".ckm")
-            let ids = ""
-            if (boxies.length != 0) {
-                boxies.each((i, e) => {
-                    ids += $(e).val() + (i == (boxies.length - 1) ? "" : ",")
-                })
-                if (ids.length != 0) {
-                    $.post("/Deliveries/Delete", { "ids": ids }, () => {
-                        location.href = "/Deliveries"
-                    })
-                } else {
-                    $(".toast-body").text("你还未选中任何一条记录")
-                    new bootstrap.Toast(document.getElementById('liveToast')).show()
-                }
-            } else {
-                $(".toast-body").text("你还未选中任何一条记录")
-                new bootstrap.Toast(document.getElementById('liveToast')).show()
-            }
-        }
     }
 </script>
 

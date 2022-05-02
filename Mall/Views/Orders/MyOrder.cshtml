@@ -11,7 +11,7 @@
         UpdateTargetId = "ajax",
         InsertionMode = InsertionMode.Replace,
         HttpMethod = "GET",
-    }, new { id="filter"}))
+    }, new { id = "filter" }))
     {
         <select class="form-select" aria-label="Default select example" onchange="$(this).submit()" id="filter" name="states">
             <option>全部</option>
@@ -25,7 +25,7 @@
 </div>
 
 <div id="ajax">
-    @Html.Partial("_MyOrder",Model)
+    @Html.Partial("_MyOrder", Model)
 </div>
 @section scripts
 {

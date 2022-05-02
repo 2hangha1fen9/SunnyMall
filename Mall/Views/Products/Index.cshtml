@@ -1,108 +1,60 @@
 ﻿@model PagedList<Products>
 @{
-    ViewBag.Title = "商品列表";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
     string auth = MyAuthentication.GetAuth();
 }
 
-<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
-    <h2>@ViewBag.Title</h2>
-    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
-        @if (auth == "1")
-        {
-            <button type="button" class="btn btn-danger" onclick="deleteList()">删除</button>
-        }
-        <button type="button" onclick="location.href='/Products/Update'" class="btn btn-success">添加</button>
-    </div>
-</div>
-<table class="table" style="text-align: center" id="data">
-    <thead class="table-dark">
-        <tr>
-            @if (auth == "1")
-            {
-                <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
-            }
-            <td></td>
-            <td>商品名</td>
-            <td>市场价格</td>
-            <td>本站价格</td>
-            <td>商品库存</td>
-            <td>分类</td>
-            <td>状态</td>
-            <td>操作</td>
-        </tr>
-    </thead>
-    <tbody style="line-height: 50px;">
-        @foreach (var item in Model)
-        {
-            <tr>
-                @if (auth == "1")
-                {
-                    <td>
-                        <input type="checkbox" class="ck ckn" value="@item.ProductID" id="flexCheckDefault">
-                    </td>
-                }
-                <td><img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" width="50px"></td>
-                <td>@item.Title</td>
-                <td>@item.MarketPrice.ToString("0.00")</td>
-                <td>@item.Price.ToString("0.00")</td>
-                <td>@item.Stock</td>
-                <td>@item.Categories.CateName</td>
-                <td style="color: @(item.States == 1 ? "green" : "red");">@(item.States == 1 ? "上架" : "下架")</td>
-                <td>
-                    <a href="/Products/Update/@item.ProductID" class="btn-sm btn-primary">编辑</a>
-                    <a href="/Products/Details/@item.ProductID" class="btn-sm btn-success" target="_blank">详情</a>
-                    <a href="/Products/Photos/@item.ProductID" class="btn-sm btn-info">管理图片</a>
-                    <a href="/Products/States/@item.ProductID" class="btn-sm btn-dark">@(item.States == 0 ? "上架" : "下架")</a>
-                    @if (auth == "1")
-                    {
-                        <a href="/Products/Delete/@item.ProductID" class="btn-sm btn-danger" onclick="confirm('是否删除此商品')">删除</a>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
-<div style="margin: 50px 0px 50px 0px">
-    @Html.Pager(Model, new PagerOptions
+@using (Ajax.BeginForm("Index", "", new AjaxOptions
 {
-    PageIndexParameterName = "id",
-    HorizontalAlign = "center",
-    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
-    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
-    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
-    FirstPageText = "<<",
-    LastPageText = ">>",
-    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
-})
-</div>
+    UpdateTargetId = "ajax",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "GET",
 
+}, new { id = "filter", style = "display:flex; justify - content:space - between; align - content:center; margin: 20px" }))
+{
+    <input type="hidden" name="key" value="@TempData["Search"]" />
+    <input type="hidden" name="cates" value="@TempData["cates"]" />
+    <div class="input-group mb-3">
+        <span class="input-group-text">价格区间:</span>
+        <input type="number" style="width:10px" class="form-control" oninput="if(value < 0)value=0" placeholder="最低价" aria-label="priceMin" name="priceMin" value="@TempData["priceMin"]" id="min">
+        <span class="input-group-text">~</span>
+        <input type="number" class="form-control" placeholder="最高价" oninput="if(value < 0)value=0" aria-label="priceMax" name="priceMax" value="@TempData["priceMax"]" id="max">
+        <select class="form-select" aria-label="Default select example" name="orderBy">
+            <option value="Count" id="order">销量</option>
+            <option value="Price">价格</option>
+            <option value="Appraise">评论数</option>
+            <option value="PostTime">上架时间</option>
+        </select>
+        <select class="form-select" aria-label="Default select example" name="sortBy">
+            <option value="1" id="sort">降序</option>
+            <option value="0">升序</option>
+        </select>
+        <button class="btn btn-secondary" type="button" onclick="document.getElementById('filter').reset(); $('#filter').submit()">重置</button>
+        <button class="btn btn-secondary" type="submit">确定</button>
+    </div>
+}
+@using (Ajax.BeginForm("Delete", "Products", new AjaxOptions
+{
+    UpdateTargetId = "ajax",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    Confirm = "是否确认删除",
+    OnFailure = $"showMessage('操作失败')",
+    OnSuccess = "showMessage('删除成功')"
+}))
+{
 
+    <div id="ajax">
+        @Html.Partial("_Index", Model)
+    </div>
+}
+@section scripts
+{
+    @{Html.RegisterMvcPagerScriptResource();}
+}
 <script>
     function selectAll(o) {
         $(".ck").prop("checked", o.checked)
-    }
-    function deleteList() {
-        if (confirm('是否确认删除')) {
-            let boxies = $(":checked").not(".ckm")
-            let ids = ""
-            if (boxies.length != 0) {
-                boxies.each((i, e) => {
-                    ids += $(e).val() + (i == (boxies.length - 1) ? "" : ",")
-                })
-                if (ids.length != 0) {
-                    $.post("/Products/Delete", { "ids": ids }, () => {
-                        location.href = "/Products"
-                    })
-                } else {
-                    $(".toast-body").text("你还未选中任何一条记录")
-                    new bootstrap.Toast(document.getElementById('liveToast')).show()
-                }
-            } else {
-                $(".toast-body").text("你还未选中任何一条记录")
-                new bootstrap.Toast(document.getElementById('liveToast')).show()
-            }
-        }
     }
 </script>
 

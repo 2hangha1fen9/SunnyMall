@@ -17,7 +17,19 @@ namespace Mall.Controllers
         private PhotosBLL pll = new PhotosBLL();
         private FavoritesBLL fll = new FavoritesBLL();
         private CartBLL cartBLL = new CartBLL();
-          
+
+
+        private List<Products> GetProducts(string key = "",string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
+        {
+            TempData["Search"] = key;
+            TempData["cates"] = cates;
+            TempData["orderBy"] = orderBy;
+            TempData["sortBy"] = sortBy;
+            TempData["priceMin"] = priceMin;
+            TempData["priceMax"] = priceMax;
+            return bll.ListEntity(key, cates, orderBy, sortBy, priceMin, priceMax);
+        }
+
         /// <summary>
         /// GET /Products/Index/{id}?[id=][key=][cates=][sortBy=][orderBy=][priceMin=][priceMax=]
         /// 管理员商品列表首页
@@ -33,12 +45,15 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
-            var products = bll.ListEntity(key, cates, orderBy, sortBy, priceMin, priceMax);
-            if(key.Length > 0)
+            var products = GetProducts(key, cates, orderBy, sortBy, priceMin, priceMax);
+            if (key.Length > 0)
             {
                 TempData["Message"] = $"检索到{products.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", products.ToPagedList(id.Value, 10));
+            }
             return View(products.ToPagedList(id.Value,10));
         }
 
@@ -223,7 +238,7 @@ namespace Mall.Controllers
 
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id,int? pageIndex = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
             if (!id.HasValue)
             {
@@ -231,8 +246,7 @@ namespace Mall.Controllers
             }
             if (bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
-
+                return PartialView("_Index", GetProducts(key, cates, orderBy, sortBy, priceMin, priceMax).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
@@ -244,15 +258,13 @@ namespace Mall.Controllers
 
         [HttpPost]
         [AdminAuthentication]
-        public ActionResult Delete(string ids)
+        public ActionResult Delete(string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
-            if (ids.Length == 0)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            string ids = Request.Form["ids"];
+            string pageIndex = Request.Form["pageIndex"];
             if (bll.DeleteEntityByIdList(ids))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetProducts(key, cates, orderBy, sortBy, priceMin, priceMax).ToPagedList(int.Parse(pageIndex), 10));
             }
             else
             {
@@ -264,7 +276,7 @@ namespace Mall.Controllers
        
 
         [AdminAuthentication]
-        public ActionResult States(int? id)
+        public ActionResult States(int? id, int? pageIndex = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
             if (!id.HasValue)
             {
@@ -278,7 +290,7 @@ namespace Mall.Controllers
             news.States = news.States == 0 ? 1 : 0;
             if (bll.UpdateEntity(news))
             {
-                TempData["Message"] = "操作成功";
+                return PartialView("_Index", GetProducts(key, cates, orderBy, sortBy, priceMin, priceMax).ToPagedList(pageIndex.Value, 10));
             }
             return RedirectToAction("Index");
         }

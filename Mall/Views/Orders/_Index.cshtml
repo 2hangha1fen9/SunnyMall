@@ -1,0 +1,102 @@
+﻿@model PagedList<Orders>
+@{
+    string auth = MyAuthentication.GetAuth();
+}
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            <td>下单日期</td>
+            <td>订单金额</td>
+            <td>收货日期</td>
+            <td>订单状态</td>
+            <td>收件人姓名</td>
+            <td>用户名</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Orderdate</td>
+                <td>@item.Total.Value.ToString("0.00")</td>
+                <td>
+                    @if (item.DeliveryDate != null)
+                    {@item.DeliveryDate}
+                </td>
+                <td>
+                    @(item.States == 0 ? "未付款" : item.States == 1 ? "已付款" : item.States == 2 ? "已发货" : item.States == 3 ? "已收货" : "已关闭")
+                </td>
+                <td>
+                    @if (item.Deliveries != null)
+                    {@item.Deliveries.Consignee}
+                </td>
+                <td>@item.Users.UserName</td>
+                <td>
+                    @if (item.States == 1)
+                    {
+                        <a href="/Orders/Send/@item.OrdersID" class="btn-sm btn-success">发货</a>
+                    }
+                    <a class="btn-sm btn-info" role="button" target="_blank" href="/Orders/OrderDetails/@item.OrdersID">查看详情</a>
+                    @if (item.OrdersDetails.Count() > 0)
+                    {
+                        <a class="btn-sm btn-info dropdown-toggle" data-bs-toggle="collapse" href="#order@(item.OrdersID)" role="button" aria-expanded="false" aria-controls="order@(item.OrdersID)"></a>
+                    }
+                    @if (auth == "1")
+                    {
+                        @Ajax.ActionLink("删除订单", $"Delete", new { id = item.OrdersID, pageIndex = Model.CurrentPageIndex, states = TempData["States"], key = TempData["Search"] }, new AjaxOptions
+                          {
+                              UpdateTargetId = "ajax",
+                              InsertionMode = InsertionMode.Replace,
+                              Confirm = "是否确认删除"
+                          }, new { @class = "btn-sm btn-danger" })
+                    }
+
+                    <div class="collapse" id="order@(item.OrdersID)">
+                        <div>
+                            <table class="table" style="text-align: center;line-height: 20px;" id="data">
+                                <thead class="table-secondary">
+                                    <tr>
+                                        <td></td>
+                                        <td>商品名</td>
+                                        <td>数量</td>
+                                        <td>小计</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var sub in item.OrdersDetails)
+                                    {
+                                        <tr>
+                                            <td><img src="@if(sub.Products.Photos.Count() > 0) {@sub.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width: 50px;"></td>
+                                            <td>@sub.Products.Title</td>
+                                            <td>@sub.Quantity.ToString("0.00")</td>
+                                            <td>@((sub.Quantity * sub.Products.Price).ToString("0.00"))</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" }, { "states", $"{TempData["States"]}" } }
+}, new MvcAjaxOptions
+{
+    UpdateTargetId = "ajax",
+    OnComplete = "document.documentElement.scrollTop =0",
+    DataFormId = "filter"
+})
+</div>

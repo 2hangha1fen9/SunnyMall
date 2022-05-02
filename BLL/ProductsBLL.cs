@@ -21,7 +21,7 @@ namespace BLL
             {
                 products = products.Where(n => n.Title.Contains(key) ||
                                                                    n.Title.Contains(key) ||
-                                                                   n.Categories.CateName.Contains(key) ||
+                                                                   n.Categories.CateName.Contains(key) || n.Categories.Categories2.CateName.Contains(key) ||
                                                                    n.States == (key == "下架" ? 0 : key == "上架" ? 1 : -1));
             }
             if (orderBy.Length > 0)

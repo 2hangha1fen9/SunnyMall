@@ -15,16 +15,25 @@ namespace Mall.Controllers
         ProductsBLL productsBLL = new ProductsBLL();
         AppraisesBLL appraisesBLL = new AppraisesBLL();
 
+        private IEnumerable<Appraises> GetAppraise(string key = "")
+        {
+            TempData["Search"] = key;
+            int uid = MyAuthentication.GetUserID();
+            return appraisesBLL.ListEntity(key).Where(a => a.UserID == uid).ToList();
+        }
+
         [UserAuthentication]
         public ActionResult Index(int? id = 1,string key = "")
         {
-            int uid = MyAuthentication.GetUserID();
-            var appraises = appraisesBLL.ListEntity(key).Where(a => a.UserID == uid).ToList();
+            var appraises = GetAppraise(key);
             if (key.Length > 0)
             {
                 TempData["Message"] = $"检索到{appraises.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", GetAppraise(key).ToPagedList(id.Value, 10));
+            }
             return View(appraises.ToPagedList(id.Value, 10));
         }
 
@@ -81,17 +90,17 @@ namespace Mall.Controllers
 
         // GET: Appraises
         [UserAuthentication]
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id, int? pageIndex = 1, string key = "")
         {
             if(appraisesBLL.DeleteEntityById(id))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetAppraise(key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
                 TempData["Message"] = "删除失败";
+                return RedirectToAction("Index");
             }
-            return RedirectToAction("Index");
         }
     }
 }

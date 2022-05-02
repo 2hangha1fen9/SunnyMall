@@ -13,23 +13,31 @@ namespace Mall.Controllers
     public class CategoriesController : Controller
     {
         private CategoriesBLL bll = new CategoriesBLL();
-        
+
+        private List<Categories> GetCategories(string key = "")
+        {
+            TempData["Search"] = key;
+            return bll.ListEntity(key);
+        }
 
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "")
         {
-            var cates = bll.ListEntity(key);
+            var cates = GetCategories(key);
             if(key.Length > 0)
             {
                 TempData["Message"] = $"检索到{cates.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", cates.ToPagedList(id.Value, 10));
+            }
             return View(cates.ToPagedList(id.Value,10));
         }
 
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, int? pageIndex = 1, string key = "")
         {
             if (!id.HasValue)
             {
@@ -41,7 +49,7 @@ namespace Mall.Controllers
             }
             else if (bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetCategories(key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
@@ -102,7 +110,7 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult States(int? id)
+        public ActionResult States(int? id, int? pageIndex = 1, string key = "")
         {
             if (!id.HasValue)
             {
@@ -116,7 +124,7 @@ namespace Mall.Controllers
             cates.States = cates.States == 0 ? 1 : 0;
             if (bll.UpdateEntity(cates))
             {
-                TempData["Message"] = "操作成功";
+                return PartialView("_Index", GetCategories(key).ToPagedList(pageIndex.Value, 10));
             }
             return RedirectToAction("Index");
         }

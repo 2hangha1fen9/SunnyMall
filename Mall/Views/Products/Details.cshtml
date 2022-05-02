@@ -16,7 +16,7 @@
     <div class="card mb-3 rounded-3" style="height: 100%;">
         <div class="row g-0">
             <div class="col-md-4">
-                <div class="flow" style="height: 100%;">
+                <div class="flow" style="height: 100%; overflow: hidden;">
                     <div class="slider-for">
                         @foreach (var item in Model.Photos)
                         {
@@ -50,7 +50,7 @@
                             <div class="input-group mb-3" role="group" aria-label="Basic example" style="width: 100%;">
                                 <span class="input-group-text">购买数量:</span>
                                 <input class="input-group-text" oninput="if(value < 1)value=1" type="number" style="width: 90px;" class="form-control"
-                                       value="1" name="quantity" id="quantity" >
+                                       value="1" name="quantity" id="quantity">
                                 <span class="input-group-text">件</span>
                             </div>
                             <button type="submit" class="btn btn-success">立即购买</button>
@@ -62,22 +62,22 @@
                                onclick = $"$(this).attr('href',`/Cart/AddProduct/{Model.ProductID}?quantity=${{$('#quantity').val()}}`)",
                                type = "button",
                                @class = "btn btn-primary",
-                               id="addCart",
+                               id = "addCart",
                            })
                             @{ string text = "添加收藏";}
                             @if (favorites.Any(f => f.ProductID == Model.ProductID && f.UserID == user.UserID))
-                             {
-                                text = "取消收藏";  
+                            {
+                                text = "取消收藏";
                             }
-                            @Ajax.ActionLink(text,$"Like/{Model.ProductID}","Favorites","",new AjaxOptions
-                           {
-                                UpdateTargetId = "like",
-                                InsertionMode = InsertionMode.Replace,
-                           },new
-                           {
-                               id = "like",
-                               @class = "btn btn-info"
-                           })
+                            @Ajax.ActionLink(text, $"Like/{Model.ProductID}", "Favorites", new { detail=1}, new AjaxOptions
+                       {
+                           UpdateTargetId = "like",
+                           InsertionMode = InsertionMode.Replace,
+                       }, new
+                       {
+                           id = "like",
+                           @class = "btn btn-info"
+                       })
                         </form>
                     }
                 </div>
@@ -103,37 +103,37 @@
             </div>
             <div class="tab-pane fade active" id="nav-profile" role="tabpanel"
                  aria-labelledby="nav-profile-tab">
-                @using (Ajax.BeginForm($"AppraiseList/{Model.ProductID}", "Products","", new AjaxOptions
+                @using (Ajax.BeginForm($"AppraiseList/{Model.ProductID}", "Products", "", new AjaxOptions
                 {
                     UpdateTargetId = "appraise",
                     InsertionMode = InsertionMode.Replace,
                     HttpMethod = "GET"
-                },new { id="filter"}))
+                }, new { id = "filter" }))
                 {
-                <div class="input-group mb-3">
-                    <select class="form-select" aria-label="Default select example" name="appraiseLevel">
-                        <option value="-1" @if (TempData["appraiseLevel"].ToString() == "-1") { @Html.Raw("selected") }>全部</option>
-                        <option value="0" @if (TempData["appraiseLevel"].ToString() == "0") { @Html.Raw("selected") }>好评</option>
-                        <option value="1" @if (TempData["appraiseLevel"].ToString() == "1") { @Html.Raw("selected") }>中评</option>
-                        <option value="2" @if (TempData["appraiseLevel"].ToString() == "2") { @Html.Raw("selected") }>差评</option>
-                    </select>
-                    <select class="form-select" aria-label="Default select example" name="appraiseOrderBy">
-                        <option value="1" @if (TempData["appraiseOrderBy"].ToString() == "1") { @Html.Raw("selected") }>按时间</option>
-                        <option value="0" @if (TempData["appraiseOrderBy"].ToString() == "0") { @Html.Raw("selected") }>默认</option>
-                    </select>
-                    <select class="form-select" aria-label="Default select example" name="appraiseSortBy">
-                        <option value="1" @if (TempData["appraiseSortBy"].ToString() == "1") { @Html.Raw("selected") }>降序</option>
-                        <option value="0" @if (TempData["appraiseSortBy"].ToString() == "0") { @Html.Raw("selected") }>升序</option>
-                    </select>
-                    <button class="btn btn-secondary" type="button" onclick="document.getElementById('filter').reset(); $('#filter').submit()">重置</button>
-                    <button class="btn btn-secondary" type="submit">确定</button>
-                </div>
+                    <div class="input-group mb-3">
+                        <select class="form-select" aria-label="Default select example" name="appraiseLevel">
+                            <option value="-1" @if (TempData["appraiseLevel"].ToString() == "-1") { @Html.Raw("selected") }>全部</option>
+                            <option value="0" @if (TempData["appraiseLevel"].ToString() == "0") { @Html.Raw("selected") }>好评</option>
+                            <option value="1" @if (TempData["appraiseLevel"].ToString() == "1") { @Html.Raw("selected") }>中评</option>
+                            <option value="2" @if (TempData["appraiseLevel"].ToString() == "2") { @Html.Raw("selected") }>差评</option>
+                        </select>
+                        <select class="form-select" aria-label="Default select example" name="appraiseOrderBy">
+                            <option value="1" @if (TempData["appraiseOrderBy"].ToString() == "1") { @Html.Raw("selected") }>按时间</option>
+                            <option value="0" @if (TempData["appraiseOrderBy"].ToString() == "0") { @Html.Raw("selected") }>默认</option>
+                        </select>
+                        <select class="form-select" aria-label="Default select example" name="appraiseSortBy">
+                            <option value="1" @if (TempData["appraiseSortBy"].ToString() == "1") { @Html.Raw("selected") }>降序</option>
+                            <option value="0" @if (TempData["appraiseSortBy"].ToString() == "0") { @Html.Raw("selected") }>升序</option>
+                        </select>
+                        <button class="btn btn-secondary" type="button" onclick="document.getElementById('filter').reset(); $('#filter').submit()">重置</button>
+                        <button class="btn btn-secondary" type="submit">确定</button>
+                    </div>
                 }
 
                 <div id="appraise">
                     @Html.Partial("_DetailsAppraise", Model.Appraises)
                 </div>
-                
+
             </div>
         </div>
     </div>

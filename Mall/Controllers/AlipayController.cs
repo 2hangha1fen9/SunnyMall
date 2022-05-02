@@ -31,9 +31,8 @@ namespace Mall.Controllers
             Dictionary<string, object> bizContent = new Dictionary<string, object>();
             bizContent.Add("out_trade_no",orders.SerialID);
             bizContent.Add("total_amount", orders.Total.Value.ToString("0.00"));
-            bizContent.Add("subject","阳光商城支付宝收银台");
+            bizContent.Add("subject","阳光商城收银台");
             bizContent.Add("product_code", "FAST_INSTANT_TRADE_PAY");
-            bizContent.Add("goods_detail", orders.OrdersDetails.ToList());
             string contentJson = JsonConvert.SerializeObject(bizContent);
             request.BizContent = contentJson;
             AlipayTradePagePayResponse response = client.pageExecute(request);

@@ -1,0 +1,67 @@
+﻿@model PagedList<Deliveries>
+@{
+    ViewBag.Title = "用户地址列表";
+    string auth = MyAuthentication.GetAuth();
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <input type="hidden" name="pageIndex" value="@Model.CurrentPageIndex" />
+        <button type="submit" class="btn btn-danger">删除</button>
+        <button type="button" onclick="location.href='/Deliveries/Update'" class="btn btn-success">添加</button>
+    </div>
+</div>
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            <td>用户名</td>
+            <td>详细地址</td>
+            <td>收货人</td>
+            <td>手机号</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" class="ck ckn" name="ids" value="@item.DeliveryID" id="flexCheckDefault">
+                </td>
+                <td>@item.Users.UserName</td>
+                <td>@item.Complete</td>
+                <td>@item.Consignee</td>
+                <td>@item.Phone</td>
+                <td>
+                    <a href="/Deliveries/Update/@item.DeliveryID" class="btn-sm btn-primary">编辑</a>
+                    @Ajax.ActionLink("删除", $"Delete", new { id = item.DeliveryID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                      {
+                          UpdateTargetId = "ajax",
+                          InsertionMode = InsertionMode.Replace,
+                          Confirm = "是否确认删除",
+                          OnSuccess = "showMessage('操作成功')"
+                      }, new { @class = "btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+}, new MvcAjaxOptions
+{
+    UpdateTargetId = "ajax",
+    OnComplete = "document.documentElement.scrollTop = 0",
+})
+</div>

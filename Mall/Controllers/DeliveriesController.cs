@@ -15,20 +15,29 @@ namespace Mall.Controllers
         private DeliveriesBLL bll = new DeliveriesBLL();
         private UsersBLL ull = new UsersBLL();
 
+        private List<Deliveries> GetDeliveries(string key = "")
+        {
+            TempData["Search"] = key;
+            return bll.ListEntity(key);
+        }
+
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "")
         {
-            var deliveries = bll.ListEntity(key);
+            var deliveries = GetDeliveries(key);
             if(key.Length > 0)
             {
                 TempData["Message"] = $"检索到{deliveries.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", deliveries.ToPagedList(id.Value, 10));
+            }
             return View(deliveries.ToPagedList(id.Value, 10));
         }
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, int? pageIndex = 1, string key = "")
         {
             if (!id.HasValue)
             {
@@ -36,7 +45,7 @@ namespace Mall.Controllers
             }
             if (bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetDeliveries(key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
@@ -48,15 +57,17 @@ namespace Mall.Controllers
         
         [AdminAuthentication]
         [HttpPost]
-        public ActionResult Delete(string ids)
+        public ActionResult Delete(string key = "")
         {
+            string ids = Request.Form["ids"];
+            string pageIndex = Request.Form["pageIndex"];
             if (ids.Length == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             if (bll.DeleteEntityByIdList(ids))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetDeliveries(key).ToPagedList(int.Parse(pageIndex), 10));
             }
             else
             {

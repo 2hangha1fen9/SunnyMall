@@ -1,0 +1,43 @@
+﻿@model PagedList<Favorites>
+<table class="table" style="text-align: center" id="data">
+    <thead>
+        <tr>
+            <td></td>
+            <td>商品名</td>
+            <td>价格</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><img src="@if(item.Products.Photos.Count() > 0) {@item.Products.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" style="width:50px"></td>
+                <td>@item.Products.Title</td>
+                <td>@item.Products.Price.ToString("0.00")</td>
+                <td>
+                    <a href="/Products/Details/@item.ProductID" class="btn-sm btn-primary">查看详情</a>
+                    @Ajax.ActionLink("取消收藏", $"Like", new { id = item.ProductID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                   {
+                       UpdateTargetId = "ajax",
+                       InsertionMode = InsertionMode.Replace,
+                       Confirm = "是否取消收藏"
+                   }, new { @class = "btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Html.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+})
+</div>

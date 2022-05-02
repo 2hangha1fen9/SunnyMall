@@ -15,16 +15,24 @@ namespace Mall.Controllers
     {
         private NewsBLL bll = new NewsBLL();
 
+        private List<News> GetNews(string key = "")
+        {
+            TempData["Search"] = key;
+            return bll.ListEntity(key);
+        }
 
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, string key = "")
         {
-            var news = bll.ListEntity(key);
-            if(key.Length > 0)
+            var news = GetNews(key);
+            if (key.Length > 0)
             {
                 TempData["Message"] = $"检索到{news.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", news.ToPagedList(id.Value, 10));
+            }
             return View(news.ToPagedList(id.Value,10));
         }
 
@@ -88,7 +96,7 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id,int? pageIndex = 1,string key = "")
         {
             if (!id.HasValue)
             {
@@ -96,8 +104,7 @@ namespace Mall.Controllers
             }
             if (bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
-                
+                return PartialView("_Index", GetNews(key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
@@ -108,15 +115,17 @@ namespace Mall.Controllers
         }  
 
         [HttpPost]
-        public ActionResult Delete(string ids)
+        public ActionResult Delete(string key = "")
         {
-            if(ids.Length == 0)
+            string ids = Request.Form["ids"];
+            string pageIndex = Request.Form["pageIndex"];
+            if (ids.Length == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             if (bll.DeleteEntityByIdList(ids))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Index", GetNews(key).ToPagedList(int.Parse(pageIndex), 10));
             }
             else
             {
@@ -126,7 +135,7 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult States(int? id)
+        public ActionResult States(int? id, int? pageIndex = 1, string key = "")
         {
             if(!id.HasValue)
             {
@@ -140,7 +149,7 @@ namespace Mall.Controllers
             news.States = news.States == 0 ? 1 : 0;
             if (bll.UpdateEntity(news))
             {
-                TempData["Message"] = "操作成功";              
+                return PartialView("_Index", GetNews(key).ToPagedList(pageIndex.Value, 10));
             }
             return RedirectToAction("Index");
         }   

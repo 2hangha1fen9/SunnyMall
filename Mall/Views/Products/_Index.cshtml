@@ -1,0 +1,111 @@
+﻿@model PagedList<Products>
+@{
+    ViewBag.Title = "商品列表";
+    string auth = MyAuthentication.GetAuth();
+}
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        @if (auth == "1")
+        {
+            <input type="hidden" name="pageIndex" value="@Model.CurrentPageIndex" />
+            <button type="submit" class="btn btn-danger">删除</button>
+        }
+        <button type="button" onclick="location.href='/Products/Update'" class="btn btn-success">添加</button>
+    </div>
+</div>
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            @if (auth == "1")
+            {
+                <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            }
+            <td></td>
+            <td>商品名</td>
+            <td>市场价格</td>
+            <td>本站价格</td>
+            <td>商品库存</td>
+            <td>分类</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (auth == "1")
+                {
+                    <td>
+                        <input type="checkbox" class="ck ckn" name="ids" value="@item.ProductID" id="flexCheckDefault">
+                    </td>
+                }
+                <td><img src="@if(item.Photos.Count() > 0) {@item.Photos.OrderByDescending(p => p.States).First().PhotoUrl }" class="rounded" alt="" width="50px"></td>
+                <td>@item.Title</td>
+                <td>@item.MarketPrice.ToString("0.00")</td>
+                <td>@item.Price.ToString("0.00")</td>
+                <td>@item.Stock</td>
+                <td>@item.Categories.CateName</td>
+                <td style="color: @(item.States == 1 ? "green" : "red");">@(item.States == 1 ? "上架" : "下架")</td>
+                <td>
+                    <a href="/Products/Update/@item.ProductID" class="btn-sm btn-primary">编辑</a>
+                    <a href="/Products/Details/@item.ProductID" class="btn-sm btn-success" target="_blank">详情</a>
+                    <a href="/Products/Photos/@item.ProductID" class="btn-sm btn-info">管理图片</a>
+                    @Ajax.ActionLink(item.States == 1 ? "上架" : "下架", $"States", new
+                    {
+                       id = item.ProductID,
+                       pageIndex = Model.CurrentPageIndex,
+                       key = TempData["Search"],
+                       orderBy = TempData["orderBy"],
+                       sortBy = TempData["sortBy"],
+                       priceMin = TempData["priceMin"],
+                       priceMax = TempData["priceMax"]
+                   }, new AjaxOptions
+                   {
+                       UpdateTargetId = "ajax",
+                       InsertionMode = InsertionMode.Replace,
+                       OnSuccess = "showMessage('操作成功')"
+                   }, new { @class = "btn-sm btn-dark" })
+
+                    @if (auth == "1")
+                    {
+                        @Ajax.ActionLink("删除", $"Delete", new
+                        {
+                           id = item.ProductID,
+                           pageIndex = Model.CurrentPageIndex,
+                           key = TempData["Search"],
+                           orderBy = TempData["orderBy"],
+                           sortBy = TempData["sortBy"],
+                           priceMin = TempData["priceMin"],
+                           priceMax = TempData["priceMax"]
+                        }, new AjaxOptions
+                        {
+                           UpdateTargetId = "ajax",
+                           InsertionMode = InsertionMode.Replace,
+                           Confirm = "是否确认删除",
+                           OnSuccess = "showMessage('操作成功')"
+                        }, new { @class = "btn-sm btn-danger" })
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+}, new MvcAjaxOptions
+{
+    UpdateTargetId = "ajax",
+    OnComplete = "document.documentElement.scrollTop = 0",
+})
+</div>

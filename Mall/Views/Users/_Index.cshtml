@@ -1,0 +1,83 @@
+﻿@model PagedList<Users>
+@{
+    ViewBag.Title = "用户列表";
+    string auth = MyAuthentication.GetAuth();
+}
+
+<div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+    <h2>@ViewBag.Title</h2>
+    <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+        <input type="hidden" name="pageIndex" value="@Model.CurrentPageIndex" />
+        <button type="submit" class="btn btn-danger" >删除</button>
+        <button type="button" onclick="location.href='/Users/Update'" class="btn btn-success">添加</button>
+    </div>
+</div>
+<table class="table" style="text-align: center" id="data">
+    <thead class="table-dark">
+        <tr>
+            <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            <td>用户名</td>
+            <td>昵称</td>
+            <td>邮箱</td>
+            <td>密码</td>
+            <td>默认地址</td>
+            <td>状态</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input type="checkbox" class="ck ckn" name="ids" value="@item.UserID" id="flexCheckDefault">
+                </td>
+                <td>@item.UserName</td>
+                <td>@item.Nick</td>
+                <td>@item.Email</td>
+                <td>
+                    <a class="mask" onclick="show(this,'@item.Pwd')" href="#">********</a>
+                </td>
+                <td>
+                    @if (@item.Deliveries1 != null)
+                    {@item.Deliveries1.Complete}
+            </td>
+            <td style="color: @(item.States == 3 || item.States == -1 ? "red" : "green");">@(item.States == 3 ? "禁用" : item.States == -1 ? "未激活": "正常")</td>
+            <td>
+                <a href="/Users/Update/@item.UserID" class="btn-sm btn-primary">编辑</a>
+                <a href="/Users/Details/@item.UserID" class="btn-sm btn-success">详情</a>
+                @Ajax.ActionLink(item.States == 3 ? "启用" : "禁用", $"States", new { id = item.UserID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                  {
+                      UpdateTargetId = "ajax",
+                      InsertionMode = InsertionMode.Replace,
+                      OnSuccess = "showMessage('操作成功')"
+                  }, new { @class = "btn-sm btn-warning" })
+                @Ajax.ActionLink("删除", $"Delete", new { id = item.UserID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                  {
+                      UpdateTargetId = "ajax",
+                      InsertionMode = InsertionMode.Replace,
+                      Confirm = "是否确认删除",
+                      OnSuccess = "showMessage('操作成功')"
+                  }, new { @class = "btn-sm btn-danger" })
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" } }
+}, new MvcAjaxOptions
+{
+    UpdateTargetId = "ajax",
+    OnComplete = "document.documentElement.scrollTop = 0",
+})
+</div>

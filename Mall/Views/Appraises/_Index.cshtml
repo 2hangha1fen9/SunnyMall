@@ -1,0 +1,48 @@
+﻿@model PagedList<Appraises>
+
+<table class="table" style="text-align: center" id="data">
+    <thead>
+        <tr>
+            <td>商品名</td>
+            <td>评价等级</td>
+            <td>评价时间</td>
+            <td>操作</td>
+        </tr>
+    </thead>
+    <tbody style="line-height: 50px;">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Products.Title</td>
+                <td>@(item.Grade == 0 ? "好评" : item.Grade == 1 ? "中评" : item.Grade == 2 ? "差评" : "")</td>
+                <td>@item.RateTime</td>
+                <td>
+                    <a href="/Appraises/Update/@item.AppraiseID" class="btn-sm btn-primary">编辑</a>
+                    @Ajax.ActionLink("删除", $"Delete", new { id = item.AppraiseID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                   {
+                       UpdateTargetId = "ajax",
+                       InsertionMode = InsertionMode.Replace,
+                       Confirm = "是否确认删除"
+                   }, new { @class = "btn-sm btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div style="margin: 50px 0px 50px 0px">
+    @Ajax.Pager(Model, new PagerOptions
+{
+    PageIndexParameterName = "id",
+    HorizontalAlign = "center",
+    CurrentPagerItemTemplate = "<span class=\"btn-sm btn-primary\">{0}</span>",
+    DisabledPagerItemTemplate = "<span class=\"btn-sm btn-light btn-lg\">{0}</span>",
+    PagerItemTemplate = "<span class=\"btn-sm btn-light\">{0}</span>",
+    FirstPageText = "<<",
+    LastPageText = ">>",
+    RouteValues = new RouteValueDictionary { { "key", $"{TempData["Search"]}" }, { "states", $"{TempData["States"]}" } }
+}, new MvcAjaxOptions
+{
+    UpdateTargetId = "ajax",
+    OnComplete = "document.documentElement.scrollTop = document.getElementById('center').offsetTop",
+})
+</div>

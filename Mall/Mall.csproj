@@ -227,6 +227,15 @@
     <Content Include="Views\Deliveries\_Create.cshtml" />
     <Content Include="Views\Orders\OrderDetails.cshtml" />
     <Content Include="Views\Orders\Send.cshtml" />
+    <Content Include="Views\Appraises\_Index.cshtml" />
+    <Content Include="Views\Favorites\_Index.cshtml" />
+    <Content Include="Views\News\_Index.cshtml" />
+    <Content Include="Views\Categories\_Index.cshtml" />
+    <Content Include="Views\Products\_Index.cshtml" />
+    <Content Include="Views\Orders\_Index.cshtml" />
+    <Content Include="Views\Users\_Index.cshtml" />
+    <Content Include="Views\Deliveries\_Index.cshtml" />
+    <Content Include="Views\Admin\_Manager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />

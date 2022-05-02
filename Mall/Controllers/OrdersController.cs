@@ -15,31 +15,47 @@ namespace Mall.Controllers
         private OrdersBLL bll = new OrdersBLL();
         private OrdersDetailsBLL ordersDetailsBLL = new OrdersDetailsBLL();
 
+        private IEnumerable<Orders> GetOrders(int? states = null, string key = "")
+        {
+            TempData["Search"] = key;
+            TempData["States"] = states;
+            int uid = MyAuthentication.GetUserID();
+            return bll.ListEntity(key, states).Where(o => o.UserID == uid);
+        }
+
+        private IEnumerable<Orders> GetAllOrders(int? states = null, string key = "")
+        {
+            TempData["Search"] = key;
+            TempData["States"] = states;
+            int uid = MyAuthentication.GetUserID();
+            return bll.ListEntity(key, states);
+        }
+
         // GET: Orders
         [AdminAuthentication]
         public ActionResult Index(int? id = 1, int? states = null, string key = "")
         {
-            var orders = bll.ListEntity(key,states);
+            var orders = GetAllOrders(states, key);
             if (key.Length > 0)
             {
                 TempData["Message"] = $"检索到{orders.Count()}条数据";
             }
-            TempData["Search"] = key;
-            TempData["States"] = states;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Index", orders.ToPagedList(id.Value, 10));
+            }
             return View(orders.ToPagedList(id.Value,10));
         }
 
         [UserAuthentication]
         public ActionResult MyOrder(int? id = 1, int? states = null, string key = "")
         {
-            int uid = MyAuthentication.GetUserID();
-            var orders = bll.ListEntity(key, states).Where(o => o.UserID == uid);
+            var orders = GetOrders(states, key);
             if (key.Length > 0)
             {
                 TempData["Message"] = $"检索到{orders.Count()}条数据";
             }
-            TempData["Search"] = key;
-            TempData["States"] = states;
+            
             if (Request.IsAjaxRequest())
             {
                 return PartialView("_MyOrder", orders.ToPagedList(id.Value, 10));
@@ -148,40 +164,41 @@ namespace Mall.Controllers
         }
 
         [UserAuthentication]
-        public ActionResult Confirm(int id)
+        public ActionResult Confirm(int id,int? pageIndex = 1,int? states = null, string key = "")
         {
             Orders orders = bll.FindEntityById(id);
             orders.States = 3;
             orders.DeliveryDate = DateTime.Now;
             if (bll.UpdateEntity(orders))
             {
-                TempData["Message"] = "确认收货成功";
+                return PartialView("_MyOrder", GetOrders(states,key).ToPagedList(pageIndex.Value, 10));
             }
-            return RedirectToAction("MyOrder");
+            else
+            {
+                TempData["Message"] = "无效的ID";
+                return RedirectToAction("MyOrder");
+            }
+            
         }
 
         [UserAuthentication]
-        public ActionResult OrderDelete(int id)
+        public ActionResult OrderDelete(int id,int? pageIndex = 1, int? states = null, string key = "")
         {
             if (bll.DeleteEntityById(id))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_MyOrder", GetOrders(states, key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
                 TempData["Message"] = "无效的ID";
+                return RedirectToAction("MyOrder");
             }
-            return RedirectToAction("MyOrder");
         }
 
         [UserAuthentication]
-        public ActionResult OrderClose(int? id)
+        public ActionResult OrderClose(int id, int? pageIndex = 1, int? states = null, string key = "")
         {
-            if (!id.HasValue)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Orders order = bll.FindEntityById(id.Value);
+            Orders order = bll.FindEntityById(id);
             if (order == null)
             {
                 TempData["Message"] = "无效的ID";
@@ -189,57 +206,23 @@ namespace Mall.Controllers
             order.States = -1;
             if (bll.UpdateEntity(order))
             {
-                TempData["Message"] = "关闭成功";
+                return PartialView("_MyOrder", GetOrders(states, key).ToPagedList(pageIndex.Value, 10));
             }
             return RedirectToAction("MyOrder");
         }
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id, int? pageIndex = 1, int? states = null, string key = "")
         {
-            if (!id.HasValue)
+            if (bll.DeleteEntityById(id))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            if (bll.DeleteEntityById(id.Value))
-            {
-                TempData["Message"] = "删除成功";
-
+                return PartialView("_Index", GetAllOrders(states, key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
                 TempData["Message"] = "无效的ID";
+                return RedirectToAction("_Index");
             }
-
-            return RedirectToAction("Index");
-        }
-
-        [UserAuthentication]
-        [AdminAuthentication]
-        public ActionResult Details(int? id)
-        {
-            return View();
-        }
-
-        [UserAuthentication]
-        [AdminAuthentication]
-        public ActionResult Close(int? id)
-        {
-            if (!id.HasValue)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Orders order = bll.FindEntityById(id.Value);
-            if (order == null)
-            {
-                TempData["Message"] = "无效的ID";
-            }
-            order.States = -1;
-            if (bll.UpdateEntity(order))
-            {
-                TempData["Message"] = "关闭成功";
-            }
-            return RedirectToAction("Index");
         }
 
         [AdminAuthentication]

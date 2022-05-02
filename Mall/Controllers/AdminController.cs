@@ -19,6 +19,12 @@ namespace Mall.Controllers
         private ProductsBLL pll = new ProductsBLL();
         private UsersBLL ull = new UsersBLL();
 
+        private List<AdminUsers> GetAdmin(string key = "")
+        {
+            TempData["Search"] = key;
+            return bll.ListEntity(key);
+        }
+
         // GET: Admin
         [AdminAuthentication]
         public ActionResult Index()
@@ -50,12 +56,15 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Manager(int? id = 1, string key = "")
         {
-            var users = bll.ListEntity(key);
+            var users = GetAdmin(key);
             if(key.Length > 0)
             { 
                 TempData["Message"] = $"检索到{users.Count()}条数据";
             }
-            TempData["Search"] = key;
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Manager", users.ToPagedList(id.Value, 10));
+            }
             return View(users.ToPagedList(id.Value, 10));
         }
 
@@ -101,7 +110,7 @@ namespace Mall.Controllers
         }
 
         [AdminAuthentication]
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id, int? pageIndex = 1, string key = "")
         {
             if (!id.HasValue)
             {
@@ -109,8 +118,7 @@ namespace Mall.Controllers
             }
             if (bll.DeleteEntityById(id.Value))
             {
-                TempData["Message"] = "删除成功";
-
+                return PartialView("_Manager", GetAdmin(key).ToPagedList(pageIndex.Value, 10));
             }
             else
             {
@@ -121,15 +129,17 @@ namespace Mall.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(string ids)
+        public ActionResult Delete(string key = "")
         {
+            string ids = Request.Form["ids"];
+            string pageIndex = Request.Form["pageIndex"];
             if (ids.Length == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             if (bll.DeleteEntityByIdList(ids))
             {
-                TempData["Message"] = "删除成功";
+                return PartialView("_Manager", GetAdmin(key).ToPagedList(int.Parse(pageIndex), 10));
             }
             else
             {
