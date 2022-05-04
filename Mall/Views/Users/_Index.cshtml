@@ -32,13 +32,13 @@
                 <td>
                     <input type="checkbox" class="ck ckn" name="ids" value="@item.UserID" id="flexCheckDefault">
                 </td>
-                <td>@item.UserName</td>
-                <td>@item.Nick</td>
-                <td>@item.Email</td>
+                <td  class=" text-truncate" style="max-width: 100px;">@item.UserName</td>
+                <td  class=" text-truncate" style="max-width: 100px;">@item.Nick</td>
+                <td  class=" text-truncate" style="max-width: 100px;">@item.Email</td>
                 <td>
                     <a class="mask" onclick="show(this,'@item.Pwd')" href="#">********</a>
                 </td>
-                <td>
+                <td  class=" text-truncate" style="max-width: 100px;">
                     @if (@item.Deliveries1 != null)
                     {@item.Deliveries1.Complete}
             </td>

@@ -11,6 +11,7 @@
             <td>订单状态</td>
             <td>收件人姓名</td>
             <td>用户名</td>
+            <td>备注</td>
             <td>操作</td>
         </tr>
     </thead>
@@ -32,6 +33,7 @@
                     {@item.Deliveries.Consignee}
                 </td>
                 <td>@item.Users.UserName</td>
+                <td  class=" text-truncate" style="max-width: 100px;">@item.Remark</td>
                 <td>
                     @if (item.States == 1)
                     {

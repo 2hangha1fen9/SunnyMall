@@ -40,7 +40,7 @@
                     </td>
                 }
                 <td><img src="@item.PhotoUrl" class="rounded" alt="" width="50px"></td>
-                <td>@item.Title</td>
+                <td  class=" text-truncate" style="max-width: 100px;">@item.Title</td>
                 <td>@item.NType</td>
                 <td>@item.PushTime</td>
                 <td style="color: @(item.States == 1 ? "green" : "");">@(item.States == 1 ? "置顶" : "")</td>

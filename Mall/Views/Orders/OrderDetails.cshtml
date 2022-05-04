@@ -49,17 +49,24 @@
             </blockquote>
         </div>
     </div>
-
     <h4 style="margin-top: 20px">详细信息</h4>
     <div>
         <p>订单编号: @Model.SerialID</p>
         <p>用户名: @Model.Users.UserName</p>
         <p>下单时间: @Model.Orderdate</p>
         <p>订单状态:  @(Model.States == 0 ? "未付款" : Model.States == 1 ? "已付款" : Model.States == 2 ? "已发货" : Model.States == 3 ? "已收货" : "已关闭")</p>
+        @if (Model.States == 1)
+        {
+            <p>支付方式: @(Model.PayType == 0 ? "支付宝" : "微信")</p>
+        }
         @if (Model.States == 2)
         {
             <p>快递单号: @Model.ExpressNumber (@Model.ExpressType)</p>
         }
+    </div>
+    <div class="form-floating" style="margin-bottom: 30px">
+        <textarea readonly class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="remark" style="height: 100px">@Model.Remark</textarea>
+        <label for="floatingTextarea2">备注</label>
     </div>
 </div>
 
