@@ -24,10 +24,47 @@
         </select>
     }
 </div>
-<div id="ajax">
-    @Html.Partial("_Index", Model)
-</div>
+
+@using (Ajax.BeginForm("Delete", "Orders", new AjaxOptions
+{
+    UpdateTargetId = "ajax",
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    Confirm = "是否确认删除",
+    OnFailure = $"showMessage('操作失败')",
+    OnSuccess = "showMessage('删除成功')"
+}))
+{
+    if (auth == "1")
+    {
+        <div style="display:flex;justify-content:space-between;align-content:center;margin:20px">
+            <div></div>
+            <div>
+                <input type="hidden" name="pageIndex" value="@Model.CurrentPageIndex" />
+                <button type="button" class="btn btn-danger" onclick="check()">删除</button>
+            </div>
+        </div>
+    }
+    <div id="ajax">
+        @Html.Partial("_Index", Model)
+    </div>
+}
 @section scripts
 {
     @{Html.RegisterMvcPagerScriptResource();}
 }
+<script>
+    function selectAll(o) {
+        $(".ck").prop("checked", o.checked)
+    }
+    function check() {
+        let boxies = $("input:checkbox[name='ids']:checked")
+        if (boxies.length == 0) {
+            $(".toast-body").text("你还未选中任何一条记录")
+            new bootstrap.Toast(document.getElementById('liveToast')).show()
+        }
+        else {
+            $("#data").submit();
+        }
+    }
+</script>

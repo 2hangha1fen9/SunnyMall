@@ -5,6 +5,10 @@
 <table class="table" style="text-align: center" id="data">
     <thead class="table-dark">
         <tr>
+            @if (auth == "1")
+            {
+                <td><input class="form-check-input ck ckm" type="checkbox" value="" id="flexCheckDefault" onclick="selectAll(this)"></td>
+            }
             <td>下单日期</td>
             <td>订单金额</td>
             <td>收货日期</td>
@@ -19,6 +23,12 @@
         @foreach (var item in Model)
         {
             <tr>
+                @if(auth == "1")
+                {
+                    <td>
+                        <input type="checkbox" class="ck ckn" name="ids" value="@item.OrdersID" id="flexCheckDefault">
+                    </td>
+                }
                 <td>@item.Orderdate</td>
                 <td>@item.Total.Value.ToString("0.00")</td>
                 <td>
@@ -38,7 +48,7 @@
                         @item.Users.UserName
                     }
                 </td>
-                <td  class=" text-truncate" style="max-width: 100px;">@item.Remark</td>
+                <td class=" text-truncate" style="max-width: 100px;">@item.Remark</td>
                 <td>
                     @if (item.States == 1)
                     {

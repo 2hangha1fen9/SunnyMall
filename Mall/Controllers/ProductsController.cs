@@ -273,7 +273,6 @@ namespace Mall.Controllers
             return RedirectToAction("Index");
         }
 
-       
 
         [AdminAuthentication]
         public ActionResult States(int? id, int? pageIndex = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")

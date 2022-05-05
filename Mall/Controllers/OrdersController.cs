@@ -235,6 +235,23 @@ namespace Mall.Controllers
             }
         }
 
+        [HttpPost]
+        [AdminAuthentication]
+        public ActionResult Delete()
+        {
+            string ids = Request.Form["ids"];
+            string pageIndex = Request.Form["pageIndex"];
+            if (bll.DeleteEntityByIdList(ids))
+            {
+                return PartialView("_Index", GetAllOrders().ToPagedList(int.Parse(pageIndex), 10));
+            }
+            else
+            {
+                TempData["Message"] = "无效的ID列表";
+            }
+            return RedirectToAction("Index");
+        }
+
         [AdminAuthentication]
         public ActionResult Send(int id)
         {
