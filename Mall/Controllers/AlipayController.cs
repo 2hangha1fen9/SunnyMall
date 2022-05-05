@@ -28,6 +28,7 @@ namespace Mall.Controllers
         {
             AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
             request.SetReturnUrl($"http://{Request.Url.Host}:{Request.Url.Port}/Orders/Pay");
+            request.SetNotifyUrl($"http://{Request.Url.Host}:{Request.Url.Port}/Orders/Pay");
             Dictionary<string, object> bizContent = new Dictionary<string, object>();
             bizContent.Add("out_trade_no",orders.SerialID);
             bizContent.Add("total_amount", orders.Total.Value.ToString("0.00"));

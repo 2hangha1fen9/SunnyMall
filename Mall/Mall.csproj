@@ -236,10 +236,10 @@
     <Content Include="Views\Users\_Index.cshtml" />
     <Content Include="Views\Deliveries\_Index.cshtml" />
     <Content Include="Views\Admin\_Manager.cshtml" />
+    <Content Include="Views\Alipay\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\Images\" />
-    <Folder Include="Views\Alipay\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\glyphicons-halflings-regular.eot" />
