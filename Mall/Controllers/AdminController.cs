@@ -31,6 +31,8 @@ namespace Mall.Controllers
         {
             DateTime d = DateTime.Now;
             d.AddDays(-1);
+            DateTime d2 = DateTime.Now.AddDays(0 - Convert.ToInt16(DateTime.Now.DayOfWeek));
+            DateTime d3 = DateTime.Now.AddDays(6 - Convert.ToInt16(DateTime.Now.DayOfWeek));
             ViewBag.prepay = oll.ListEntityByCondition(o => o.States == 0).Count();
             ViewBag.presend = oll.ListEntityByCondition(o => o.States == 1).Count();
             ViewBag.send = oll.ListEntityByCondition(o => o.States == 2).Count();
@@ -40,10 +42,15 @@ namespace Mall.Controllers
             ViewBag.down = pll.ListEntityByCondition(p => p.States == 0).Count();
             ViewBag.warn = pll.ListEntityByCondition(p => p.Stock > 10).Count();
             ViewBag.ProductCount = pll.ListEntity().Count();
-            ViewBag.today = ull.ListEntityByCondition(u => u.RegisterDate.Day == DateTime.Now.Day).Count();
-            ViewBag.yesterday = ull.ListEntityByCondition(u => u.RegisterDate.Day == d.Day).Count();
-            ViewBag.month = ull.ListEntityByCondition(u => u.RegisterDate.Month == DateTime.Now.Month).Count();
+            ViewBag.today = ull.ListEntityByCondition(u => u.RegisterDate.Value.Day == DateTime.Now.Day).Count();
+            ViewBag.yesterday = ull.ListEntityByCondition(u => u.RegisterDate.Value.Day == d.Day).Count();
+            ViewBag.month = ull.ListEntityByCondition(u => u.RegisterDate.Value.Month == DateTime.Now.Month).Count();
             ViewBag.count = ull.ListEntity().Count();
+            ViewBag.SalesToday = (oll.ListEntityByCondition(o => o.Orderdate.Day == DateTime.Now.Day).Sum(o => o.Total) ?? 0).ToString("0.00");
+            ViewBag.SalesYesterday = (oll.ListEntityByCondition(o => o.Orderdate.Day == d.Day).Sum(o => o.Total) ?? 0).ToString("0.00");
+            ViewBag.SalesWeek = (oll.ListEntityByCondition(o => o.Orderdate.Day >= d2.Day && o.Orderdate.Day <= d3.Day).Sum(o => o.Total) ?? 0).ToString("0.00");
+            ViewBag.SalesMonth = (oll.ListEntityByCondition(o => o.Orderdate.Month == DateTime.Now.Month).Sum(o => o.Total) ?? 0).ToString("0.00");
+            ViewBag.SalesYear = (oll.ListEntityByCondition(o => o.Orderdate.Year == DateTime.Now.Year).Sum(o => o.Total) ?? 0).ToString("0.00");
             return View();
         }
 

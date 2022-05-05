@@ -41,11 +41,12 @@ namespace Mall.Controllers
         {
             if (!id.HasValue)
             {
-                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (bll.FindEntityById(id.Value).Products.Count() > 0)
+            var cate = bll.FindEntityById(id.Value);
+            if(cate.Categories1.Count > 0 || cate.Products.Count > 0)
             {
-                TempData["Message"] = "删除失败,该分类下还有商品,请删除对应商品在进行操作";              
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else if (bll.DeleteEntityById(id.Value))
             {
@@ -62,7 +63,7 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Update(int? id)
         {
-            ViewBag.CateGroups = bll.ListEntity();
+            ViewBag.CateGroups = bll.ListEntityByCondition(c => !c.ParentID.HasValue);
             var createsub = Request.QueryString["createsub"];
             if (id.HasValue)
             {

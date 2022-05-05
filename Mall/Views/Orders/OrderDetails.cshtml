@@ -38,28 +38,35 @@
         <span id="count" style="color: orange;">@Model.OrdersDetails.Sum(c => c.Quantity)</span> 件商品 | 总计: &yen; <span id="sum" style="color: orange;">@Model.OrdersDetails.Sum(c => (c.Quantity * c.Products.Price)).ToString("0.00")</span>
     </p>
 
-    <h4 style="margin-top: 20px">收货地址</h4>
-    <div class="card" style="justify-content: flex-start;height: 100%;">
-        <div class="card-header">
-            @Model.Deliveries.Consignee (@Model.Deliveries.Phone)
+    @if (Model.Deliveries != null)
+    {
+        <h4 style="margin-top: 20px">收货地址</h4>
+        <div class="card" style="justify-content: flex-start;height: 100%;">
+            <div class="card-header">
+                @Model.Deliveries.Consignee (@Model.Deliveries.Phone)
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>@Model.Deliveries.Complete</p>
+                </blockquote>
+            </div>
         </div>
-        <div class="card-body">
-            <blockquote class="blockquote mb-0">
-                <p>@Model.Deliveries.Complete</p>
-            </blockquote>
-        </div>
-    </div>
+    }
+
     <h4 style="margin-top: 20px">详细信息</h4>
     <div>
         <p>订单编号: @Model.SerialID</p>
-        <p>用户名: @Model.Users.UserName</p>
+        @if (Model.Users != null)
+        {
+            <p>用户名: @Model.Users.UserName</p>
+        }
         <p>下单时间: @Model.Orderdate</p>
         <p>订单状态:  @(Model.States == 0 ? "未付款" : Model.States == 1 ? "已付款" : Model.States == 2 ? "已发货" : Model.States == 3 ? "已收货" : "已关闭")</p>
         @if (Model.States == 1)
         {
             <p>支付方式: @(Model.PayType == 0 ? "支付宝" : "微信")</p>
         }
-        @if (Model.States == 2)
+        @if (Model.States != 0)
         {
             <p>快递单号: @Model.ExpressNumber (@Model.ExpressType)</p>
         }

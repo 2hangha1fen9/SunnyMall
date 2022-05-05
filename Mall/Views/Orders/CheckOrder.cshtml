@@ -9,12 +9,14 @@
     <div class="item container" style="display: flex;flex-direction: column;background-color: white;width: 100%;">
         <h2 class="fw-bold" style="margin-top: 20px">确认订单</h2>
         <ul class="list-group" style="margin-top: 10px;margin-bottom: 50px">
+            @{bool flag = true;}
             @foreach (var item in deliveries)
             {
                 <li class="list-group-item">
-                    <input class="form-check-input" type="radio" name="id" value="@item.DeliveryID" @(user.Deliveries1.DeliveryID == item.DeliveryID ? "checked" : "") onclick="exchange(this)">
+                    <input class="form-check-input" type="radio" name="id" value="@item.DeliveryID" @if (user.Deliveries1 != null) { @(user.Deliveries1.DeliveryID == item.DeliveryID ? "checked" : "")} else if (flag) { @Html.Raw("checked")} onclick="exchange(this)">
                     @item.Consignee (@item.Phone) @item.Complete
                 </li>
+                flag = false;
             }
         </ul>
 

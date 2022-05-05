@@ -32,7 +32,12 @@
                     @if (item.Deliveries != null)
                     {@item.Deliveries.Consignee}
                 </td>
-                <td>@item.Users.UserName</td>
+                <td>
+                    @if (item.Users != null)
+                    {
+                        @item.Users.UserName
+                    }
+                </td>
                 <td  class=" text-truncate" style="max-width: 100px;">@item.Remark</td>
                 <td>
                     @if (item.States == 1)

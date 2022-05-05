@@ -87,29 +87,14 @@ namespace BLL
             return products.ToList();
         }
 
-        PhotosBLL pll = new PhotosBLL();
         public override bool DeleteEntityById(int id)
         {
-            var photos = pll.ListEntityByCondition(p => p.ProductID == id);
-            if(photos.Count() > 0)
-            {
-                pll.DeleteEntity(photos);
-            }
             return dal.Delete("ProductID", id);
         }
 
         public override bool DeleteEntityByIdList(string idList)
         {
             string[] ids = idList.Split(',');
-            foreach (var item in ids)
-            {
-                int id = int.Parse(item);
-                var photos = pll.ListEntityByCondition(p => p.ProductID == id);
-                if (photos.Count() > 0)
-                {
-                    pll.DeleteEntity(photos);
-                }
-            }
             return  dal.Delete("ProductID", idList);
         }
     }

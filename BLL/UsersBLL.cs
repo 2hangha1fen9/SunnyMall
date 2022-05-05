@@ -10,6 +10,7 @@ namespace BLL
 {
     public class UsersBLL : BaseBLL<Users>
     {
+        private OrdersBLL ordersBLL = new OrdersBLL();
         public List<Users> ListEntity(string key)
         {
             if(key.Length > 0)
@@ -22,48 +23,36 @@ namespace BLL
             return ListEntity().ToList();
         }
         public override bool DeleteEntityById(int id)
-        {
-            Users user = FindEntityById(id);
-            if(user.Favorites.Count() > 0)
+        {   
+            var user = FindEntityById(id);
+            if(user != null)
             {
-                new FavoritesBLL().DeleteEntity(user.Favorites);
+                foreach(var item in user.Orders.ToList())
+                {
+                    item.UserID = null;
+                    item.DeliveryID = null;
+                    item.States = 3;
+                    ordersBLL.UpdateEntity(item);
+                }
             }
-            if (user.Appraises.Count() > 0)
-            {
-                new AppraisesBLL().DeleteEntity(user.Appraises);
-            }
-            if (user.Orders.Count() > 0)
-            {
-                new OrdersBLL().DeleteEntity(user.Orders);
-            }
-            if (user.Deliveries.Count() > 0)
-            {
-                new DeliveriesBLL().DeleteEntity(user.Deliveries);
-            }        
             return dal.Delete("UserID",id);
         }
 
         public override bool DeleteEntityByIdList(string idList)
         {
             string[] ids = idList.Split(',');
-            foreach (var item in ids)
+            foreach (string id in ids)
             {
-                Users user = FindEntityById(int.Parse(item));
-                if (user.Favorites.Count() > 0)
+                var user = FindEntityById(int.Parse(id));
+                if (user != null)
                 {
-                    new FavoritesBLL().DeleteEntity(user.Favorites);
-                }
-                if (user.Appraises.Count() > 0)
-                {
-                    new AppraisesBLL().DeleteEntity(user.Appraises);
-                }
-                if (user.Deliveries.Count() > 0)
-                {
-                    new DeliveriesBLL().DeleteEntity(user.Deliveries);
-                }
-                if (user.Orders.Count() > 0)
-                {
-                    new OrdersBLL().DeleteEntity(user.Orders);
+                    foreach (var item in user.Orders.ToList())
+                    {
+                        item.UserID = null;
+                        item.DeliveryID = null;
+                        item.States = 3;
+                        ordersBLL.UpdateEntity(item);
+                    }
                 }
             }
             return dal.Delete("UserID", idList);

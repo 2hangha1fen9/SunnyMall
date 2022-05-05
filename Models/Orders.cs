@@ -23,7 +23,7 @@ namespace Models
         public int OrdersID { get; set; }
         public string SerialID { get; set; }
         public System.DateTime Orderdate { get; set; }
-        public int UserID { get; set; }
+        public Nullable<int> UserID { get; set; }
         public Nullable<decimal> Total { get; set; }
         public Nullable<int> DeliveryID { get; set; }
         public Nullable<System.DateTime> DeliveryDate { get; set; }

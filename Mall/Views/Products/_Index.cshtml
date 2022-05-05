@@ -9,7 +9,7 @@
         @if (auth == "1")
         {
             <input type="hidden" name="pageIndex" value="@Model.CurrentPageIndex" />
-            <button type="submit" class="btn btn-danger">删除</button>
+            <button type="button" class="btn btn-danger" onclick="check()">删除</button>
         }
         <button type="button" onclick="location.href='/Products/Update'" class="btn btn-success">添加</button>
     </div>
@@ -83,7 +83,7 @@
                         {
                            UpdateTargetId = "ajax",
                            InsertionMode = InsertionMode.Replace,
-                           Confirm = "是否确认删除",
+                           Confirm = "是否确认删除(此操作十分危险,会删除相关联的数据)",
                            OnSuccess = "showMessage('操作成功')"
                         }, new { @class = "btn-sm btn-danger" })
                     }
@@ -109,3 +109,16 @@
     OnComplete = "document.documentElement.scrollTop = 0",
 })
 </div>
+
+<script>
+    function check() {
+        let boxies = $("input:checkbox[name='ids']:checked")
+        if (boxies.length == 0) {
+            $(".toast-body").text("你还未选中任何一条记录")
+            new bootstrap.Toast(document.getElementById('liveToast')).show()
+        }
+        else {
+            $("#data").submit();
+        }
+    }
+</script>

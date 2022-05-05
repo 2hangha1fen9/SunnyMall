@@ -56,8 +56,8 @@
                   {
                       UpdateTargetId = "ajax",
                       InsertionMode = InsertionMode.Replace,
-                      Confirm = "是否确认删除",
-                      OnSuccess = "showMessage('操作成功')"
+                      Confirm = "是否确认删除(此操作十分危险,会删除相关联的数据)",
+                      OnSuccess = "showMessage('操作成功')",
                   }, new { @class = "btn-sm btn-danger" })
             </td>
         </tr>

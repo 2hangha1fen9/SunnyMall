@@ -126,11 +126,6 @@ namespace BLL
 
         public override bool DeleteEntityById(int id)
         {
-            Orders od = FindEntityById(id);
-            if (od.OrdersDetails.Count() > 0)
-            {
-                new OrdersDetailsBLL().DeleteEntity(od.OrdersDetails);
-            }
             return dal.Delete("OrdersID", id);
         }
 

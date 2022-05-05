@@ -81,10 +81,10 @@
           <Property Name="OrdersID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SerialID" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Orderdate" Type="datetime" Nullable="false" />
-          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" />
           <Property Name="Total" Type="money" />
           <Property Name="DeliveryID" Type="int" />
-          <Property Name="DeliveryDate" Type="date" />
+          <Property Name="DeliveryDate" Type="datetime" />
           <Property Name="States" Type="int" Nullable="false" />
           <Property Name="Remark" Type="nvarchar" MaxLength="500" />
           <Property Name="ExpressNumber" Type="nvarchar" MaxLength="100" />
@@ -135,11 +135,13 @@
           <Property Name="Nick" Type="nvarchar" MaxLength="50" />
           <Property Name="DeliveryID" Type="int" />
           <Property Name="States" Type="int" Nullable="false" />
-          <Property Name="RegisterDate" Type="datetime" Nullable="false" />
+          <Property Name="RegisterDate" Type="datetime" />
           <Property Name="ActivationCode" Type="nvarchar" MaxLength="100" />
         </EntityType>
         <Association Name="FK_Appraises_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -151,7 +153,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Appraises_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Appraises" Type="Self.Appraises" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -163,7 +167,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Cart_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -175,7 +181,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Cart_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -199,7 +207,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Deliveries_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Deliveries" Type="Self.Deliveries" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -211,7 +221,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Favorites_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -223,7 +235,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Favorites_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Favorites" Type="Self.Favorites" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -247,7 +261,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_Users">
-          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -259,7 +275,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdersDetails_Orders">
-          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Orders">
@@ -271,7 +289,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdersDetails_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="OrdersDetails" Type="Self.OrdersDetails" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -283,7 +303,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Photos_Products">
-          <End Role="Products" Type="Self.Products" Multiplicity="1" />
+          <End Role="Products" Type="Self.Products" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Photos" Type="Self.Photos" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Products">
@@ -604,7 +626,7 @@
           <Property Name="Nick" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="DeliveryID" Type="Int32" />
           <Property Name="States" Type="Int32" Nullable="false" />
-          <Property Name="RegisterDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RegisterDate" Type="DateTime" Precision="3" />
           <Property Name="ActivationCode" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Appraises" Relationship="MallModel.FK_Appraises_Users" FromRole="Users" ToRole="Appraises" />
           <NavigationProperty Name="Cart" Relationship="MallModel.FK_Cart_Users" FromRole="Users" ToRole="Cart" />
@@ -764,18 +786,18 @@
           <Property Name="OrdersID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SerialID" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Orderdate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
           <Property Name="Total" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="DeliveryID" Type="Int32" />
-          <Property Name="DeliveryDate" Type="DateTime" Precision="0" />
+          <Property Name="DeliveryDate" Type="DateTime" Precision="3" />
           <Property Name="States" Type="Int32" Nullable="false" />
           <Property Name="Remark" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="ExpressNumber" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="ExpressType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PayType" Type="Int32" />
           <NavigationProperty Name="Deliveries" Relationship="MallModel.FK_Orders_Deliveries" FromRole="Orders" ToRole="Deliveries" />
           <NavigationProperty Name="Users" Relationship="MallModel.FK_Orders_Users" FromRole="Orders" ToRole="Users" />
           <NavigationProperty Name="OrdersDetails" Relationship="MallModel.FK_OrdersDetails_Orders" FromRole="Orders" ToRole="OrdersDetails" />
-          <Property Name="PayType" Type="Int32" />
         </EntityType>
         <Association Name="FK_Orders_Deliveries">
           <End Type="MallModel.Deliveries" Role="Deliveries" Multiplicity="0..1" />
@@ -790,7 +812,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_Orders_Users">
-          <End Type="MallModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="MallModel.Users" Role="Users" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="MallModel.Orders" Role="Orders" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Users">
@@ -802,7 +826,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_OrdersDetails_Orders">
-          <End Type="MallModel.Orders" Role="Orders" Multiplicity="1" />
+          <End Type="MallModel.Orders" Role="Orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Type="MallModel.OrdersDetails" Role="OrdersDetails" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Orders">

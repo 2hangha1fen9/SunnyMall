@@ -31,7 +31,7 @@ namespace Models
         public string Nick { get; set; }
         public Nullable<int> DeliveryID { get; set; }
         public int States { get; set; }
-        public System.DateTime RegisterDate { get; set; }
+        public Nullable<System.DateTime> RegisterDate { get; set; }
         public string ActivationCode { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

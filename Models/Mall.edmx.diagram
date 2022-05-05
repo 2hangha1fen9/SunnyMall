@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1" ZoomLevel="63" ShowGrid="true" SnapToGrid="false">
+      <Diagram DiagramId="6ba6a31a8fe546da859bed315877c8cd" Name="Diagram1" ZoomLevel="108" ShowGrid="true" SnapToGrid="false">
         <EntityTypeShape EntityType="MallModel.AdminUsers" Width="1.5" PointX="5.75" PointY="1.6255174153645833" />
         <EntityTypeShape EntityType="MallModel.Appraises" Width="1.5" PointX="6.0000005000000005" PointY="7.448455810546875" />
         <EntityTypeShape EntityType="MallModel.Cart" Width="1.5000000000000004" PointX="3.0000005000000005" PointY="4.548970540364583" />
@@ -28,11 +28,11 @@
         <AssociationConnector Association="MallModel.FK_Favorites_Users" />
         <AssociationConnector Association="MallModel.FK_OrdersDetails_Products" />
         <AssociationConnector Association="MallModel.FK_Photos_Products" />
-        <EntityTypeShape EntityType="MallModel.Orders" Width="1.5" PointX="5.2500005" PointY="11.209411621093754" />
+        <EntityTypeShape EntityType="MallModel.Orders" Width="1.5" PointX="5.2500005" PointY="11.108896891276045" />
         <AssociationConnector Association="MallModel.FK_Orders_Deliveries" />
         <AssociationConnector Association="MallModel.FK_Orders_Users" />
         <AssociationConnector Association="MallModel.FK_OrdersDetails_Orders" />
-      </Diagram>
+        </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

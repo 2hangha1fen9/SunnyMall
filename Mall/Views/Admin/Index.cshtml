@@ -6,7 +6,7 @@
 
 <div class="container" style="margin-top: 20px;">
     <div class="row g-2">
-        <div class="col-3">
+        <div class="col-6">
             <ul class="list-group">
                 <li class="list-group-item active" aria-current="true">待处理事务</li>
                 <li class="list-group-item">待付款订单<span style="color: red">(@ViewBag.prepay)</span></li>
@@ -16,7 +16,17 @@
                 <li class="list-group-item">已完成订单<span style="color: red">(@ViewBag.complete)</span></li>
             </ul>
         </div>
-        <div class="col-3">
+        <div class="col-6">
+            <ul class="list-group">
+                <li class="list-group-item active" aria-current="true">销售额</li>
+                <li class="list-group-item">今日销售额<span style="color: red">(@ViewBag.SalesToday&yen;)</span></li>
+                <li class="list-group-item">昨日销售额<span style="color: red">(@ViewBag.SalesYesterday&yen;)</span></li>
+                <li class="list-group-item">本周销售额<span style="color: red">(@ViewBag.SalesWeek&yen;)</span></li>
+                <li class="list-group-item">本月销售额<span style="color: red">(@ViewBag.SalesMonth&yen;)</span></li>
+                <li class="list-group-item">本年销售额<span style="color: red">(@ViewBag.SalesYear&yen;)</span></li>
+            </ul>
+        </div>
+        <div class="col-6">
             <ul class="list-group">
                 <li class="list-group-item active" aria-current="true">商品总览</li>
                 <li class="list-group-item">已上架<span style="color: red">(@ViewBag.up)</span></li>
@@ -25,7 +35,7 @@
                 <li class="list-group-item">全部商品<span style="color: red">(@ViewBag.ProductCount)</span></li>
             </ul>
         </div>
-        <div class="col-3">
+        <div class="col-6">
             <ul class="list-group">
                 <li class="list-group-item active" aria-current="true">用户总览</li>
                 <li class="list-group-item">今日新增<span style="color: red">(@ViewBag.today)</span></li>

@@ -72,6 +72,11 @@ namespace Mall.Controllers
         public ActionResult CheckOrder()
         {
             Users user = MyAuthentication.GetUser();
+            if (user.Deliveries.Count() == 0)
+            {
+                TempData["Message"] = "购买前请设置您的收货地址";
+                return RedirectToAction("Create", "Deliveries");
+            }
             ViewBag.Deliveries = user.Deliveries.ToList();
             ViewBag.User = user;
             return View(ordersDetailsBLL.CheckDetail(user));
@@ -88,6 +93,11 @@ namespace Mall.Controllers
         public ActionResult CheckOrder(int pid,int quantity)
         {
             Users user = MyAuthentication.GetUser();
+            if (user.Deliveries.Count() == 0)
+            {
+                TempData["Message"] = "购买前请设置您的收货地址";
+                return RedirectToAction( "Create","Deliveries");
+            }
             ViewBag.Deliveries = user.Deliveries.ToList();
             ViewBag.User = user;
             ViewBag.OnKeyBuy = true;
