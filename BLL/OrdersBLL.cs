@@ -33,95 +33,66 @@ namespace BLL
 
         public Orders CreateOrder(Users user,int deliverieID,string remark)
         {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                try
-                {
-                    List<Cart> cart = user.Cart.Where(c => c.Checked == 1).ToList();
-                    Orders orders = new Orders();
-                    orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
-                    orders.Orderdate = DateTime.Now;
-                    orders.DeliveryID = deliverieID;
-                    orders.UserID = user.UserID;
-                    orders.Remark = remark;
+            List<Cart> cart = user.Cart.Where(c => c.Checked == 1).ToList();
+            Orders orders = new Orders();
+            orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
+            orders.Orderdate = DateTime.Now;
+            orders.DeliveryID = deliverieID;
+            orders.UserID = user.UserID;
+            orders.Remark = remark;
 
-                    foreach (Cart cartItem in cart)
-                    {
-                        OrdersDetails details = new OrdersDetails();
-                        details.ProductID = cartItem.ProductID;
-                        details.Products = cartItem.Products;
-                        details.Quantity = cartItem.Quantity;
-                        cartItem.Products.Stock -= cartItem.Quantity;
-                        if (!productsBLL.UpdateEntity(cartItem.Products))
-                        {
-                            throw new Exception();
-                        }
-                        orders.OrdersDetails.Add(details);
-                    }
-                    orders.Total = orders.OrdersDetails.Sum(c => c.Products.Price * c.Quantity);
-                    Orders confirm = AddEntity(orders);
-                    if (confirm != null)
-                    {
-                        if (cartBLL.DeleteEntity(cart))
-                        {
-                            scope.Complete();
-                            return confirm;
-                        }
-                        return null;
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch (Exception)
+            foreach (Cart cartItem in cart)
+            {
+                OrdersDetails details = new OrdersDetails();
+                details.ProductID = cartItem.ProductID;
+                details.Products = cartItem.Products;
+                details.Quantity = cartItem.Quantity;
+                cartItem.Products.Stock -= cartItem.Quantity;
+                if (!productsBLL.UpdateEntity(cartItem.Products))
                 {
                     return null;
                 }
+                orders.OrdersDetails.Add(details);
             }
+            orders.Total = orders.OrdersDetails.Sum(c => c.Products.Price * c.Quantity);
+            Orders confirm = AddEntity(orders);
+            if (confirm != null)
+            {
+                if (cartBLL.DeleteEntity(cart))
+                {
+                    return confirm;
+                }
+                return null;
+            }
+            return null;
         }
 
         public Orders CreateOrder(Users user, int pid,int quantity,int deliverieID, string remark)
         {
-            using (TransactionScope scope = new TransactionScope())
-            {
-                try
-                {
-                    Orders orders = new Orders();
-                    orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
-                    orders.Orderdate = DateTime.Now;
-                    orders.DeliveryID = deliverieID;
-                    orders.UserID = user.UserID;
-                    orders.Remark = remark;
+            Orders orders = new Orders();
+            orders.SerialID = $"{DateTime.Now.ToString("yyyyMMddHHmmssff")}{user.UserID}";
+            orders.Orderdate = DateTime.Now;
+            orders.DeliveryID = deliverieID;
+            orders.UserID = user.UserID;
+            orders.Remark = remark;
 
-                    Products products = productsBLL.FindEntityById(pid);
-                    OrdersDetails details = new OrdersDetails();
-                    details.ProductID = products.ProductID;
-                    details.Products = products;
-                    details.Quantity = quantity;
-                    products.Stock -= quantity;
-                    if (!productsBLL.UpdateEntity(products))
-                    {
-                        throw new Exception();
-                    }
-                    orders.OrdersDetails.Add(details);
-                    orders.Total = orders.OrdersDetails.Sum(c => c.Products.Price * c.Quantity);
-                    Orders confirm = AddEntity(orders);
-                    if (confirm != null)
-                    {
-                        scope.Complete();
-                        return confirm;
-                    }
-                    else
-                    {
-                        throw new Exception();
-                    }
-                }
-                catch (Exception)
+            Products products = productsBLL.FindEntityById(pid);
+            OrdersDetails details = new OrdersDetails();
+            details.ProductID = products.ProductID;
+            details.Products = products;
+            details.Quantity = quantity;
+            products.Stock -= quantity;
+            if (productsBLL.UpdateEntity(products))
+            {
+                orders.OrdersDetails.Add(details);
+                orders.Total = orders.OrdersDetails.Sum(c => c.Products.Price * c.Quantity);
+                Orders confirm = AddEntity(orders);
+                if (confirm != null)
                 {
-                    return null;
+                    return confirm;
                 }
             }
+            return null;
         }
 
         public override bool DeleteEntityById(int id)
