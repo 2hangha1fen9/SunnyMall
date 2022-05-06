@@ -136,7 +136,7 @@ namespace Mall.Controllers
             for (int i = 0; i < checkCode.Length; i++)
             {
                 string code = checkCode[i].ToString();
-                Font font = new Font("stix", 100);
+                Font font = new Font("ariali", 100);
                 SolidBrush solidBrush = new SolidBrush(colors[r.Next(colors.Length - 1)]);
                 int x = i * (imageWidth / checkCode.Length);
                 int y = r.Next(imageHeight - font.Height);
