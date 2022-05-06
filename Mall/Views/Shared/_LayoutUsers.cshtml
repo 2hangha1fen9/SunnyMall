@@ -257,6 +257,14 @@
         </div>
     </div>
     @RenderSection("scripts", required: false)
+    <script>
+        function show(e) {
+            bootstrap.Dropdown.getOrCreateInstance($(e).children(".dropdown-toggle").get(0)).show()
+        }
+        function hide(e) {
+            bootstrap.Dropdown.getOrCreateInstance($(e).children(".dropdown-toggle").get(0)).hide()
+        }
+    </script>
 </body>
 
 </html>

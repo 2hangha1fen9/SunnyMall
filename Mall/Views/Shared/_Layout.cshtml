@@ -156,7 +156,7 @@
                     @foreach (var item in categories)
                     {
 
-                        <li class="nav-item" style="display:flex">
+                        <li class="nav-item" style="display:flex" onmouseover="show(this)" onmouseout="hide(this)">
                             <a class="nav-link link-dark px-2" href="/Products/List?cates=@item.CateName" role="button">@item.CateName</a>
                             <a class="nav-link link-dark px-2 dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></a>
                             <ul class="dropdown-menu">
@@ -235,6 +235,14 @@
         </div>
     </div>
     @RenderSection("scripts", required: false)
+    <script>
+        function show(e) {
+            bootstrap.Dropdown.getOrCreateInstance($(e).children(".dropdown-toggle").get(0)).show()
+        }
+        function hide(e) {
+            bootstrap.Dropdown.getOrCreateInstance($(e).children(".dropdown-toggle").get(0)).hide()
+        }
+    </script>
 </body>
 
 </html>
