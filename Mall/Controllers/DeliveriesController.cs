@@ -138,7 +138,7 @@ namespace Mall.Controllers
         {
             int uid = MyAuthentication.GetUserID();
             Users user = ull.FindEntityById(uid);
-            ViewBag.Deliveries = user.Deliveries.OrderByDescending(d => d.DeliveryID == user.DeliveryID);
+            ViewBag.Deliveries = bll.ListEntityByCondition(d => d.UserID == user.UserID).OrderByDescending(d => d.DeliveryID == user.DeliveryID);
             ViewBag.User = user;
             return user;
         }
