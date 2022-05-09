@@ -45,7 +45,6 @@
             <td style="color: @(item.States == 3 || item.States == -1 ? "red" : "green");">@(item.States == 3 ? "禁用" : item.States == -1 ? "未激活": "正常")</td>
             <td>
                 <a href="/Users/Update/@item.UserID" class="btn-sm btn-primary">编辑</a>
-                <a href="/Users/Details/@item.UserID" class="btn-sm btn-success">详情</a>
                 @Ajax.ActionLink(item.States == 3 ? "启用" : "禁用", $"States", new { id = item.UserID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
                   {
                       UpdateTargetId = "ajax",
