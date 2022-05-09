@@ -29,8 +29,7 @@ namespace Mall.Controllers
         [AdminAuthentication]
         public ActionResult Index()
         {
-            DateTime d = DateTime.Now;
-            d.AddDays(-1);
+            DateTime d = DateTime.Now.AddDays(-1);
             DateTime d2 = DateTime.Now.AddDays(0 - Convert.ToInt16(DateTime.Now.DayOfWeek));
             DateTime d3 = DateTime.Now.AddDays(6 - Convert.ToInt16(DateTime.Now.DayOfWeek));
             ViewBag.prepay = oll.ListEntityByCondition(o => o.States == 0).Count();
