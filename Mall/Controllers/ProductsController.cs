@@ -71,7 +71,7 @@ namespace Mall.Controllers
         /// <returns></returns>
         public ActionResult List(int? id = 1, string key = "", string cates = "", string orderBy = "Count", string sortBy = "1", string priceMin = "", string priceMax = "")
         {
-            var products = bll.ListEntity(key, cates, orderBy, sortBy, priceMin, priceMax).Where(p => p.States == 1);
+            var products = bll.ListEntity(key, cates, orderBy, sortBy, priceMin, priceMax).Where(p => p.States == 1 && p.Categories.States == 1);
             if (key.Length > 0)
             {
                 TempData["Message"] = $"找到{products.Count()}个关于 \"{key}\" 的商品";
