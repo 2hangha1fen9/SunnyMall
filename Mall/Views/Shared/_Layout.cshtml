@@ -162,7 +162,10 @@
                             <ul class="dropdown-menu">
                                 @foreach (var sub in item.Categories1)
                                 {
-                                    <li><a class="dropdown-item" href="/Products/List?cates=@sub.CateName">@sub.CateName</a></li>
+                                    if (sub.States == 1)
+                                    {
+                                        <li><a class="dropdown-item" href="/Products/List?cates=@sub.CateName">@sub.CateName</a></li>
+                                    }
                                 }
                             </ul>
                         </li>
