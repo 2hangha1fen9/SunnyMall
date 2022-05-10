@@ -59,7 +59,7 @@
                                             <td style="color: @(sub.States == 0 ? "red" : "green");">@(sub.States == 0 ? "禁用" : "正常")</td>
                                             <td>
                                                 <a href="/Categories/Update/@sub.CateID" class="btn-sm btn-success">编辑</a>
-                                                @Ajax.ActionLink(cates.States == 0 ? "启用" : "禁用", $"States", new { id = sub.CateID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
+                                                @Ajax.ActionLink(sub.States == 0 ? "启用" : "禁用", $"States", new { id = sub.CateID, pageIndex = Model.CurrentPageIndex, key = TempData["Search"] }, new AjaxOptions
                                                   {
                                                       UpdateTargetId = "ajax",
                                                       InsertionMode = InsertionMode.Replace,
